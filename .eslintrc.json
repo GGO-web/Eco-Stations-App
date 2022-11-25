@@ -1,6 +1,11 @@
 {
-   "extends": ["airbnb", "airbnb-typescript"],
-   "parserOptions": {
-      "project": "./tsconfig.json"
-   }
+  "extends": ["airbnb", "airbnb-typescript"],
+  "parserOptions": {
+    "project": "./tsconfig.json"
+  },
+  "rules": {
+    "import/prefer-default-export": "off",
+    "no-param-reassign": "off"
+  },
+  "ignorePatterns": ["postcss.config.ts", "tailwind.config.ts"]
 }
