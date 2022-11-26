@@ -1,11 +1,12 @@
 {
   "name": "eco-stations-app",
   "private": true,
+  "homepage": "./",
   "version": "0.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite --host",
-    "build": "tsc && vite build",
+    "build": "tsc && vite build --base=./",
     "preview": "vite preview"
   },
   "dependencies": {

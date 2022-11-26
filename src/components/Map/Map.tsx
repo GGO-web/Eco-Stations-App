@@ -1,8 +1,9 @@
 import React from 'react';
 
-import { GoogleMap, Marker } from '@react-google-maps/api';
+import { GoogleMap, MarkerF } from '@react-google-maps/api';
 import { defaultTheme } from './Theme';
 
+// import { useGetAllServicesQuery } from '../../redux/services/services';
 import { useActions } from '../../hooks/actions';
 
 import { ICoordinate } from '../../models/coordinates.model';
@@ -45,25 +46,14 @@ export function Map({
   };
 
   const handleOnLoad = (map: google.maps.Map) => {
-    // const bounds = new google.maps.LatLngBounds();
-    // trashBins.forEach((trashBin: IService) => bounds.extend(
-    //   {
-    //     lat: trashBin.coordinate.longitude,
-    //     lng: trashBin.coordinate.latitude,
-    //   },
-    // ));
-    // map.fitBounds(bounds);
-  };
-
-  console.log(trashBins);
-
-  const position = {
-    lat: 37.772,
-    lng: -122.214,
-  };
-
-  const onLoad = (marker: any) => {
-    console.log('marker: ', marker);
+    const bounds = new google.maps.LatLngBounds();
+    trashBins.forEach((trashBin: IService) => bounds.extend(
+      {
+        lat: trashBin.coordinate.longitude,
+        lng: trashBin.coordinate.latitude,
+      },
+    ));
+    map.fitBounds(bounds);
   };
 
   return (
@@ -74,11 +64,25 @@ export function Map({
       onLoad={handleOnLoad}
       options={defaultOptions}
     >
-      <Marker
-        visible
-        onLoad={onLoad}
-        position={position}
-      />
+      {trashBins?.map((trashBin: IService) => {
+        const trashBinCenter = {
+          lng: trashBin.coordinate.latitude,
+          lat: trashBin.coordinate.longitude,
+        };
+
+        return (
+          <MarkerF
+            key={trashBin.id}
+            position={trashBinCenter}
+            label={{
+              text: trashBin.serviceName,
+              fontSize: '22px',
+              fontWeight: 'bold',
+            }}
+            onClick={() => handleClick(trashBin)}
+          />
+        );
+      })}
     </GoogleMap>
   );
 }
