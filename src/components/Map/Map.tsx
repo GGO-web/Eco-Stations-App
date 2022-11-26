@@ -1,17 +1,18 @@
-import React, { useRef } from 'react';
+import React from 'react';
 
 import { GoogleMap, Marker } from '@react-google-maps/api';
 import { defaultTheme } from './Theme';
 
-import { trashBins } from '../../constants';
-
 import { useActions } from '../../hooks/actions';
+
 import { ICoordinate } from '../../models/coordinates.model';
 import { IService } from '../../models/service.model';
 
+import { trashBins } from '../../constants';
+
 const containerStyle = {
-  width: '100%',
-  height: '100%',
+  width: '100vw',
+  height: '100vh',
 };
 
 const defaultOptions = {
@@ -29,12 +30,12 @@ const defaultOptions = {
   styles: defaultTheme,
 };
 
-export function Map({ center }: { center: ICoordinate }) {
-  const mapRef = useRef<any>(null);
-
-  const onLoad = React.useCallback((map: google.maps.Map) => {
-    mapRef.current = map;
-  }, []);
+export function Map({
+  center,
+}: {
+  center: ICoordinate;
+}) {
+  // const { data: trashBins } = useGetAllServicesQuery();
 
   const { setPopupState, setCurrentService } = useActions();
 
@@ -43,35 +44,41 @@ export function Map({ center }: { center: ICoordinate }) {
     setCurrentService(trashBinService);
   };
 
-  return (
-    <div style={{ width: '90%', height: '90vh' }}>
-      <GoogleMap
-        mapContainerStyle={containerStyle}
-        center={center}
-        zoom={10}
-        onLoad={onLoad}
-        options={defaultOptions}
-      >
-        {trashBins.map((trashBin: IService) => {
-          const trashBinCenter = {
-            lng: trashBin.coordinate.latitude,
-            lat: trashBin.coordinate.longitude,
-          };
+  const handleOnLoad = (map: google.maps.Map) => {
+    // const bounds = new google.maps.LatLngBounds();
+    // trashBins.forEach((trashBin: IService) => bounds.extend(
+    //   {
+    //     lat: trashBin.coordinate.longitude,
+    //     lng: trashBin.coordinate.latitude,
+    //   },
+    // ));
+    // map.fitBounds(bounds);
+  };
 
-          return (
-            <Marker
-              key={trashBin.id}
-              position={trashBinCenter}
-              label={{
-                text: trashBin.serviceName,
-                fontSize: '22px',
-                fontWeight: 'bold',
-              }}
-              onClick={() => handleClick(trashBin)}
-            />
-          );
-        })}
-      </GoogleMap>
-    </div>
+  console.log(trashBins);
+
+  const position = {
+    lat: 37.772,
+    lng: -122.214,
+  };
+
+  const onLoad = (marker: any) => {
+    console.log('marker: ', marker);
+  };
+
+  return (
+    <GoogleMap
+      mapContainerStyle={containerStyle}
+      center={center}
+      zoom={10}
+      onLoad={handleOnLoad}
+      options={defaultOptions}
+    >
+      <Marker
+        visible
+        onLoad={onLoad}
+        position={position}
+      />
+    </GoogleMap>
   );
 }

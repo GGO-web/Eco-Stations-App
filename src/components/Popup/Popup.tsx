@@ -1,30 +1,29 @@
 import React from 'react';
 
-import { useSelector } from 'react-redux';
-
 import { useActions } from '../../hooks/actions';
+import { useAppSelector } from '../../hooks/redux';
 
 import './Popup.scss';
 
-function Popup() {
+export function Popup() {
   const {
     address,
-    typesOfWaste,
+    typeOfWastes,
     deliveryOptions,
     rating,
     priceOfService,
-  } = useSelector((store) => store.service.service);
+  } = useAppSelector((store) => store.service.service);
 
   const { setPopupState } = useActions();
 
-  const popupHandleClick = (e) => {
-    if (e.target.classList.contains('wrapper-popup')) {
+  const popupHandleClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    if ((e.target as HTMLDivElement).classList.contains('wrapper-popup')) {
       setPopupState(false);
     }
   };
 
   return (
-    <div onClick={popupHandleClick} className="wrapper-popup">
+    <div onClick={(e) => popupHandleClick(e)} className="wrapper-popup">
       <div className="popup-container">
         <h3 className="text-3xl">Service Info</h3>
         <div>
@@ -34,12 +33,12 @@ function Popup() {
           </p>
           <p>
             Types of waste:
-            {typesOfWaste.map((type) => type).join(',')}
+            {typeOfWastes.map((type: string) => type).join(',')}
           </p>
           <p>
             Delivery options:
             {' '}
-            {deliveryOptions.map((option) => option).join(',')}
+            {deliveryOptions.map((option: string) => option).join(',')}
           </p>
         </div>
         <div>
@@ -56,5 +55,3 @@ function Popup() {
     </div>
   );
 }
-
-export default Popup;
