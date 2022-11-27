@@ -3,7 +3,7 @@ import React from 'react';
 import { GoogleMap, MarkerF } from '@react-google-maps/api';
 import { defaultTheme } from './Theme';
 
-// import { useGetAllServicesQuery } from '../../redux/services/services';
+import { useGetAllServicesQuery } from '../../redux/services/services';
 import { useActions } from '../../hooks/actions';
 
 import { ICoordinate } from '../../models/coordinates.model';
@@ -36,7 +36,7 @@ export function Map({
 }: {
   center: ICoordinate;
 }) {
-  // const { data: trashBins } = useGetAllServicesQuery();
+  const { data } = useGetAllServicesQuery();
 
   const { setPopupState, setCurrentService } = useActions();
 
@@ -72,12 +72,14 @@ export function Map({
 
         return (
           <MarkerF
+            icon="/eco-bin.png"
             key={trashBin.id}
             position={trashBinCenter}
             label={{
               text: trashBin.serviceName,
-              fontSize: '22px',
+              fontSize: '1.5rem',
               fontWeight: 'bold',
+              color: '#023047',
             }}
             onClick={() => handleClick(trashBin)}
           />
