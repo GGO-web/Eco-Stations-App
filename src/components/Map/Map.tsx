@@ -36,7 +36,7 @@ export function Map({
 }: {
   center: ICoordinate;
 }) {
-  const { data } = useGetAllServicesQuery();
+  const { data: allTrashBins } = useGetAllServicesQuery();
 
   const { setPopupState, setCurrentService } = useActions();
 
@@ -64,7 +64,7 @@ export function Map({
       onLoad={handleOnLoad}
       options={defaultOptions}
     >
-      {trashBins?.map((trashBin: IService) => {
+      {(allTrashBins || trashBins)?.map((trashBin: IService) => {
         const trashBinCenter = {
           lng: trashBin.coordinate.latitude,
           lat: trashBin.coordinate.longitude,

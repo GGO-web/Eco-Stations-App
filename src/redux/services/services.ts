@@ -7,11 +7,15 @@ export const serviceApi = createApi({
   reducerPath: 'serviceApi',
   tagTypes: ['Service'],
   baseQuery: fetchBaseQuery({
-    baseUrl: `${import.meta.env.REACT_APP_BACKEND_URI}`,
+    baseUrl: import.meta.env.VITE_BACKEND_URI,
+    mode: 'cors',
   }),
   endpoints: (builder) => ({
     getAllServices: builder.query<IService[], void>({
-      query: () => '/',
+      query: () => ({
+        url: '/',
+        responseHandler: (response) => response.json(),
+      }),
       providesTags: ['Service'],
     }),
     getServicesFromAnArea: builder.query({
