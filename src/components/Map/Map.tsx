@@ -3,7 +3,7 @@ import React from 'react';
 import { GoogleMap, MarkerF } from '@react-google-maps/api';
 import { defaultTheme } from './Theme';
 
-import { useGetAllServicesQuery } from '../../redux/services/services';
+import { useGetAllServicesQuery, useLazyGetAddressFromCoordinatesQuery } from '../../redux/services/services';
 import { useActions } from '../../hooks/actions';
 
 import { ICoordinate } from '../../models/coordinates.model';
@@ -38,9 +38,18 @@ export function Map({
 }) {
   const { data: allTrashBins } = useGetAllServicesQuery();
 
+  const [getAddress] = useLazyGetAddressFromCoordinatesQuery();
+
   const { setPopupState, setCurrentService } = useActions();
 
-  const handleClick = (trashBinService: IService) => {
+  const handleClick = async (trashBinService: IService) => {
+    const response = await getAddress({
+      lat: trashBinService.coordinate.longitude,
+      lng: trashBinService.coordinate.latitude,
+    }).unwrap();
+
+    trashBinService.address = (response as any).results[0].formatted_address;
+
     setPopupState(true);
     setCurrentService(trashBinService);
   };
