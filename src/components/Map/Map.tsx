@@ -55,29 +55,17 @@ export function Map({
     });
   };
 
-  const handleOnLoad = (map: google.maps.Map) => {
-    const bounds = new google.maps.LatLngBounds();
-    trashBins?.forEach((trashBin: IService) => bounds.extend(
-      {
-        lat: trashBin.coordinate.longitude,
-        lng: trashBin.coordinate.latitude,
-      },
-    ));
-    map.fitBounds(bounds);
-  };
-
   return (
     <GoogleMap
       mapContainerStyle={containerStyle}
       center={center}
       zoom={12}
-      onLoad={handleOnLoad}
       options={defaultOptions}
     >
       {(allTrashBins || trashBins)?.map((trashBin: IService) => {
         const trashBinCenter = {
-          lng: trashBin.coordinate.latitude,
-          lat: trashBin.coordinate.longitude,
+          lng: trashBin.coordinate.longitude,
+          lat: trashBin.coordinate.latitude,
         };
 
         return (
