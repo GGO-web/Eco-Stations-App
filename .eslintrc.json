@@ -1,5 +1,10 @@
 {
   "extends": ["airbnb", "airbnb-typescript"],
+  "env": {
+    "es6": true,
+    "node": true
+  },
+  "files": ["*.js", "*.ts", "*.tsx"],
   "parserOptions": {
     "project": "./tsconfig.json"
   },

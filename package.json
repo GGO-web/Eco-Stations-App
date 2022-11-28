@@ -12,6 +12,7 @@
   "dependencies": {
     "@react-google-maps/api": "^2.17.0",
     "@reduxjs/toolkit": "^1.9.0",
+    "@types/uuid": "^8.3.4",
     "postcss": "^8.4.19",
     "prettier-stylelint": "^0.4.2",
     "react": "^18.2.0",
@@ -24,7 +25,8 @@
     "stylelint-order": "^5.0.0",
     "tailwindcss": "^3.2.4",
     "ts-node": "^10.9.1",
-    "use-places-autocomplete": "^4.0.0"
+    "use-places-autocomplete": "^4.0.0",
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
     "@types/node": "^18.11.9",

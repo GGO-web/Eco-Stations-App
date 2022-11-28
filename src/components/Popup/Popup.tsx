@@ -14,6 +14,7 @@ export function Popup() {
     typeOfWastes,
     deliveryOptions,
     rating,
+    paymentConditions,
     priceOfService,
   } = useAppSelector((store) => store.service.service);
 
@@ -35,11 +36,13 @@ export function Popup() {
           <div className="flex flex-col flex-auto">
             <p className="py-2">
               Address:
+              {' '}
               {address}
             </p>
             <p className="py-2">
               Types of waste:
-              {typeOfWastes.map((type: string) => type).join(',')}
+              {' '}
+              {typeOfWastes.join(', ')}
             </p>
             <p className="py-2">
               Delivery options:
@@ -50,13 +53,17 @@ export function Popup() {
           <div className="flex flex-col flex-auto">
             <p className="py-2">
               Price of service:
-              {priceOfService}
+              {' '}
+              {priceOfService || 'FREE'}
             </p>
             <p className="py-2">
               Payment Conditions:
+              {' '}
+              {paymentConditions.join(', ')}
             </p>
             <div className="flex gap-4 items-center py-2">
               Rating:
+              {' '}
               <StarRating rate={rating} />
             </div>
           </div>

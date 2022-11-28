@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
+import { v4 as uuidv4 } from 'uuid';
 
-function StarRating({ rate }: { rate: number | undefined }) {
+export function StarRating({ rate }: { rate: number | undefined }) {
   const [rating, setRating] = useState(rate || 0);
   const [hover, setHover] = useState(0);
   return (
@@ -10,7 +11,7 @@ function StarRating({ rate }: { rate: number | undefined }) {
         return (
           <button
             type="button"
-            key={index}
+            key={uuidv4()}
             className={index <= (hover || rating) ? 'text-[#9300FE]' : 'text-[#010101]'}
             onClick={() => setRating(index)}
             onMouseEnter={() => setHover(index)}
@@ -23,5 +24,3 @@ function StarRating({ rate }: { rate: number | undefined }) {
     </div>
   );
 }
-
-export default StarRating;
