@@ -56,7 +56,7 @@ export function Map({
 
   const handleOnLoad = (map: google.maps.Map) => {
     const bounds = new google.maps.LatLngBounds();
-    trashBins.forEach((trashBin: IService) => bounds.extend(
+    trashBins?.forEach((trashBin: IService) => bounds.extend(
       {
         lat: trashBin.coordinate.longitude,
         lng: trashBin.coordinate.latitude,
@@ -86,9 +86,9 @@ export function Map({
             position={trashBinCenter}
             label={{
               text: trashBin.serviceName,
+              className: 'absolute left-0 top-[-5px]',
               fontSize: '1.5rem',
               fontWeight: 'bold',
-              color: '#023047',
             }}
             onClick={() => handleClick(trashBin)}
           />
