@@ -48,10 +48,11 @@ export function Map({
       lng: trashBinService.coordinate.latitude,
     }).unwrap();
 
-    trashBinService.address = (response as any).results[0].formatted_address;
-
     setPopupState(true);
-    setCurrentService(trashBinService);
+    setCurrentService({
+      ...trashBinService,
+      address: (response as any).results[0].formatted_address,
+    });
   };
 
   const handleOnLoad = (map: google.maps.Map) => {
