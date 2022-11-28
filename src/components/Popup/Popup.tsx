@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { useActions } from '../../hooks/actions';
 import { useAppSelector } from '../../hooks/redux';
 
 import StarRating from './StarRating';
+import AskForm from '../AskForm/AskForm';
 
 import './Popup.scss';
 
@@ -17,6 +18,8 @@ export function Popup() {
   } = useAppSelector((store) => store.service.service);
 
   const { setPopupState } = useActions();
+
+  const [askQuestionField, setAskQuestionField] = useState<boolean>(false);
 
   const popupHandleClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if ((e.target as HTMLDivElement).classList.contains('wrapper-popup')) {
@@ -58,8 +61,13 @@ export function Popup() {
             </div>
           </div>
         </div>
-        <p className="text-center py-4">If you have any questions, feel free to ask 😉</p>
-        <button type="button" className="p-3 rounded-2xl bg-[#7483bd] text-white w-full">Ask a Question</button>
+        {!askQuestionField && (
+          <>
+            <p className="text-center py-4">If you have any questions, feel free to ask 😉</p>
+            <button onClick={() => setAskQuestionField(true)} type="button" className="p-3 rounded-2xl bg-[#7483bd] text-white w-full">Ask a Question</button>
+          </>
+        )}
+        {askQuestionField && <AskForm setQuestion={setAskQuestionField} />}
       </div>
     </div>
   );
