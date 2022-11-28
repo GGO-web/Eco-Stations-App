@@ -2,6 +2,8 @@ import React from 'react';
 
 import { useJsApiLoader } from '@react-google-maps/api';
 
+import { ToastContainer } from 'react-toastify';
+
 import { Map } from './components/Map/Map';
 import { Popup } from './components/Popup/Popup';
 
@@ -24,6 +26,7 @@ function App() {
 
   return (
     <div className="App">
+      <ToastContainer limit={1} />
       {popUp && <Popup />}
       {isLoaded
         ? <Map center={center} />
