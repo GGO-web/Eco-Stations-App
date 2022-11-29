@@ -47,7 +47,7 @@ export function Popup() {
             <p className="py-2">
               Delivery options:
               {' '}
-              {deliveryOptions.map((option: string) => option).join(',')}
+              {deliveryOptions.join(',')}
             </p>
           </div>
           <div className="flex flex-col flex-auto">

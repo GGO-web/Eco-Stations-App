@@ -10,6 +10,7 @@ export const serviceApi = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: '',
     mode: 'cors',
+
   }),
   endpoints: (builder) => ({
     getAllServices: builder.query<IService[], void>({
@@ -25,7 +26,9 @@ export const serviceApi = createApi({
       }),
       providesTags: ['Service'],
     }),
-    getServicesFromAnArea: builder.query({
+    getServicesFromAnArea: builder.query<IService[], {
+      latitude: number, longitude: number, distance: number
+    }>({
       query: ({ latitude, longitude, distance }) => ({
         url: `${import.meta.env.VITE_BACKEND_URL}/${latitude}/${longitude}/${distance}`,
       }),
