@@ -44,8 +44,8 @@ export function Map({
 
   const handleClick = async (trashBinService: IService) => {
     const response = await getAddress({
-      lat: trashBinService.coordinate.longitude,
-      lng: trashBinService.coordinate.latitude,
+      lat: trashBinService.coordinate.latitude,
+      lng: trashBinService.coordinate.longitude,
     }).unwrap();
 
     setPopupState(true);

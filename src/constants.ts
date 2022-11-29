@@ -7,8 +7,8 @@ export const trashBins = [
     deliveryOptions: ['SELF'],
     coordinate: {
       id: 1,
-      longitude: 50.448589,
-      latitude: 30.5333339,
+      latitude: 50.448589,
+      longitude: 30.5333339,
     },
   },
   {
@@ -19,8 +19,8 @@ export const trashBins = [
     deliveryOptions: ['SELF'],
     coordinate: {
       id: 2,
-      longitude: 50.412123,
-      latitude: 30.512486,
+      latitude: 50.412123,
+      longitude: 30.512486,
     },
   },
   {
@@ -31,8 +31,8 @@ export const trashBins = [
     deliveryOptions: ['SELF'],
     coordinate: {
       id: 3,
-      longitude: 50.482625,
-      latitude: 30.4603376,
+      latitude: 50.482625,
+      longitude: 30.4603376,
     },
   },
 ];
