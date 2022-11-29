@@ -1,7 +1,9 @@
-export const typesOfWaste = {
+export const waste = {
   types: [
     {
+      id: 'plastics',
       name: 'PLASTICS',
+      image: './CardPics/plastics.jpg',
       specificTypes: [
         {
           shortcut: 'PET',
@@ -86,7 +88,9 @@ export const typesOfWaste = {
       ],
     },
     {
+      id: 'paper',
       name: 'PAPER',
+      image: './CardPics/paper.webp',
       specificTypes: [
         {
           shortcut: 'PAP',
@@ -105,7 +109,9 @@ export const typesOfWaste = {
       ],
     },
     {
+      id: 'metal',
       name: 'METAL',
+      image: './CardPics/metal.jpg',
       specificTypes: [
         {
           shortcut: 'FE, ALU ETC',
@@ -127,7 +133,9 @@ export const typesOfWaste = {
       ],
     },
     {
+      id: 'glass',
       name: 'GLASS',
+      image: './CardPics/glass.jpg',
       specificTypes: [
         {
           shortcut: 'GL',
@@ -146,7 +154,9 @@ export const typesOfWaste = {
       ],
     },
     {
+      id: 'e-waste',
       name: 'Electronic waste',
+      image: './CardPics/e-waste.jpg',
       specificTypes: [
         {
           shortcut: 'E-waste',
@@ -168,7 +178,9 @@ export const typesOfWaste = {
       ],
     },
     {
-      name: 'Can NOT be disposed:',
+      id: 'not-disposed',
+      name: 'Can NOT be disposed',
+      image: './CardPics/not-disposed.jpg',
       specificTypes: [
         {
           shortcut: 'NT DIS',

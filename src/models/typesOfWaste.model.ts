@@ -1,17 +1,19 @@
 export interface ITypesOfWaste {
-  types: Type[];
+  types: IType[];
 }
 
-export interface SpecificType {
-  shortcut: string;
-  fullName: string;
-  disposed: string[];
-  importantly: string[];
-  notDisposed: string[];
-  description: string;
+export interface ISpecificType {
+  shortcut?: string;
+  fullName?: string;
+  disposed?: string[];
+  importantly?: string[];
+  notDisposed?: string[];
+  description?: string;
 }
 
-export interface Type {
+export interface IType {
+  id: string;
   name: string;
-  specificTypes: SpecificType[];
+  image: string;
+  specificTypes: ISpecificType[];
 }
