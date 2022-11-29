@@ -4,7 +4,7 @@ import { GoogleMap, MarkerF } from '@react-google-maps/api';
 import { defaultTheme } from './Theme';
 
 import {
-  useGetAllServicesQuery,
+  // useGetAllServicesQuery,
   useLazyGetAddressFromCoordinatesQuery,
   useLazyGetServicesFromAnAreaQuery,
 } from '../../redux/services/services';
@@ -39,8 +39,8 @@ const defaultOptions = {
 };
 
 export function Map({ center }: { center: ICoordinate }) {
-  const { data: allEcoServices } = useGetAllServicesQuery();
-  const [allTrashBins, setAllTrashBins] = useState(allEcoServices);
+  // const { data: allEcoServices } = useGetAllServicesQuery();
+  const [allTrashBins, setAllTrashBins] = useState<IService[]>([]);
 
   const [getAddress] = useLazyGetAddressFromCoordinatesQuery();
   const [getSevicesFromArea] = useLazyGetServicesFromAnAreaQuery();
@@ -118,7 +118,9 @@ export function Map({ center }: { center: ICoordinate }) {
       center={center}
       zoom={12}
       onLoad={handleOnLoad}
-      onCenterChanged={() => handleCenterChanged(mapref)}
+      onZoomChanged={() => handleCenterChanged(mapref)}
+      onBoundsChanged={() => handleCenterChanged(mapref)}
+      onDragEnd={() => handleCenterChanged(mapref)}
       options={defaultOptions}
     >
       {(allTrashBins || trashBins)?.map((trashBin: IService) => {
