@@ -59,8 +59,8 @@ export const Auth: React.FC = () => {
 
    return (
       <div>
-         <Button aria-describedby={id} variant="contained" onClick={handleClick}>
-            Registration
+         <Button aria-describedby={id} variant="contained" onClick={handleClick} >
+            sign up
          </Button>
          <Popover
             id={id}
@@ -78,7 +78,7 @@ export const Auth: React.FC = () => {
          >
             <Card sx={{ minWidth: 400, minHeight: 480 }}>
                <CardContent>
-                  <Typography sx={{ fontSize: 30 }} color="text.secondary" gutterBottom>
+                  <Typography sx={{ fontSize: 30, ml: 2 }} color="text.secondary" gutterBottom>
                      Create a new account
                   </Typography>
                   <Box sx={{ display: 'flex' }}>
@@ -92,9 +92,9 @@ export const Auth: React.FC = () => {
                   <Box sx={{ display: 'flex' }}>
                      <TextField
                         sx={{ m: 1, width: '50ch' }}
-                        helperText="Please enter your Mail"
+                        helperText="Please enter your e-mail"
                         id="demo-helper-text-aligned"
-                        label="Mail"
+                        label="e-mail"
                      />
                   </Box>
                   <Box sx={{ minWidth: 100, textAlign: 'start', marginLeft: 1 }}>
@@ -142,7 +142,6 @@ export const Auth: React.FC = () => {
                </CardActions>
             </Card>
          </Popover>
-
       </div>
    )
 }
