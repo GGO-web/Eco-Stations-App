@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-function StarRating({ rate }: { rate: number | undefined }) {
+export function StarRating({ rate }: { rate: number | undefined }) {
   const [rating, setRating] = useState(rate || 0);
   const [hover, setHover] = useState(0);
   return (
@@ -23,5 +23,3 @@ function StarRating({ rate }: { rate: number | undefined }) {
     </div>
   );
 }
-
-export default StarRating;
