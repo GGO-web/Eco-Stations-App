@@ -38,7 +38,7 @@ export const LoginPage: React.FC = () => {
 
    return (
       <div>
-         <Card sx={{ minWidth: 400, minHeight: 360 }}>
+         <Card sx={{ minWidth: 400, minHeight: 361 }}>
             <CardContent>
                <Box sx={{ display: 'flex', ml: 1.5 }}>
                   <Typography sx={{ fontSize: 30, }} color="text.secondary" gutterBottom>
