@@ -3,8 +3,8 @@ import React, { useState } from 'react';
 import { useActions } from '../../hooks/actions';
 import { useAppSelector } from '../../hooks/redux';
 
-import {StarRating} from './StarRating';
-import AskForm from '../AskForm/AskForm';
+import { StarRating } from './StarRating';
+import { AskForm } from '../AskForm/AskForm';
 
 import './Popup.scss';
 
