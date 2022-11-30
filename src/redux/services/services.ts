@@ -27,10 +27,18 @@ export const serviceApi = createApi({
       providesTags: ['Service'],
     }),
     getServicesFromAnArea: builder.query<IService[], {
-      latitude: number, longitude: number, distance: number
+      blCoordinate: ICoordinate, trCoordinate:ICoordinate
     }>({
-      query: ({ latitude, longitude, distance }) => ({
-        url: `${import.meta.env.VITE_BACKEND_URL}/${latitude}/${longitude}/${distance}`,
+      query: ({ blCoordinate, trCoordinate }) => ({
+        url: `${import.meta.env.VITE_BACKEND_URL}/?bl_latitude=${
+          blCoordinate.lat
+        }&bl_longitude=${
+          blCoordinate.lng
+        }&tr_latitude=${
+          trCoordinate.lat
+        }&tr_longitude=${
+          trCoordinate.lng
+        }`,
       }),
       providesTags: ['Service'],
     }),

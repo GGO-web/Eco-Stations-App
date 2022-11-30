@@ -14,7 +14,7 @@ import { IService } from '../../models/service.model';
 
 import { trashBins } from '../../constants';
 import { IMapOptions } from '../../models/bounds.model';
-import { getDistanceFromCoordinates } from '../../helpers/getDistanceFromCoordinates';
+
 import { truncateCoordinate } from '../../helpers/truncateCoordinate';
 import { useDebounce } from '../../hooks/debounce';
 
@@ -62,20 +62,9 @@ export function Map({ center }: { center: ICoordinate }) {
     const getServicesInAnArea = async () => {
       // getting eco services in the area
       try {
-        const middleEdgeCoordinate: ICoordinate = {
-          lat: mapOptions.center.lat,
-          lng: mapOptions.northEast.lng,
-        };
-
-        const distance = getDistanceFromCoordinates(
-          mapOptions.center,
-          middleEdgeCoordinate,
-        );
-
         const trashBinsInArea: IService[] = await getServicesFromArea({
-          latitude: mapOptions?.center.lat,
-          longitude: mapOptions?.center.lng,
-          distance,
+          blCoordinate: mapOptions.southWest,
+          trCoordinate: mapOptions.northEast,
         }).unwrap();
 
         setAllTrashBins(trashBinsInArea);
