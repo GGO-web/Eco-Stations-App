@@ -1,4 +1,3 @@
-/* eslint-disable */
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { Box, Button, Card, CardActions, CardContent, FormControl, IconButton, InputAdornment, InputLabel, MenuItem, OutlinedInput, Select, SelectChangeEvent, TextField, Typography } from "@mui/material";
 import React from "react";

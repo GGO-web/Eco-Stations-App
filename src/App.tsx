@@ -1,4 +1,3 @@
-/* eslint-disable */
 import React from 'react';
 
 import { useJsApiLoader } from '@react-google-maps/api';
