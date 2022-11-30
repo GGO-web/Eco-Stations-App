@@ -1,7 +1,7 @@
 {
   "name": "eco-stations-app",
   "private": true,
-  "homepage": "./",
+  "homepage": "https://ggo-web.github.io/Eco-Stations-App/dist/#",
   "version": "0.0.0",
   "type": "module",
   "scripts": {
