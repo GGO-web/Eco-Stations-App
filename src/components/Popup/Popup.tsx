@@ -18,6 +18,8 @@ export function Popup() {
     priceOfService,
   } = useAppSelector((store) => store.service.service);
 
+  console.log(typeOfWastes);
+
   const { setPopupState } = useActions();
 
   const [askQuestionField, setAskQuestionField] = useState<boolean>(false);

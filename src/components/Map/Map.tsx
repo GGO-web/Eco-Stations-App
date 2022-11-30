@@ -6,6 +6,7 @@ import { defaultTheme } from './Theme';
 import {
   // useGetAllServicesQuery,
   useLazyGetAddressFromCoordinatesQuery,
+  // useLazyGetServiceByIdQuery,
   useLazyGetServicesFromAnAreaQuery,
 } from '../../redux/services/services';
 import { useActions } from '../../hooks/actions';
@@ -43,7 +44,8 @@ export function Map({ center }: { center: ICoordinate }) {
   const [allTrashBins, setAllTrashBins] = useState<IService[]>([]);
 
   const [getAddress] = useLazyGetAddressFromCoordinatesQuery();
-  const [getSevicesFromArea] = useLazyGetServicesFromAnAreaQuery();
+  const [getServicesFromArea] = useLazyGetServicesFromAnAreaQuery();
+  // const [getServiceById] = useLazyGetServiceByIdQuery();
 
   const { setPopupState, setCurrentService } = useActions();
 
@@ -55,6 +57,7 @@ export function Map({ center }: { center: ICoordinate }) {
       lng: trashBinService.coordinate.longitude,
     }).unwrap();
 
+    // console.log(getServiceById(trashBinService?.id as number));
     setPopupState(true);
     setCurrentService({
       ...trashBinService,
@@ -95,7 +98,7 @@ export function Map({ center }: { center: ICoordinate }) {
 
       // getting eco services in the area
       try {
-        const trashBinsInArea: IService[] = await getSevicesFromArea({
+        const trashBinsInArea: IService[] = await getServicesFromArea({
           latitude: mapOptions.center.lat,
           longitude: mapOptions.center.lng,
           distance,
