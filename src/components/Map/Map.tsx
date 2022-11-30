@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { GoogleMap, MarkerF } from '@react-google-maps/api';
 import { defaultTheme } from './Theme';
 
 import {
-  // useGetAllServicesQuery,
   useLazyGetAddressFromCoordinatesQuery,
   useLazyGetServicesFromAnAreaQuery,
 } from '../../redux/services/services';
@@ -17,6 +16,7 @@ import { trashBins } from '../../constants';
 import { IMapOptions } from '../../models/bounds.model';
 import { getDistanceFromCoordinates } from '../../helpers/getDistanceFromCoordinates';
 import { truncateCoordinate } from '../../helpers/truncateCoordinate';
+import { useDebounce } from '../../hooks/debounce';
 
 const containerStyle = {
   width: '100vw',
@@ -39,15 +39,53 @@ const defaultOptions = {
 };
 
 export function Map({ center }: { center: ICoordinate }) {
-  // const { data: allEcoServices } = useGetAllServicesQuery();
   const [allTrashBins, setAllTrashBins] = useState<IService[]>([]);
 
+  const [mapOptions, setMapOptions] = useState<IMapOptions>(
+    {
+      center: { lng: 0, lat: 0 },
+      southWest: { lng: 0, lat: 0 },
+      northEast: { lng: 0, lat: 0 },
+    },
+  );
+
   const [getAddress] = useLazyGetAddressFromCoordinatesQuery();
-  const [getSevicesFromArea] = useLazyGetServicesFromAnAreaQuery();
+  const [getServicesFromArea] = useLazyGetServicesFromAnAreaQuery();
 
   const { setPopupState, setCurrentService } = useActions();
 
   const [mapref, setMapRef] = useState<google.maps.Map | null>(null);
+
+  const debouncedMapOptions = useDebounce(mapOptions, 400);
+
+  useEffect(() => {
+    const getServicesInAnArea = async () => {
+      // getting eco services in the area
+      try {
+        const middleEdgeCoordinate: ICoordinate = {
+          lat: mapOptions.center.lat,
+          lng: mapOptions.northEast.lng,
+        };
+
+        const distance = getDistanceFromCoordinates(
+          mapOptions.center,
+          middleEdgeCoordinate,
+        );
+
+        const trashBinsInArea: IService[] = await getServicesFromArea({
+          latitude: mapOptions?.center.lat,
+          longitude: mapOptions?.center.lng,
+          distance,
+        }).unwrap();
+
+        setAllTrashBins(trashBinsInArea);
+      } catch (error: any) {
+        setAllTrashBins([]);
+      }
+    };
+
+    getServicesInAnArea();
+  }, [debouncedMapOptions]);
 
   const handleClick = async (trashBinService: IService) => {
     const response = await getAddress({
@@ -68,43 +106,22 @@ export function Map({ center }: { center: ICoordinate }) {
         await mapObject.getBounds() as google.maps.LatLngBounds
       );
 
-      const mapOptions: IMapOptions = {
-        center: {
-          lat: truncateCoordinate(mapBounds.getCenter().lat()),
-          lng: truncateCoordinate(mapBounds.getCenter().lng()),
+      setMapOptions(
+        {
+          center: {
+            lat: truncateCoordinate(mapBounds.getCenter().lat()),
+            lng: truncateCoordinate(mapBounds.getCenter().lng()),
+          },
+          southWest: {
+            lat: truncateCoordinate(mapBounds.getSouthWest().lat()),
+            lng: truncateCoordinate(mapBounds.getSouthWest().lng()),
+          },
+          northEast: {
+            lat: truncateCoordinate(mapBounds.getNorthEast().lat()),
+            lng: truncateCoordinate(mapBounds.getNorthEast().lng()),
+          },
         },
-        southWest: {
-          lat: truncateCoordinate(mapBounds.getSouthWest().lat()),
-          lng: truncateCoordinate(mapBounds.getSouthWest().lng()),
-        },
-        northEast: {
-          lat: truncateCoordinate(mapBounds.getNorthEast().lat()),
-          lng: truncateCoordinate(mapBounds.getNorthEast().lng()),
-        },
-      };
-
-      const middleEdgeCoordinate: ICoordinate = {
-        lat: mapOptions.center.lat,
-        lng: mapOptions.northEast.lng,
-      };
-
-      const distance = getDistanceFromCoordinates(
-        mapOptions.center,
-        middleEdgeCoordinate,
       );
-
-      // getting eco services in the area
-      try {
-        const trashBinsInArea: IService[] = await getSevicesFromArea({
-          latitude: mapOptions.center.lat,
-          longitude: mapOptions.center.lng,
-          distance,
-        }).unwrap();
-
-        setAllTrashBins(trashBinsInArea);
-      } catch (error) {
-        setAllTrashBins([]);
-      }
     }
   };
 
@@ -118,9 +135,7 @@ export function Map({ center }: { center: ICoordinate }) {
       center={center}
       zoom={12}
       onLoad={handleOnLoad}
-      onZoomChanged={() => handleCenterChanged(mapref)}
       onBoundsChanged={() => handleCenterChanged(mapref)}
-      onDragEnd={() => handleCenterChanged(mapref)}
       options={defaultOptions}
     >
       {(allTrashBins || trashBins)?.map((trashBin: IService) => {

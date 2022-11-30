@@ -1,5 +1,6 @@
-// Need to use the React-specific entry point to import createApi
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import {
+  createApi, fetchBaseQuery,
+} from '@reduxjs/toolkit/query/react';
 import { ICoordinate } from '../../models/coordinates.model';
 import { IService } from '../../models/service.model';
 
@@ -10,7 +11,6 @@ export const serviceApi = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: '',
     mode: 'cors',
-
   }),
   endpoints: (builder) => ({
     getAllServices: builder.query<IService[], void>({
