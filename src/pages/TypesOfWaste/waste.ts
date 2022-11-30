@@ -208,6 +208,7 @@ export const waste = {
       image: paper,
       specificTypes: [
         {
+          fullName: 'Paper Waste',
           shortcut: 'PAP',
           images: [
             papGen,
@@ -235,6 +236,7 @@ export const waste = {
       image: metal,
       specificTypes: [
         {
+          fullName: 'Metal Waste',
           shortcut: 'FE, ALU ETC',
           images: [
             metalGen,
@@ -269,6 +271,7 @@ export const waste = {
       image: glass,
       specificTypes: [
         {
+          fullName: 'Glass Waste',
           shortcut: 'GL',
           images: [
             glassGen,
@@ -305,6 +308,7 @@ export const waste = {
       image: eWaste,
       specificTypes: [
         {
+          fullName: 'Electronic waste',
           shortcut: 'E-waste',
           images: [
             eGen,
@@ -344,6 +348,7 @@ export const waste = {
       image: notDisposed,
       specificTypes: [
         {
+          fullName: 'Not Disposed Waste',
           shortcut: 'NT DIS',
           images: [
             batteries,

@@ -8,6 +8,7 @@ import { ICoordinate } from '../../models/coordinates.model';
 
 import { Popup } from '../../components/Popup/Popup';
 import { Map } from '../../components/Map/Map';
+import { Loader } from '../../components/Loader/Loader';
 
 export function Home() {
   const center: ICoordinate = {
@@ -26,7 +27,7 @@ export function Home() {
       {popUp && <Popup />}
       {isLoaded
         ? <Map center={center} />
-        : <h2>Loading</h2>}
+        : <Loader />}
     </>
   );
 }

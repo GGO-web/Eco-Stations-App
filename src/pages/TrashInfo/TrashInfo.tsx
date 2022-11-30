@@ -34,8 +34,8 @@ export function TrashInfo() {
       </header>
       <main className="p-5">
         {wasteInfo.specificTypes.map((specificType: ISpecificType) => (
-          <div className="my-4">
-            <h5 className="text-2xl font-bold text-center max-[426px]:text-xl">{specificType.fullName}</h5>
+          <div className="my-4 text-dark">
+            <h5 className="text-2xl font-bold text-dark text-center max-[426px]:text-xl">{specificType.fullName}</h5>
             <p className="font-semibold text-center text-[#35374f]">{specificType.shortcut}</p>
             <div className="m-2">
               <Swiper
