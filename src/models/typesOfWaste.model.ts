@@ -5,6 +5,7 @@ export interface ITypesOfWaste {
 export interface ISpecificType {
   shortcut?: string;
   fullName?: string;
+  images?: string[];
   disposed?: string[];
   importantly?: string[];
   notDisposed?: string[];
