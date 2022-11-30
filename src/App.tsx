@@ -1,37 +1,23 @@
 import React from 'react';
 
-import { useJsApiLoader } from '@react-google-maps/api';
-
 import { ToastContainer } from 'react-toastify';
 
-import { Map } from './components/Map/Map';
-import { Popup } from './components/Popup/Popup';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
-import { useAppSelector } from './hooks/redux';
-import { ICoordinate } from './models/coordinates.model';
-
-import './App.scss';
+import { Home } from './pages/Home/Home';
+import { TypesOfWaste } from './pages/TypesOfWaste/TypesOfWaste';
+import { TrashInfo } from './pages/TrashInfo/TrashInfo';
 
 function App() {
-  const center: ICoordinate = {
-    lat: 50.450001,
-    lng: 30.523333,
-  };
-
-  const { isLoaded } = useJsApiLoader({
-    googleMapsApiKey: import.meta.env.VITE_API_KEY,
-  });
-
-  const popUp = useAppSelector((store) => store.service.isPopupOpen);
-
   return (
-    <div className="App">
+    <BrowserRouter>
       <ToastContainer limit={1} />
-      {popUp && <Popup />}
-      {isLoaded
-        ? <Map center={center} />
-        : <h2>Loading</h2>}
-    </div>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/detailed" element={<TypesOfWaste />} />
+        <Route path="/detailed/:id" element={<TrashInfo />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
