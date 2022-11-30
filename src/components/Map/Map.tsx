@@ -5,7 +5,7 @@ import { defaultTheme } from './Theme';
 
 import {
   useLazyGetAddressFromCoordinatesQuery,
-  // useLazyGetServiceByIdQuery,
+  useLazyGetServiceByIdQuery,
   useLazyGetServicesFromAnAreaQuery,
 } from '../../redux/services/services';
 import { useActions } from '../../hooks/actions';
@@ -18,6 +18,7 @@ import { IMapOptions } from '../../models/bounds.model';
 
 import { truncateCoordinate } from '../../helpers/truncateCoordinate';
 import { useDebounce } from '../../hooks/debounce';
+import { IShortService } from '../../models/shortService.model';
 
 const containerStyle = {
   width: '100vw',
@@ -40,7 +41,7 @@ const defaultOptions = {
 };
 
 export function Map({ center }: { center: ICoordinate }) {
-  const [allTrashBins, setAllTrashBins] = useState<IService[]>([]);
+  const [allTrashBins, setAllTrashBins] = useState<IShortService[]>([]);
 
   const [mapOptions, setMapOptions] = useState<IMapOptions>(
     {
@@ -58,6 +59,8 @@ export function Map({ center }: { center: ICoordinate }) {
   const [mapref, setMapRef] = useState<google.maps.Map | null>(null);
 
   const debouncedMapOptions = useDebounce(mapOptions, 400);
+
+  const [getServiceById] = useLazyGetServiceByIdQuery();
 
   useEffect(() => {
     const getServicesInAnArea = async () => {
@@ -77,17 +80,20 @@ export function Map({ center }: { center: ICoordinate }) {
     getServicesInAnArea();
   }, [debouncedMapOptions]);
 
-  const handleClick = async (trashBinService: IService) => {
-    const response = await getAddress({
+  const handleClick = async (trashBinService: IShortService) => {
+    const addressResponse = await getAddress({
       lat: trashBinService.coordinate.latitude,
       lng: trashBinService.coordinate.longitude,
     }).unwrap();
 
-    // console.log(getServiceById(trashBinService?.id as number));
+    const serviceResponse = await getServiceById(trashBinService.id as number);
+
+    const currentService: IService = serviceResponse.data as IService;
+
     setPopupState(true);
     setCurrentService({
-      ...trashBinService,
-      address: (response as any).results[0].formatted_address,
+      ...currentService,
+      address: (addressResponse as any).results[0].formatted_address,
     });
   };
 
@@ -129,7 +135,7 @@ export function Map({ center }: { center: ICoordinate }) {
       onBoundsChanged={() => handleCenterChanged(mapref)}
       options={defaultOptions}
     >
-      {(allTrashBins || trashBins)?.map((trashBin: IService) => {
+      {(allTrashBins || trashBins)?.map((trashBin: IShortService) => {
         const trashBinCenter = {
           lng: trashBin.coordinate.longitude,
           lat: trashBin.coordinate.latitude,
