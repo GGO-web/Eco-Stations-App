@@ -143,7 +143,7 @@ export function Map({ center }: { center: ICoordinate }) {
 
         return (
           <MarkerF
-            icon="/eco-bin.png"
+            icon="eco-bin.png"
             key={trashBin.id}
             position={trashBinCenter}
             label={{
