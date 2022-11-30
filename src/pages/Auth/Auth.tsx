@@ -1,6 +1,7 @@
-import { Visibility, VisibilityOff } from "@mui/icons-material";
-import { Box, Button, Card, CardActions, CardContent, FormControl, IconButton, InputAdornment, InputLabel, MenuItem, OutlinedInput, Select, SelectChangeEvent, TextField, Typography } from "@mui/material";
-import React, { useState } from "react";
+/* eslint-disable */
+import { Visibility, VisibilityOff } from '@mui/icons-material';
+import { Box, Button, Card, CardActions, CardContent, FormControl, IconButton, InputAdornment, InputLabel, MenuItem, OutlinedInput, Popover, Select, SelectChangeEvent, TextField, Typography } from "@mui/material";
+import React, { useState } from 'react';
 
 interface State {
    amount: string;
@@ -10,8 +11,7 @@ interface State {
    showPassword: boolean;
 }
 
-export const LoginPage: React.FC = () => {
-
+export function Auth() {
    const [values, setValues] = React.useState<State>({
       amount: '',
       password: '',
@@ -36,14 +36,26 @@ export const LoginPage: React.FC = () => {
       event.preventDefault();
    };
 
+   const [role, setRole] = useState('');
+
+   const handleChangeRole = (event: SelectChangeEvent) => {
+      setRole(event.target.value as string);
+   };
+
    return (
       <div>
-         <Card sx={{ minWidth: 400, minHeight: 361 }}>
+         <Card sx={{ width: 480, height: 480, mt: 10, ml: '33%' }}>
             <CardContent>
-               <Box sx={{ display: 'flex', ml: 1.5 }}>
-                  <Typography sx={{ fontSize: 30, }} color="text.secondary" gutterBottom>
-                     Login
-                  </Typography>
+               <Typography sx={{ fontSize: 30, ml: 2 }} color="text.secondary" gutterBottom>
+                  Create a new account
+               </Typography>
+               <Box sx={{ display: 'flex' }}>
+                  <TextField
+                     sx={{ m: 1, width: '50ch' }}
+                     helperText="Please enter your name"
+                     id="demo-helper-text-aligned"
+                     label="Name"
+                  />
                </Box>
                <Box sx={{ display: 'flex' }}>
                   <TextField
@@ -54,6 +66,19 @@ export const LoginPage: React.FC = () => {
                   />
                </Box>
                <Box sx={{ minWidth: 100, textAlign: 'start', marginLeft: 1 }}>
+                  <FormControl sx={{ minWidth: 100 }}>
+                     <InputLabel id="demo-simple-select-label">Role</InputLabel>
+                     <Select
+                        labelId="demo-simple-select-label"
+                        id="demo-simple-select"
+                        value={role}
+                        label="Role"
+                        onChange={handleChangeRole}
+                     >
+                        <MenuItem value="User">User</MenuItem>
+                        <MenuItem value="Service">Service</MenuItem>
+                     </Select>
+                  </FormControl>
                </Box>
                <Box sx={{ display: 'flex' }}>
                   <FormControl sx={{ m: 1, width: '50ch' }} variant="outlined">
@@ -79,9 +104,9 @@ export const LoginPage: React.FC = () => {
                      />
                   </FormControl>
                </Box>
-            </CardContent >
+            </CardContent>
             <CardActions>
-               <Button sx={{ marginLeft: 2 }} variant="outlined">Sign in</Button>
+               <Button sx={{ marginLeft: 2 }} variant="outlined">Sign up</Button>
             </CardActions>
          </Card>
       </div >
