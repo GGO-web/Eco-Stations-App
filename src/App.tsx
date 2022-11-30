@@ -16,7 +16,7 @@ import Header from './pages/Header/Header';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { LoginPage } from './pages/Login/LoginPage';
 
-function App() {
+const App: React.FC = () => {
   const center: ICoordinate = {
     lat: 50.450001,
     lng: 30.523333,
