@@ -1,16 +1,17 @@
-// Need to use the React-specific entry point to import createApi
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import {
+  createApi, fetchBaseQuery,
+} from '@reduxjs/toolkit/query/react';
 import { ICoordinate } from '../../models/coordinates.model';
 import { IService } from '../../models/service.model';
 
 // Define a service using a base URL and expected endpoints
 export const serviceApi = createApi({
   reducerPath: 'serviceApi',
-  tagTypes: ['Service'],
   baseQuery: fetchBaseQuery({
     baseUrl: '',
     mode: 'cors',
   }),
+  tagTypes: ['Service'],
   endpoints: (builder) => ({
     getAllServices: builder.query<IService[], void>({
       query: () => ({
@@ -25,11 +26,50 @@ export const serviceApi = createApi({
       }),
       providesTags: ['Service'],
     }),
-    getServicesFromAnArea: builder.query({
-      query: ({ latitude, longitude, distance }) => ({
-        url: `${import.meta.env.VITE_BACKEND_URL}/${latitude}/${longitude}/${distance}`,
+    getServicesFromAnArea: builder.query<IService[], {
+      blCoordinate: ICoordinate, trCoordinate:ICoordinate
+    }>({
+      query: ({ blCoordinate, trCoordinate }) => ({
+        url: `${import.meta.env.VITE_BACKEND_URL}/?bl_latitude=${
+          blCoordinate.lat
+        }&bl_longitude=${
+          blCoordinate.lng
+        }&tr_latitude=${
+          trCoordinate.lat
+        }&tr_longitude=${
+          trCoordinate.lng
+        }`,
       }),
       providesTags: ['Service'],
+    }),
+    getServiceById: builder.query<IService, number>({
+      query: (id) => ({
+        url: `${import.meta.env.VITE_BACKEND_URL}/${id}`,
+      }),
+      providesTags: ['Service'],
+    }),
+    createNewService: builder.mutation<IService, IService>({
+      query: (newService: IService) => ({
+        url: `${import.meta.env.VITE_BACKEND_URL}/manage`,
+        method: 'POST',
+        body: newService,
+      }),
+      invalidatesTags: ['Service'],
+    }),
+    updateExistingService: builder.mutation<IService, IService>({
+      query: (updateService: IService) => ({
+        url: `${import.meta.env.VITE_BACKEND_URL}/manage/${updateService.id}`,
+        method: 'PUT',
+        body: updateService,
+      }),
+      invalidatesTags: ['Service'],
+    }),
+    deleteExistingService: builder.mutation<void, number>({
+      query: (id) => ({
+        url: `${import.meta.env.VITE_BACKEND_URL}/manage/${id}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: ['Service'],
     }),
   }),
 });
@@ -40,4 +80,8 @@ export const {
   useGetAllServicesQuery,
   useLazyGetServicesFromAnAreaQuery,
   useLazyGetAddressFromCoordinatesQuery,
+  useLazyGetServiceByIdQuery,
+  useCreateNewServiceMutation,
+  useUpdateExistingServiceMutation,
+  useDeleteExistingServiceMutation,
 } = serviceApi;

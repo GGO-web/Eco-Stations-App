@@ -3,8 +3,8 @@ import React, { useState } from 'react';
 import { useActions } from '../../hooks/actions';
 import { useAppSelector } from '../../hooks/redux';
 
-import {StarRating} from './StarRating';
-import AskForm from '../AskForm/AskForm';
+import { StarRating } from './StarRating';
+import { AskForm } from '../AskForm/AskForm';
 
 import './Popup.scss';
 
@@ -47,7 +47,7 @@ export function Popup() {
             <p className="py-2">
               Delivery options:
               {' '}
-              {deliveryOptions.map((option: string) => option).join(',')}
+              {deliveryOptions.join(',')}
             </p>
           </div>
           <div className="flex flex-col flex-auto">

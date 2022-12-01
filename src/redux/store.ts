@@ -1,4 +1,6 @@
-import { configureStore } from '@reduxjs/toolkit';
+import {
+  configureStore,
+} from '@reduxjs/toolkit';
 
 import { setupListeners } from '@reduxjs/toolkit/query';
 
@@ -11,7 +13,8 @@ export const store = configureStore({
     service: serviceReducer,
     [serviceApi.reducerPath]: serviceApi.reducer,
   },
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(serviceApi.middleware),
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware()
+    .concat(serviceApi.middleware),
 });
 
 setupListeners(store.dispatch);
