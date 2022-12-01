@@ -1,24 +1,29 @@
 import React, { useEffect, useState } from 'react';
 
 import { GoogleMap, MarkerF } from '@react-google-maps/api';
-import { defaultTheme } from './Theme';
 
 import {
   useLazyGetAddressFromCoordinatesQuery,
   useLazyGetServiceByIdQuery,
   useLazyGetServicesFromAnAreaQuery,
 } from '../../redux/services/services';
-import { useActions } from '../../hooks/actions';
+
+import { truncateCoordinate } from '../../helpers/truncateCoordinate';
+
+import { trashBins } from '../../constants';
 
 import { ICoordinate } from '../../models/coordinates.model';
 import { IService } from '../../models/service.model';
-
-import { trashBins } from '../../constants';
 import { IMapOptions } from '../../models/bounds.model';
-
-import { truncateCoordinate } from '../../helpers/truncateCoordinate';
-import { useDebounce } from '../../hooks/debounce';
 import { IShortService } from '../../models/shortService.model';
+
+import { useActions } from '../../hooks/actions';
+import { useDebounce } from '../../hooks/debounce';
+import { useAppSelector } from '../../hooks/redux';
+
+import { Popup } from '../Popup/Popup';
+
+import { defaultTheme } from './Theme';
 
 const containerStyle = {
   width: '100vw',
@@ -126,36 +131,42 @@ export function Map({ center }: { center: ICoordinate }) {
     setMapRef(map);
   };
 
-  return (
-    <GoogleMap
-      mapContainerStyle={containerStyle}
-      center={center}
-      zoom={12}
-      onLoad={handleOnLoad}
-      onBoundsChanged={() => handleCenterChanged(mapref)}
-      options={defaultOptions}
-    >
-      {(allTrashBins || trashBins)?.map((trashBin: IShortService) => {
-        const trashBinCenter = {
-          lng: trashBin.coordinate.longitude,
-          lat: trashBin.coordinate.latitude,
-        };
+  const popUp = useAppSelector((store) => store.service.isPopupOpen);
 
-        return (
-          <MarkerF
-            icon="/eco-bin.png"
-            key={trashBin.id}
-            position={trashBinCenter}
-            label={{
-              text: trashBin.serviceName,
-              className: 'absolute left-0 top-[-5px]',
-              fontSize: '1.5rem',
-              fontWeight: 'bold',
-            }}
-            onClick={() => handleClick(trashBin)}
-          />
-        );
-      })}
-    </GoogleMap>
+  return (
+    <>
+      {popUp && <Popup />}
+
+      <GoogleMap
+        mapContainerStyle={containerStyle}
+        center={center}
+        zoom={12}
+        onLoad={handleOnLoad}
+        onBoundsChanged={() => handleCenterChanged(mapref)}
+        options={defaultOptions}
+      >
+        {(allTrashBins || trashBins)?.map((trashBin: IShortService) => {
+          const trashBinCenter = {
+            lng: trashBin.coordinate.longitude,
+            lat: trashBin.coordinate.latitude,
+          };
+
+          return (
+            <MarkerF
+              icon="/eco-bin.png"
+              key={trashBin.id}
+              position={trashBinCenter}
+              label={{
+                text: trashBin.serviceName,
+                className: 'absolute left-0 top-[-5px]',
+                fontSize: '1.5rem',
+                fontWeight: 'bold',
+              }}
+              onClick={() => handleClick(trashBin)}
+            />
+          );
+        })}
+      </GoogleMap>
+    </>
   );
 }

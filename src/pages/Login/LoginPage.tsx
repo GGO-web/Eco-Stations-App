@@ -1,3 +1,5 @@
+import React, { ChangeEvent, useState } from 'react';
+
 import {
   Box,
   Button,
@@ -12,7 +14,6 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import React, { ChangeEvent, useState } from 'react';
 
 import { ILoginState } from '../../models/login.model';
 

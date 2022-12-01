@@ -9,6 +9,7 @@ export function Error() {
         <h3 className="text-[220px] max-[425px]:text-[160px] leading-none">404</h3>
         <p className="text-6xl tracking-widest max-[425px]:text-4xl">THE PAGE</p>
         <p className="text-2xl mt-2">WAS NOT FOUND</p>
+
         <Link to="/" className="mt-3 bg-light-green  rounded-2xl px-8 py-4">BACK TO HOME</Link>
       </div>
     </div>
