@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import { GoogleMap, MarkerF } from '@react-google-maps/api';
+import { Circle, GoogleMap, MarkerF } from '@react-google-maps/api';
 import { defaultTheme } from './Theme';
 
 import {
@@ -14,11 +14,14 @@ import { ICoordinate } from '../../models/coordinates.model';
 import { IService } from '../../models/service.model';
 
 import { trashBins } from '../../constants';
+
 import { IMapOptions } from '../../models/bounds.model';
+import { IShortService } from '../../models/shortService.model';
 
 import { truncateCoordinate } from '../../helpers/truncateCoordinate';
+import { closeOptions, farOptions, middleOptions } from '../../helpers/circleOptions';
+
 import { useDebounce } from '../../hooks/debounce';
-import { IShortService } from '../../models/shortService.model';
 
 const containerStyle = {
   width: '100vw',
@@ -40,8 +43,11 @@ const defaultOptions = {
   styles: defaultTheme,
 };
 
+const user = true;
+
 export function Map({ center }: { center: ICoordinate }) {
   const [allTrashBins, setAllTrashBins] = useState<IShortService[]>([]);
+  const [userLocation, setUserLocation] = useState<ICoordinate>();
 
   const [mapOptions, setMapOptions] = useState<IMapOptions>(
     {
@@ -79,6 +85,10 @@ export function Map({ center }: { center: ICoordinate }) {
 
     getServicesInAnArea();
   }, [debouncedMapOptions]);
+
+  useEffect(() => {
+
+  }, []);
 
   const handleClick = async (trashBinService: IShortService) => {
     const addressResponse = await getAddress({
@@ -124,6 +134,14 @@ export function Map({ center }: { center: ICoordinate }) {
 
   const handleOnLoad = (map: google.maps.Map) => {
     setMapRef(map);
+
+    // the way you can get user coordinate
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const { latitude, longitude } = position.coords;
+        setUserLocation({ lat: latitude, lng: longitude });
+      },
+    );
   };
 
   return (
@@ -156,6 +174,14 @@ export function Map({ center }: { center: ICoordinate }) {
           />
         );
       })}
+      {user && userLocation && (
+      <>
+        <MarkerF position={userLocation} icon={{ url: '/people.png', scaledSize: new google.maps.Size(100, 100) }} />
+        <Circle center={userLocation} radius={15000} options={closeOptions} />
+        <Circle center={userLocation} radius={30000} options={middleOptions} />
+        <Circle center={userLocation} radius={45000} options={farOptions} />
+      </>
+      )}
     </GoogleMap>
   );
 }
