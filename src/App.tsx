@@ -19,17 +19,14 @@ function App() {
     <HashRouter>
       <Header />
       <ToastContainer limit={1} />
-
-      <main className="main">
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/detailed" element={<TypesOfWaste />} />
-          <Route path="/detailed/:id" element={<TrashInfo />} />
-          <Route path="/Login" element={<LoginPage />} />
-          <Route path="/Auth" element={<Auth />} />
-          <Route path="/*" element={<Error />} />
-        </Routes>
-      </main>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/detailed" element={<TypesOfWaste />} />
+        <Route path="/detailed/:id" element={<TrashInfo />} />
+        <Route path="/Login" element={<LoginPage />} />
+        <Route path="/Auth" element={<Auth />} />
+        <Route path="/*" element={<Error />} />
+      </Routes>
     </HashRouter>
   );
 }

@@ -5,6 +5,11 @@ import { useParams } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay } from 'swiper';
 
+import { LazyLoadImage } from 'react-lazy-load-image-component';
+import 'react-lazy-load-image-component/src/effects/blur.css';
+
+import { v4 as uuidv4 } from 'uuid';
+
 import { waste } from '../TypesOfWaste/waste';
 
 import { ISpecificType, IType } from '../../models/typesOfWaste.model';
@@ -34,7 +39,7 @@ export function TrashInfo() {
       </header>
       <main className="p-5">
         {wasteInfo.specificTypes.map((specificType: ISpecificType) => (
-          <div className="my-4 text-dark">
+          <div key={uuidv4()} className="my-4 text-dark">
             <h5 className="text-2xl font-bold text-dark text-center max-[426px]:text-xl">{specificType.fullName}</h5>
             <p className="font-semibold text-center text-[#35374f]">{specificType.shortcut}</p>
             <div className="m-2">
@@ -71,8 +76,8 @@ export function TrashInfo() {
                 modules={[Autoplay]}
               >
                 {specificType.images && specificType.images?.map((image) => (
-                  <SwiperSlide>
-                    <img className="w-full h-full object-cover rounded-2xl object-center" src={image} alt={wasteInfo.id} />
+                  <SwiperSlide key={uuidv4()}>
+                    <LazyLoadImage height="100%" width="100%" className="w-full h-full object-cover rounded-2xl object-center" effect="blur" src={image} alt={wasteInfo.id} />
                   </SwiperSlide>
                 ))}
               </Swiper>
@@ -81,7 +86,7 @@ export function TrashInfo() {
             <div className="m-2">
               <h6 className="text-xl font-semibold max-[426px]:text-lg">What can be disposed:</h6>
               {specificType.disposed?.map((disposed) => (
-                <p className="text-lg my-3 max-[426px]:text-base">
+                <p key={uuidv4()} className="text-lg my-3 max-[426px]:text-base">
                   🚮
                   {' '}
                   {disposed}
@@ -93,7 +98,7 @@ export function TrashInfo() {
               <div className="m-2">
                 <h6 className="text-xl font-semibold max-[426px]:text-lg">What can NOT be disposed:</h6>
                 {specificType.notDisposed?.map((notDisposed) => (
-                  <p className="text-lg my-3 max-[426px]:text-base">
+                  <p key={uuidv4()} className="text-lg my-3 max-[426px]:text-base">
                     🚯
                     {' '}
                     {notDisposed}
@@ -105,7 +110,7 @@ export function TrashInfo() {
               <div className="m-2">
                 <h6 className="text-xl font-semibold max-[426px]:text-lg">Important:</h6>
                 {specificType.importantly?.map((importantly) => (
-                  <p className="text-lg my-3 max-[426px]:text-base">
+                  <p key={uuidv4()} className="text-lg my-3 max-[426px]:text-base">
                     🗸
                     {' '}
                     {importantly}
