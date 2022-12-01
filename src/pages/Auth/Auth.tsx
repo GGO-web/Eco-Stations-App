@@ -1,3 +1,5 @@
+import React, { useState } from 'react';
+
 import {
   Box,
   Button,
@@ -16,18 +18,10 @@ import {
   Typography,
 } from '@mui/material';
 
-import React, { useState } from 'react';
-
-interface State {
-  amount: string;
-  password: string;
-  weight: string;
-  weightRange: string;
-  showPassword: boolean;
-}
+import { IAuth } from '../../models/auth.model';
 
 export function Auth() {
-  const [values, setValues] = React.useState<State>({
+  const [values, setValues] = React.useState<IAuth>({
     amount: '',
     password: '',
     weight: '',
@@ -35,7 +29,9 @@ export function Auth() {
     showPassword: false,
   });
 
-  const handleChange = (prop: keyof State) => (event: React.ChangeEvent<HTMLInputElement>) => {
+  const [role, setRole] = useState('');
+
+  const handleChange = (prop: keyof IAuth) => (event: React.ChangeEvent<HTMLInputElement>) => {
     setValues({ ...values, [prop]: event.target.value });
   };
 
@@ -49,8 +45,6 @@ export function Auth() {
   const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
   };
-
-  const [role, setRole] = useState('');
 
   const handleChangeRole = (event: SelectChangeEvent) => {
     setRole(event.target.value as string);
@@ -105,6 +99,7 @@ export function Auth() {
           <Box sx={{ display: 'flex' }}>
             <FormControl sx={{ width: '50ch' }} variant="outlined">
               <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
+
               <OutlinedInput
                 id="outlined-adornment-password"
                 type={values.showPassword ? 'text' : 'password'}
@@ -129,6 +124,7 @@ export function Auth() {
             </FormControl>
           </Box>
         </CardContent>
+
         <CardActions>
           <Button sx={{ marginLeft: 1 }} variant="outlined">Sign up</Button>
         </CardActions>

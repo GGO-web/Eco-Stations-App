@@ -23,6 +23,5 @@ export function Loader() {
         </svg>
       </div>
     </div>
-
   );
 }

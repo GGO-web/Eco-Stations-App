@@ -11,14 +11,16 @@ import { TypesOfWaste } from './pages/TypesOfWaste/TypesOfWaste';
 import { TrashInfo } from './pages/TrashInfo/TrashInfo';
 import { Error } from './pages/Error/Error';
 
-import './App.scss';
 import { Header } from './components/Header/Header';
+
+import './App.scss';
 
 function App() {
   return (
     <HashRouter>
       <Header />
       <ToastContainer limit={1} />
+
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/detailed" element={<TypesOfWaste />} />
