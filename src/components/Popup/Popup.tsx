@@ -64,7 +64,7 @@ export function Popup() {
               Delivery options:
               {' '}
               {deliveryOptions.map((option, index) => (
-                <span key={uuidv4()} className="cursor-pointer">
+                <span key={uuidv4()}>
                   {option}
                   {index + 1 !== deliveryOptions.length && ', '}
                   {' '}
@@ -82,7 +82,7 @@ export function Popup() {
               Payment Conditions:
               {' '}
               {paymentConditions.map((pay, index) => (
-                <span key={uuidv4()} className="cursor-pointer">
+                <span key={uuidv4()}>
                   {pay}
                   {index + 1 !== paymentConditions.length && ', '}
                   {' '}
