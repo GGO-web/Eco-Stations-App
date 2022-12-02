@@ -38,6 +38,10 @@ export function Header() {
             <NavLink className="text-xl font-bold" to="/detailed">Detailed</NavLink>
           </Typography>
 
+          <Typography variant="h6" component="div">
+            <NavLink className="text-xl font-bold" to="/services">Services</NavLink>
+          </Typography>
+
           <IconButton
             sx={{}}
             size="large"
