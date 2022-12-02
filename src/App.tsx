@@ -10,8 +10,8 @@ import { Home } from './pages/Home/Home';
 import { TypesOfWaste } from './pages/TypesOfWaste/TypesOfWaste';
 import { TrashInfo } from './pages/TrashInfo/TrashInfo';
 import { Error } from './pages/Error/Error';
-
 import { Header } from './components/Header/Header';
+import { ServicesPage } from './pages/ServicesPage/ServicesPage';
 
 import './App.scss';
 
@@ -27,6 +27,7 @@ function App() {
         <Route path="/detailed/:id" element={<TrashInfo />} />
         <Route path="/Login" element={<LoginPage />} />
         <Route path="/Auth" element={<Auth />} />
+        <Route path="/services" element={<ServicesPage />} />
         <Route path="/*" element={<Error />} />
       </Routes>
     </HashRouter>
