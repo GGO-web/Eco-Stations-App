@@ -26,8 +26,8 @@ import { Popup } from '../Popup/Popup';
 import { defaultTheme } from './Theme';
 
 const containerStyle = {
-  width: '100vw',
-  height: '100vh',
+  width: '100%',
+  height: '100%',
 };
 
 const defaultOptions = {

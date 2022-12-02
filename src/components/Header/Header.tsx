@@ -19,7 +19,7 @@ export function Header() {
   };
 
   return (
-    <AppBar style={{ position: 'sticky', background: '#8EE4AF', color: '#05386B' }}>
+    <AppBar elevation={0} style={{ position: 'sticky', background: '#8EE4AF', color: '#05386B' }}>
       <Toolbar>
         <IconButton
           size="large"
