@@ -5,6 +5,8 @@ import { useAppSelector } from '../../hooks/redux';
 
 import 'react-lazy-load-image-component/src/effects/blur.css';
 
+import { v4 as uuidv4 } from 'uuid';
+
 import { Images } from './Images';
 
 export function ExampleTrash({ waste }: { waste: string }) {
@@ -15,6 +17,7 @@ export function ExampleTrash({ waste }: { waste: string }) {
       {waste !== '' && (Images[waste] as string[]).map(
         (image: string) => (
           <LazyLoadImage
+            key={uuidv4()}
             height="100%"
             width="100%"
             className="w-full h-full object-cover rounded-2xl object-center"
