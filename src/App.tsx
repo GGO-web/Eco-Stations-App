@@ -4,6 +4,8 @@ import { ToastContainer } from 'react-toastify';
 
 import { HashRouter, Route, Routes } from 'react-router-dom';
 
+import { useJsApiLoader } from '@react-google-maps/api';
+
 import { Auth } from './pages/Auth/Auth';
 import { LoginPage } from './pages/Login/LoginPage';
 import { Home } from './pages/Home/Home';
@@ -16,18 +18,23 @@ import { ServicesPage } from './pages/ServicesPage/ServicesPage';
 import './App.scss';
 
 function App() {
+  const { isLoaded } = useJsApiLoader({
+    googleMapsApiKey: import.meta.env.VITE_API_KEY,
+    libraries: ['places'],
+  });
+
   return (
     <HashRouter>
       <Header />
       <ToastContainer limit={1} />
 
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<Home isLoaded={isLoaded} />} />
         <Route path="/detailed" element={<TypesOfWaste />} />
         <Route path="/detailed/:id" element={<TrashInfo />} />
         <Route path="/Login" element={<LoginPage />} />
         <Route path="/Auth" element={<Auth />} />
-        <Route path="/services" element={<ServicesPage />} />
+        <Route path="/services" element={<ServicesPage isLoaded={isLoaded} />} />
         <Route path="/*" element={<Error />} />
       </Routes>
     </HashRouter>
