@@ -3,11 +3,13 @@ import { IService } from '../../models/service.model';
 
 export interface IServiceWithPopup {
   isPopupOpen: boolean,
+  isUpdatePopupOpen: boolean,
   service: IService
 }
 
 const initialState: IServiceWithPopup = {
   isPopupOpen: false,
+  isUpdatePopupOpen: false,
   service: {
     address: '',
     serviceName: '',
@@ -30,6 +32,9 @@ export const serviceSlice = createSlice({
     setPopupState: (state, action: PayloadAction<boolean>) => {
       state.isPopupOpen = action.payload;
     },
+    setUpdatePopupState: (state, action: PayloadAction<boolean>) => {
+      state.isUpdatePopupOpen = action.payload;
+    },
     setCurrentService: (state, action: PayloadAction<IService>) => {
       state.service = action.payload;
     },
@@ -37,6 +42,6 @@ export const serviceSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { setPopupState, setCurrentService } = serviceSlice.actions;
+export const { setPopupState, setCurrentService, setUpdatePopupState } = serviceSlice.actions;
 
 export const serviceReducer = serviceSlice.reducer;

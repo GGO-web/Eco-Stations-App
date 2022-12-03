@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 
+import { v4 as uuidv4 } from 'uuid';
 import { useActions } from '../../hooks/actions';
 import { useAppSelector } from '../../hooks/redux';
 
 import { StarRating } from './StarRating';
 import { AskForm } from '../AskForm/AskForm';
+import { ExampleTrash } from '../ExampleTrash/ExampleTrash';
 
 import './Popup.scss';
 
@@ -18,6 +20,8 @@ export function Popup() {
     priceOfService,
   } = useAppSelector((store) => store.service.service);
 
+  const [waste, setWaste] = useState('');
+
   const { setPopupState } = useActions();
 
   const [askQuestionField, setAskQuestionField] = useState<boolean>(false);
@@ -30,6 +34,7 @@ export function Popup() {
 
   return (
     <div onClick={(e) => popupHandleClick(e)} className="wrapper-popup">
+      {waste && <ExampleTrash waste={waste} />}
       <div className="popup-container">
         <h3 className="text-3xl text-center pb-4">Service Info</h3>
         <div className="max-w-[400px]">
@@ -42,12 +47,29 @@ export function Popup() {
             <p className="py-2">
               Types of waste:
               {' '}
-              {typeOfWastes.join(', ')}
+              {typeOfWastes.map((type, index) => (
+                <span
+                  onMouseEnter={() => setWaste(type)}
+                  onMouseLeave={() => setWaste('')}
+                  key={uuidv4()}
+                  className="cursor-pointer"
+                >
+                  {type}
+                  {index + 1 !== typeOfWastes.length && ', '}
+                  {' '}
+                </span>
+              ))}
             </p>
             <p className="py-2">
               Delivery options:
               {' '}
-              {deliveryOptions.join(',')}
+              {deliveryOptions.map((option, index) => (
+                <span key={uuidv4()}>
+                  {option}
+                  {index + 1 !== deliveryOptions.length && ', '}
+                  {' '}
+                </span>
+              ))}
             </p>
           </div>
           <div className="flex flex-col flex-auto">
@@ -59,7 +81,13 @@ export function Popup() {
             <p className="py-2">
               Payment Conditions:
               {' '}
-              {paymentConditions.join(', ')}
+              {paymentConditions.map((pay, index) => (
+                <span key={uuidv4()}>
+                  {pay}
+                  {index + 1 !== paymentConditions.length && ', '}
+                  {' '}
+                </span>
+              ))}
             </p>
             <div className="flex gap-4 items-center py-2">
               Rating:

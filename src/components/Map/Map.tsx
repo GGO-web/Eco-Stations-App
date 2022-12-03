@@ -1,24 +1,29 @@
 import React, { useEffect, useState } from 'react';
 
 import { GoogleMap, MarkerF } from '@react-google-maps/api';
-import { defaultTheme } from './Theme';
 
 import {
   useLazyGetAddressFromCoordinatesQuery,
   useLazyGetServiceByIdQuery,
   useLazyGetServicesFromAnAreaQuery,
 } from '../../redux/services/services';
-import { useActions } from '../../hooks/actions';
+
+import { truncateCoordinate } from '../../helpers/truncateCoordinate';
+
+import { trashBins } from '../../constants';
 
 import { ICoordinate } from '../../models/coordinates.model';
 import { IService } from '../../models/service.model';
-
-import { trashBins } from '../../constants';
 import { IMapOptions } from '../../models/bounds.model';
-
-import { truncateCoordinate } from '../../helpers/truncateCoordinate';
-import { useDebounce } from '../../hooks/debounce';
 import { IShortService } from '../../models/shortService.model';
+
+import { useActions } from '../../hooks/actions';
+import { useDebounce } from '../../hooks/debounce';
+import { useAppSelector } from '../../hooks/redux';
+
+import { Popup } from '../Popup/Popup';
+
+import { defaultTheme } from './Theme';
 
 const containerStyle = {
   width: '100vw',
@@ -125,6 +130,8 @@ export function Map({ center }: { center: ICoordinate }) {
   const handleOnLoad = (map: google.maps.Map) => {
     setMapRef(map);
   };
+
+  const popUp = useAppSelector((store) => store.service.isPopupOpen);
 
   return (
     <GoogleMap
