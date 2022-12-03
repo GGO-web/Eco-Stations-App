@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { ICoordinate } from '../../models/coordinates.model';
 
 import { Map } from '../../components/Map/Map';
 import { Loader } from '../../components/Loader/Loader';
+import { Sidebar } from '../../components/Sidebar/Sidebar';
 
 export function Home({ isLoaded }: { isLoaded: boolean }) {
   const center: ICoordinate = {
@@ -11,7 +12,18 @@ export function Home({ isLoaded }: { isLoaded: boolean }) {
     lng: 30.523333,
   };
 
-  return isLoaded
-    ? <Map center={center} />
-    : <Loader />;
+  const { isLoaded } = useJsApiLoader({
+    googleMapsApiKey: import.meta.env.VITE_API_KEY,
+  });
+
+  const [mapRef, setMapRef] = useState<google.maps.Map | null>(null);
+
+  if (!isLoaded) return <Loader />;
+
+  return (
+    <div className="home flex flex-1 overflow-hidden">
+      <Map {...{ mapRef, setMapRef }} center={center} />
+      <Sidebar />
+    </div>
+  );
 }

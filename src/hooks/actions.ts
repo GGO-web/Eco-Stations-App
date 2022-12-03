@@ -7,10 +7,14 @@ import {
   setUpdatePopupState,
 } from '../redux/features/serviceSlice';
 
+import { setAllTrashBins, setTrashBinsFilter } from '../redux/features/trashBinsSlice';
+
 const actions = {
   setPopupState,
   setCurrentService,
   setUpdatePopupState,
+  setAllTrashBins,
+  setTrashBinsFilter,
 };
 
 export const useActions = () => {
