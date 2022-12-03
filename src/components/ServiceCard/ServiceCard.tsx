@@ -9,11 +9,17 @@ import { ServiceModal } from '../ServiceModal/ServiceModal';
 
 import { IService } from '../../models/service.model';
 
+import { useActions } from '../../hooks/actions';
+import { useAppSelector } from '../../hooks/redux';
+
 export function ServiceCard({
   id, serviceName, typeOfWastes, deliveryOptions, paymentConditions, coordinate,
 }: IService) {
   const [address, setAddress] = useState('');
-  const [modal, setModal] = useState(false);
+
+  const updatePopup = useAppSelector((store) => store.service.isUpdatePopupOpen);
+
+  const { setUpdatePopupState } = useActions();
 
   const [getAddress] = useLazyGetAddressFromCoordinatesQuery();
   const [deleteService] = useDeleteExistingServiceMutation();
@@ -32,7 +38,7 @@ export function ServiceCard({
 
   return (
     <>
-      {modal && (
+      {updatePopup && (
       <ServiceModal
         updateService={{
           ...{
@@ -83,7 +89,7 @@ export function ServiceCard({
           </p>
         </div>
         <div className="flex gap-8 text-4xl justify-self-end">
-          <RiEditFill className="cursor-pointer" onClick={() => setModal(true)} />
+          <RiEditFill className="cursor-pointer" onClick={() => setUpdatePopupState(true)} />
           <RiDeleteBin5Fill className="cursor-pointer" onClick={() => deleteService(id as number)} />
         </div>
       </div>

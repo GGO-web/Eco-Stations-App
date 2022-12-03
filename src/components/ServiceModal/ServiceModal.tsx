@@ -43,7 +43,7 @@ export function ServiceModal({ isUpdateService = false, updateService }:
     new Array(PaymentConditions.length).fill(false),
   );
 
-  const { setPopupState } = useActions();
+  const { setPopupState, setUpdatePopupState } = useActions();
 
   const handleSubmitService = async () => {
     if (service.serviceName === '') {
@@ -95,6 +95,7 @@ export function ServiceModal({ isUpdateService = false, updateService }:
         position: toast.POSITION.TOP_RIGHT,
         autoClose: 1500,
       });
+      setUpdatePopupState(false);
     }
     if (!isUpdateService) {
       toast.success('Congrats! Your service have been created 🥳', {
@@ -103,14 +104,14 @@ export function ServiceModal({ isUpdateService = false, updateService }:
         autoClose: 1500,
       });
       await createService(service).unwrap();
+      setPopupState(false);
     }
-
-    setPopupState(false);
   };
 
   const popupHandleClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if ((e.target as HTMLDivElement).classList.contains('wrapper-popup')) {
       setPopupState(false);
+      setUpdatePopupState(false);
     }
   };
 
@@ -173,7 +174,11 @@ export function ServiceModal({ isUpdateService = false, updateService }:
       className="bg-light fixed w-full h-screen left-0 top-0 grid place-items-center p-5 pt-24 wrapper-popup"
     >
       <div className="bg-white rounded-2xl p-5">
-        <h4 className="text-center pb-5 text-2xl">Create Service</h4>
+        <h4 className="text-center pb-5 text-2xl">
+          {isUpdateService ? 'Update' : 'Create'}
+          {' '}
+          Service
+        </h4>
         <div className="mb-2">
           <label htmlFor="serviceName">Your Service Name</label>
           <input
@@ -188,7 +193,11 @@ export function ServiceModal({ isUpdateService = false, updateService }:
         </div>
         <div className="mb-2 relative">
           <label htmlFor="serviceAddress">Your Service Address</label>
-          <PlacesAutocomplete adrs={updateService?.address} setService={setService} service={service} />
+          <PlacesAutocomplete
+            adrs={updateService?.address as string}
+            setService={setService}
+            service={service}
+          />
         </div>
         <div className="mb-2">
           <label htmlFor="types">Waste Types You Can Carry</label>
@@ -247,7 +256,10 @@ export function ServiceModal({ isUpdateService = false, updateService }:
         <div className="flex justify-between items-center">
           <button
             type="button"
-            onClick={() => setPopupState(false)}
+            onClick={() => {
+              setPopupState(false);
+              setUpdatePopupState(false);
+            }}
             className="font-semibold uppercase rounded text-white bg-[#b14e46] px-6 py-2"
           >
             Quit
