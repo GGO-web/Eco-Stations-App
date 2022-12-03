@@ -25,6 +25,7 @@ function App() {
 
   return (
     <Router>
+      <Header />
       <ToastContainer limit={1} />
 
       <Routes>

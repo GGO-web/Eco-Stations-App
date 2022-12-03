@@ -9,6 +9,7 @@ import { AskForm } from '../AskForm/AskForm';
 import { ExampleTrash } from '../ExampleTrash/ExampleTrash';
 
 import './Popup.scss';
+import { ImagesType } from '../ExampleTrash/Images';
 
 export function Popup() {
   const {
@@ -20,7 +21,7 @@ export function Popup() {
     priceOfService,
   } = useAppSelector((store) => store.service.service);
 
-  const [waste, setWaste] = useState('');
+  const [waste, setWaste] = useState<ImagesType | null>(null);
 
   const { setPopupState } = useActions();
 
@@ -49,8 +50,8 @@ export function Popup() {
               {' '}
               {typeOfWastes.map((type, index) => (
                 <span
-                  onMouseEnter={() => setWaste(type)}
-                  onMouseLeave={() => setWaste('')}
+                  onMouseEnter={() => setWaste(type as ImagesType)}
+                  onMouseLeave={() => setWaste(null)}
                   key={uuidv4()}
                   className="cursor-pointer"
                 >

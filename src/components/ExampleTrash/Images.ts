@@ -25,3 +25,5 @@ export const Images = {
   METALS: [m1, m2, m3],
   ELECTRONIC: [e1, e2, e3],
 };
+
+export type ImagesType = keyof typeof Images;
