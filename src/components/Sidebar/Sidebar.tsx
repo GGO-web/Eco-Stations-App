@@ -1,7 +1,13 @@
-import React, { useRef } from 'react';
+import React, { FormEvent, useRef, useState } from 'react';
+import { useActions } from '../../hooks/actions';
+import { IServiceFilter } from '../../models/serviceFilter.mode';
 
 export function Sidebar() {
   const filterForm = useRef<HTMLFormElement>(null);
+
+  const [filterMenuIsOpened, setFilterMenuIsOpened] = useState<boolean>(true);
+
+  const { setTrashBinsFilter } = useActions();
 
   const setCheckState = (checked: boolean, revert: boolean = false) => {
     const checkboxes: NodeListOf<HTMLInputElement> = document.querySelectorAll('.input-checkbox');
@@ -15,13 +21,63 @@ export function Sidebar() {
     });
   };
 
-  const formSubmitHandler = () => {
+  const formSubmitHandler = (e: FormEvent) => {
+    e.preventDefault();
+
+    const deliveryCheckboxes: NodeListOf<HTMLInputElement> = document.querySelectorAll('.input-checkbox[name=delivery]');
+    const paymentCheckboxes: NodeListOf<HTMLInputElement> = document.querySelectorAll('.input-checkbox[name=payment]');
+    const wasteTypeCheckboxes: NodeListOf<HTMLInputElement> = document.querySelectorAll('.input-checkbox[name=waste-type]');
+
+    const filterObject: IServiceFilter = {
+      deliveryOptions: [],
+      paymentConditions: [],
+      typeOfWastes: [],
+    };
+
+    deliveryCheckboxes.forEach((deliveryCheckbox: HTMLInputElement) => {
+      if (deliveryCheckbox.checked) {
+        filterObject.deliveryOptions.push(deliveryCheckbox.value);
+      }
+    });
+
+    paymentCheckboxes.forEach((paymentCheckbox: HTMLInputElement) => {
+      if (paymentCheckbox.checked) {
+        filterObject.paymentConditions.push(paymentCheckbox.value);
+      }
+    });
+
+    wasteTypeCheckboxes.forEach((wasteTypeCheckbox: HTMLInputElement) => {
+      if (wasteTypeCheckbox.checked) {
+        filterObject.typeOfWastes.push(wasteTypeCheckbox.value);
+      }
+    });
+
+    setTrashBinsFilter(filterObject);
+  };
+
+  const toggleFilterMenu = () => {
+    setFilterMenuIsOpened((prevFilterOpenState) => !prevFilterOpenState);
   };
 
   return (
-    <aside className="sidebar p-5 bg-gradient-to-br from-light-green via-light-green to-blue-500 overflow-hidden">
-      <form ref={filterForm} onSubmit={() => formSubmitHandler()} className="sidebar__form grid gap-y-[10px] sidebar-form text-white" action="">
-        <legend className="text-3xl font-semibold mb-5">Filter services</legend>
+    <aside className="sidebar p-5 bg-gradient-to-br from-light-green via-light-green to-blue-500 overflow-hidden" data-open={filterMenuIsOpened}>
+      <form ref={filterForm} onSubmit={(e) => formSubmitHandler(e)} className="sidebar__form grid gap-y-[10px] sidebar-form text-white" action="">
+        <header className="sidebar-form__header flex items-center gap-4 mb-5">
+          <button type="button" className="sidebar-form__toggler" onClick={() => toggleFilterMenu()}>
+            <svg width="30" className="fill-dark" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 377 377" xmlSpace="preserve">
+              <g>
+                <rect x="75" y="73.5" width="302" height="30" />
+                <rect y="73.5" width="30" height="30" />
+                <rect y="273.5" width="30" height="30" />
+                <rect x="75" y="273.5" width="302" height="30" />
+                <rect y="173.5" width="30" height="30" />
+                <rect x="75" y="173.5" width="302" height="30" />
+              </g>
+            </svg>
+          </button>
+
+          <legend className="text-3xl font-semibold leading-none">Filter services</legend>
+        </header>
 
         <div className="flex gap-3 sidebar-form__controls">
           <button type="button" className="sidebar-form__controls-button font-semibold bg-purple rounded-lg py-1 px-2" onClick={() => setCheckState(true)}>
@@ -46,21 +102,21 @@ export function Sidebar() {
             <ul className="sidebar-form__options">
               <li className="sidebar-form__option">
                 <label className="inline-flex cursor-pointer items-center sidebar-form__label">
-                  <input className="input-checkbox cursor-pointer" name="delivery" type="checkbox" />
+                  <input value="SELF" className="input-checkbox cursor-pointer" name="delivery" type="checkbox" />
                   <span className="input-label uppercase transition-all text-lg">self</span>
                 </label>
               </li>
 
               <li className="sidebar-form__option">
                 <label className="inline-flex cursor-pointer items-center sidebar-form__label">
-                  <input className="input-checkbox cursor-pointer" name="delivery" type="checkbox" />
+                  <input value="VAN" className="input-checkbox cursor-pointer" name="delivery" type="checkbox" />
                   <span className="input-label uppercase transition-all text-lg">van</span>
                 </label>
               </li>
 
               <li className="sidebar-form__option">
                 <label className="inline-flex cursor-pointer items-center sidebar-form__label">
-                  <input className="input-checkbox cursor-pointer" name="delivery" type="checkbox" />
+                  <input value="TRUCK" className="input-checkbox cursor-pointer" name="delivery" type="checkbox" />
                   <span className="input-label uppercase transition-all text-lg">truck</span>
                 </label>
               </li>
@@ -75,21 +131,21 @@ export function Sidebar() {
             <ul className="sidebar-form__options">
               <li className="sidebar-form__option ">
                 <label className="inline-flex cursor-pointer items-center sidebar-form__label">
-                  <input className="input-checkbox cursor-pointer" name="payment" type="checkbox" />
+                  <input value="CARD" className="input-checkbox cursor-pointer" name="payment" type="checkbox" />
                   <span className="input-label uppercase transition-all text-lg">card</span>
                 </label>
               </li>
 
               <li className="sidebar-form__option">
                 <label className="inline-flex cursor-pointer items-center sidebar-form__label">
-                  <input className="input-checkbox cursor-pointer" name="payment" type="checkbox" />
+                  <input value="CASH" className="input-checkbox cursor-pointer" name="payment" type="checkbox" />
                   <span className="input-label uppercase transition-all text-lg">cash</span>
                 </label>
               </li>
 
               <li className="sidebar-form__option">
                 <label className="inline-flex cursor-pointer items-center sidebar-form__label">
-                  <input className="input-checkbox cursor-pointer" name="payment" type="checkbox" />
+                  <input value="FREE" className="input-checkbox cursor-pointer" name="payment" type="checkbox" />
                   <span className="input-label uppercase transition-all text-lg">free</span>
                 </label>
               </li>
@@ -104,35 +160,35 @@ export function Sidebar() {
             <ul className="sidebar-form__options">
               <li className="sidebar-form__option ">
                 <label className="inline-flex cursor-pointer items-center sidebar-form__label">
-                  <input className="input-checkbox cursor-pointer" name="waste-type" type="checkbox" />
+                  <input value="GLASS" className="input-checkbox cursor-pointer" name="waste-type" type="checkbox" />
                   <span className="input-label uppercase transition-all text-lg">glass</span>
                 </label>
               </li>
 
               <li className="sidebar-form__option">
                 <label className="inline-flex cursor-pointer items-center sidebar-form__label">
-                  <input className="input-checkbox cursor-pointer" name="waste-type" type="checkbox" />
+                  <input value="PAPER" className="input-checkbox cursor-pointer" name="waste-type" type="checkbox" />
                   <span className="input-label uppercase transition-all text-lg">paper</span>
                 </label>
               </li>
 
               <li className="sidebar-form__option">
                 <label className="inline-flex cursor-pointer items-center sidebar-form__label">
-                  <input className="input-checkbox cursor-pointer" name="waste-type" type="checkbox" />
+                  <input value="PLASTICS" className="input-checkbox cursor-pointer" name="waste-type" type="checkbox" />
                   <span className="input-label uppercase transition-all text-lg">plastic</span>
                 </label>
               </li>
 
               <li className="sidebar-form__option">
                 <label className="inline-flex cursor-pointer items-center sidebar-form__label">
-                  <input className="input-checkbox cursor-pointer" name="waste-type" type="checkbox" />
+                  <input value="METALS" className="input-checkbox cursor-pointer" name="waste-type" type="checkbox" />
                   <span className="input-label uppercase transition-all text-lg">metals</span>
                 </label>
               </li>
 
               <li className="sidebar-form__option">
                 <label className="inline-flex cursor-pointer items-center sidebar-form__label">
-                  <input className="input-checkbox cursor-pointer" name="waste-type" type="checkbox" />
+                  <input value="ELECTRONIC" className="input-checkbox cursor-pointer" name="waste-type" type="checkbox" />
                   <span className="input-label uppercase transition-all text-lg">electronic</span>
                 </label>
               </li>
@@ -140,7 +196,7 @@ export function Sidebar() {
           </div>
         </div>
 
-        <button className="sidebar-form__controls-button font-semibold bg-gradient-to-r from-blue-500 to-light-green rounded-lg transition-all hover:opacity-90 p-3" type="submit">
+        <button className="sidebar-form__controls-button font-semibold bg-gradient-to-r from-yellow-400 to-pink-500 rounded-lg transition-all hover:opacity-90 p-3" type="submit">
           Apply Filters
         </button>
       </form>

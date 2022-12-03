@@ -1,13 +1,20 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { IService } from '../../models/service.model';
+import { IServiceFilter } from '../../models/serviceFilter.mode';
 
 export interface ITrashBins {
-  trashBins: IService[]
+  trashBins: IService[],
+  filter: IServiceFilter
 }
 
 const initialState: ITrashBins = {
   trashBins: [],
+  filter: {
+    typeOfWastes: [],
+    paymentConditions: [],
+    deliveryOptions: [],
+  },
 };
 
 export const trashBinsSlice = createSlice({
@@ -17,9 +24,12 @@ export const trashBinsSlice = createSlice({
     setAllTrashBins: (state, action: PayloadAction<IService[]>) => {
       state.trashBins = action.payload;
     },
+    setTrashBinsFilter: (state, action: PayloadAction<IServiceFilter>) => {
+      state.filter = action.payload;
+    },
   },
 });
 
-export const { setAllTrashBins } = trashBinsSlice.actions;
+export const { setAllTrashBins, setTrashBinsFilter } = trashBinsSlice.actions;
 
 export const trashBinsReducer = trashBinsSlice.reducer;

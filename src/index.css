@@ -2,6 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --filter-sidebar-width: 300px;
+}
 
 #root {
   display: flex;

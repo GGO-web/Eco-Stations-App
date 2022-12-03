@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { useJsApiLoader } from '@react-google-maps/api';
 
@@ -18,11 +18,13 @@ export function Home() {
     googleMapsApiKey: import.meta.env.VITE_API_KEY,
   });
 
+  const [mapRef, setMapRef] = useState<google.maps.Map | null>(null);
+
   if (!isLoaded) return <Loader />;
 
   return (
-    <div className="flex-1 grid grid-cols-[2fr_minmax(200px,300px)]">
-      <Map center={center} />
+    <div className="home flex flex-1 overflow-hidden">
+      <Map {...{ mapRef, setMapRef }} center={center} />
       <Sidebar />
     </div>
   );

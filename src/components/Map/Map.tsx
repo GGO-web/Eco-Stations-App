@@ -10,7 +10,7 @@ import {
 
 import { truncateCoordinate } from '../../helpers/truncateCoordinate';
 
-import { trashBins } from '../../constants';
+import { mapDefaultOptions } from '../../constants';
 
 import { ICoordinate } from '../../models/coordinates.model';
 import { IService } from '../../models/service.model';
@@ -23,30 +23,16 @@ import { useAppSelector } from '../../hooks/redux';
 
 import { Popup } from '../Popup/Popup';
 
-import { defaultTheme } from './Theme';
-
-const containerStyle = {
-  width: '100%',
-  height: '100%',
-};
-
-const defaultOptions = {
-  panControl: true,
-  zoomControl: true,
-  mapTypeControl: false,
-  scaleControl: true,
-  streetViewControl: false,
-  rotateControl: false,
-  clickableIcons: false,
-  keyboardShortcuts: false,
-  scrollwheel: true,
-  disableDoubleClickZoom: false,
-  fullscreenControl: false,
-  styles: defaultTheme,
-};
-
-export function Map({ center }: { center: ICoordinate }) {
-  const [allTrashBins, setAllTrashBins] = useState<IShortService[]>([]);
+export function Map({
+  mapRef,
+  setMapRef,
+  center,
+}: {
+  mapRef: google.maps.Map | null,
+  setMapRef: Function,
+  center: ICoordinate
+}) {
+  const { trashBins } = useAppSelector((store) => store.trashBins);
 
   const [mapOptions, setMapOptions] = useState<IMapOptions>(
     {
@@ -59,9 +45,7 @@ export function Map({ center }: { center: ICoordinate }) {
   const [getAddress] = useLazyGetAddressFromCoordinatesQuery();
   const [getServicesFromArea] = useLazyGetServicesFromAnAreaQuery();
 
-  const { setPopupState, setCurrentService } = useActions();
-
-  const [mapref, setMapRef] = useState<google.maps.Map | null>(null);
+  const { setPopupState, setCurrentService, setAllTrashBins } = useActions();
 
   const debouncedMapOptions = useDebounce(mapOptions, 400);
 
@@ -138,14 +122,15 @@ export function Map({ center }: { center: ICoordinate }) {
       {popUp && <Popup />}
 
       <GoogleMap
-        mapContainerStyle={containerStyle}
+        mapContainerStyle={{ width: '100%', height: '100%' }}
+        mapContainerClassName="flex-1 border-t-2 border-r-2 border-r-blue-500 border-t-blue-500"
         center={center}
         zoom={12}
         onLoad={handleOnLoad}
-        onBoundsChanged={() => handleCenterChanged(mapref)}
-        options={defaultOptions}
+        onBoundsChanged={() => handleCenterChanged(mapRef)}
+        options={mapDefaultOptions}
       >
-        {(allTrashBins || trashBins)?.map((trashBin: IShortService) => {
+        {trashBins?.map((trashBin: IShortService) => {
           const trashBinCenter = {
             lng: trashBin.coordinate.longitude,
             lat: trashBin.coordinate.latitude,
