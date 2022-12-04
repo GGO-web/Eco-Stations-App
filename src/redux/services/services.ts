@@ -3,8 +3,8 @@ import {
 } from '@reduxjs/toolkit/query/react';
 import { ICoordinate } from '../../models/coordinates.model';
 import { IService } from '../../models/service.model';
+import { IServiceFilter } from '../../models/serviceFilter.model';
 
-// Define a service using a base URL and expected endpoints
 export const serviceApi = createApi({
   reducerPath: 'serviceApi',
   baseQuery: fetchBaseQuery({
@@ -42,6 +42,26 @@ export const serviceApi = createApi({
       }),
       providesTags: ['Service'],
     }),
+    filterServiceInArea: builder.mutation<IService[], {
+      blCoordinate: ICoordinate,
+      trCoordinate:ICoordinate,
+      serviceFilter: IServiceFilter
+    }>({
+      query: ({ blCoordinate, trCoordinate, serviceFilter }) => ({
+        url: `${import.meta.env.VITE_BACKEND_URL}/?bl_latitude=${
+          blCoordinate.lat
+        }&bl_longitude=${
+          blCoordinate.lng
+        }&tr_latitude=${
+          trCoordinate.lat
+        }&tr_longitude=${
+          trCoordinate.lng
+        }`,
+        method: 'POST',
+        body: serviceFilter,
+      }),
+      invalidatesTags: ['Service'],
+    }),
     getServiceById: builder.query<IService, number>({
       query: (id) => ({
         url: `${import.meta.env.VITE_BACKEND_URL}/${id}`,
@@ -74,8 +94,6 @@ export const serviceApi = createApi({
   }),
 });
 
-// Export hooks for usage in functional components, which are
-// auto-generated based on the defined endpoints
 export const {
   useGetAllServicesQuery,
   useLazyGetServicesFromAnAreaQuery,
@@ -84,4 +102,5 @@ export const {
   useCreateNewServiceMutation,
   useUpdateExistingServiceMutation,
   useDeleteExistingServiceMutation,
+  useFilterServiceInAreaMutation,
 } = serviceApi;
