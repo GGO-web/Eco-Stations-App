@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 
+import { useNavigate } from 'react-router-dom';
+
 import {
   Box,
   Button,
@@ -24,6 +26,8 @@ import { toast } from 'react-toastify';
 
 import { useUserRegisterMutation } from '../../redux/services/auth';
 
+import {useActions} from "../../hooks/actions";
+
 import { IAuth } from '../../models/auth.model';
 
 export function Auth() {
@@ -34,9 +38,13 @@ export function Auth() {
     email: '',
   });
 
-  const [role, setRole] = useState('');
+  const [userRole, setUserRole] = useState('');
 
   const [createUser] = useUserRegisterMutation();
+
+  const {setCredentials} = useActions();
+
+  let navigate = useNavigate();
 
   const handleChange = (prop: keyof IAuth) => (event: React.ChangeEvent<HTMLInputElement>) => {
     setValues({ ...values, [prop]: event.target.value });
@@ -54,14 +62,14 @@ export function Auth() {
   };
 
   const handleChangeRole = (event: SelectChangeEvent) => {
-    setRole(event.target.value as string);
+    setUserRole(event.target.value as string);
   };
 
   const handleAuth = async () => {
     if (values.password === ''
       || values.username === ''
       || values.email === ''
-      || role === '') {
+      || userRole === '') {
       toast.error('Please fill all the fields 😅', {
         toastId: 'error-msg',
         position: toast.POSITION.TOP_RIGHT,
@@ -71,17 +79,20 @@ export function Auth() {
       return;
     }
 
-    const jwtToken = await createUser({
+    const {jwtToken} = await createUser({
       username: values.username,
       password: values.password,
       email: values.email,
-      role,
+      role: userRole,
     }).unwrap();
 
     console.log(jwtToken);
 
-    const decoded = jwt_decode(jwtToken.jwtToken);
-    console.log(decoded);
+    const {role, sub}: {role: string, sub: string} = jwt_decode(jwtToken);
+
+    setCredentials({role, username: sub, token: jwtToken})
+
+    navigate('/');
   };
 
   return (
@@ -125,7 +136,7 @@ export function Auth() {
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
-                value={role}
+                value={userRole}
                 label="Role"
                 onChange={handleChangeRole}
               >

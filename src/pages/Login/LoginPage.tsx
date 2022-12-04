@@ -15,14 +15,29 @@ import {
   Typography,
 } from '@mui/material';
 
+import { toast } from 'react-toastify';
 import { ILoginState } from '../../models/login.model';
+
+import jwt_decode from "jwt-decode";
+
+import {useUserLoginMutation} from "../../redux/services/auth";
+
+import {useActions} from "../../hooks/actions";
+
+import {useNavigate} from "react-router-dom";
 
 export function LoginPage() {
   const [values, setValues] = useState<ILoginState>({
     password: '',
     showPassword: false,
-    email: '',
+    username: '',
   });
+
+  const [loginUser] = useUserLoginMutation();
+
+  const {setCredentials} = useActions();
+
+  let navigate = useNavigate();
 
   const handleChange = (prop: string) => (event: ChangeEvent<HTMLInputElement>) => {
     setValues({ ...values, [prop]: event.target.value });
@@ -37,6 +52,28 @@ export function LoginPage() {
 
   const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
+  };
+
+  const handleLogin = async () => {
+    if (values.password === ''
+      || values.username === '') {
+      toast.error('Please fill all the fields 😅', {
+        toastId: 'error-msg',
+        position: toast.POSITION.TOP_RIGHT,
+        autoClose: 1500,
+      });
+    }
+
+    const {jwtToken} = await loginUser({
+      username: values.username,
+      password: values.password,
+    }).unwrap();
+
+    const {role, sub}: {role: string, sub: string} = jwt_decode(jwtToken);
+
+    setCredentials({role, username: sub, token: jwtToken})
+
+    navigate('/');
   };
 
   return (
@@ -59,8 +96,8 @@ export function LoginPage() {
               helperText="Please enter your e-mail"
               id="demo-helper-text-aligned"
               label="Email"
-              value={values.email}
-              onChange={handleChange('email')}
+              value={values.username}
+              onChange={handleChange('username')}
             />
           </Box>
           <Box sx={{ minWidth: 100, textAlign: 'start' }} />
@@ -95,7 +132,7 @@ export function LoginPage() {
         </CardContent>
 
         <CardActions>
-          <Button sx={{ marginLeft: 1 }} variant="outlined">Sign in</Button>
+          <Button sx={{ marginLeft: 1 }} variant="outlined" onClick={handleLogin}>Sign in</Button>
         </CardActions>
       </Card>
     </div>
