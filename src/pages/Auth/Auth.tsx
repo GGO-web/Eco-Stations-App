@@ -18,18 +18,25 @@ import {
   Typography,
 } from '@mui/material';
 
+import jwt_decode from 'jwt-decode';
+
+import { toast } from 'react-toastify';
+
+import { useUserRegisterMutation } from '../../redux/services/auth';
+
 import { IAuth } from '../../models/auth.model';
 
 export function Auth() {
   const [values, setValues] = React.useState<IAuth>({
-    amount: '',
     password: '',
-    weight: '',
-    weightRange: '',
     showPassword: false,
+    username: '',
+    email: '',
   });
 
   const [role, setRole] = useState('');
+
+  const [createUser] = useUserRegisterMutation();
 
   const handleChange = (prop: keyof IAuth) => (event: React.ChangeEvent<HTMLInputElement>) => {
     setValues({ ...values, [prop]: event.target.value });
@@ -50,6 +57,33 @@ export function Auth() {
     setRole(event.target.value as string);
   };
 
+  const handleAuth = async () => {
+    if (values.password === ''
+      || values.username === ''
+      || values.email === ''
+      || role === '') {
+      toast.error('Please fill all the fields 😅', {
+        toastId: 'error-msg',
+        position: toast.POSITION.TOP_RIGHT,
+        autoClose: 1500,
+      });
+
+      return;
+    }
+
+    const jwtToken = await createUser({
+      username: values.username,
+      password: values.password,
+      email: values.email,
+      role,
+    }).unwrap();
+
+    console.log(jwtToken);
+
+    const decoded = jwt_decode(jwtToken.jwtToken);
+    console.log(decoded);
+  };
+
   return (
     <div className="grid place-items-center fixed w-full h-screen bg-light">
       <Card sx={{
@@ -68,15 +102,20 @@ export function Auth() {
               helperText="Please enter your name"
               id="demo-helper-text-aligned"
               label="Name"
+              value={values.username}
+              onChange={handleChange('username')}
             />
           </Box>
 
           <Box sx={{ display: 'flex' }}>
             <TextField
               sx={{ width: '50ch' }}
+              type="email"
               helperText="Please enter your e-mail"
               id="demo-helper-text-aligned"
               label="Email"
+              value={values.email}
+              onChange={handleChange('email')}
             />
           </Box>
 
@@ -126,7 +165,7 @@ export function Auth() {
         </CardContent>
 
         <CardActions>
-          <Button sx={{ marginLeft: 1 }} variant="outlined">Sign up</Button>
+          <Button sx={{ marginLeft: 1 }} variant="outlined" onClick={handleAuth}>Sign up</Button>
         </CardActions>
       </Card>
     </div>

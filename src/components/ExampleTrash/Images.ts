@@ -18,10 +18,12 @@ import e1 from '../../assets/ImagesPreview/e1.jpg';
 import e2 from '../../assets/ImagesPreview/e2.webp';
 import e3 from '../../assets/ImagesPreview/e3.jpg';
 
-export const Images = {
+export const ImagesPreview = {
   GLASS: [g1, g2, g3],
   PAPER: [p1, p2, p3],
   PLASTIC: [pl1, pl2, pl3],
   METALS: [m1, m2, m3],
   ELECTRONIC: [e1, e2, e3],
 };
+
+export type ImagesType = keyof typeof ImagesPreview;

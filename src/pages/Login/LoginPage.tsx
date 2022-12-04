@@ -19,11 +19,9 @@ import { ILoginState } from '../../models/login.model';
 
 export function LoginPage() {
   const [values, setValues] = useState<ILoginState>({
-    amount: '',
     password: '',
-    weight: '',
-    weightRange: '',
     showPassword: false,
+    email: '',
   });
 
   const handleChange = (prop: string) => (event: ChangeEvent<HTMLInputElement>) => {
@@ -61,6 +59,8 @@ export function LoginPage() {
               helperText="Please enter your e-mail"
               id="demo-helper-text-aligned"
               label="Email"
+              value={values.email}
+              onChange={handleChange('email')}
             />
           </Box>
           <Box sx={{ minWidth: 100, textAlign: 'start' }} />

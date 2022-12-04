@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { BsPlusLg } from 'react-icons/Bs';
 
@@ -13,9 +13,12 @@ import { useGetAllServicesQuery } from '../../redux/services/services';
 import { IService } from '../../models/service.model';
 
 export function ServicesPage({ isLoaded }: { isLoaded: boolean }) {
-  const { data, isLoading, isError } = useGetAllServicesQuery();
+  const { data } = useGetAllServicesQuery();
+
+  const [serviceForUpdate, setServiceForUpdate] = useState<IService>({} as IService);
 
   const popup = useAppSelector((store) => store.service.isPopupOpen);
+  const updatePopup = useAppSelector((store) => store.service.isUpdatePopupOpen);
 
   const { setPopupState } = useActions();
 
@@ -29,9 +32,21 @@ export function ServicesPage({ isLoaded }: { isLoaded: boolean }) {
         </button>
       </div>
       {popup && isLoaded && <ServiceModal />}
+      {updatePopup && isLoaded && (
+      <ServiceModal
+        isUpdateService
+        updateService={serviceForUpdate}
+      />
+      )}
 
       <div className="my-5 flex flex-col gap-3">
-        {data && data?.map((service: IService) => <ServiceCard key={service.id} {...service} />)}
+        {data && data?.map((service: IService) => (
+          <ServiceCard
+            key={service.id}
+            service={service}
+            setServiceForUpdate={setServiceForUpdate}
+          />
+        ))}
       </div>
       <div />
     </div>

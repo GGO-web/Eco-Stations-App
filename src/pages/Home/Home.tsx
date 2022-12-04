@@ -12,10 +12,6 @@ export function Home({ isLoaded }: { isLoaded: boolean }) {
     lng: 30.523333,
   };
 
-  const { isLoaded } = useJsApiLoader({
-    googleMapsApiKey: import.meta.env.VITE_API_KEY,
-  });
-
   const [mapRef, setMapRef] = useState<google.maps.Map | null>(null);
 
   if (!isLoaded) return <Loader />;
