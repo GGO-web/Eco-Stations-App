@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { GoogleMap, MarkerF } from '@react-google-maps/api';
 
 import {
+  useFilterServiceInAreaMutation,
   useLazyGetAddressFromCoordinatesQuery,
   useLazyGetServiceByIdQuery,
   useLazyGetServicesFromAnAreaQuery,
@@ -43,7 +44,10 @@ export function Map({
   );
 
   const [getAddress] = useLazyGetAddressFromCoordinatesQuery();
-  const [getServicesFromArea] = useLazyGetServicesFromAnAreaQuery();
+  // const [getServicesFromArea] = useLazyGetServicesFromAnAreaQuery();
+  const [filterServicesInArea] = useFilterServiceInAreaMutation();
+
+  const trashBinsFilter = useAppSelector((store) => store.trashBins.filter);
 
   const { setPopupState, setCurrentService, setAllTrashBins } = useActions();
 
@@ -55,9 +59,10 @@ export function Map({
     const getServicesInAnArea = async () => {
       // getting eco services in the area
       try {
-        const trashBinsInArea: IService[] = await getServicesFromArea({
+        const trashBinsInArea: IService[] = await filterServicesInArea({
           blCoordinate: mapOptions.southWest,
           trCoordinate: mapOptions.northEast,
+          serviceFilter: trashBinsFilter,
         }).unwrap();
 
         setAllTrashBins(trashBinsInArea);
@@ -67,7 +72,7 @@ export function Map({
     };
 
     getServicesInAnArea();
-  }, [debouncedMapOptions]);
+  }, [debouncedMapOptions, trashBinsFilter]);
 
   const handleClick = async (trashBinService: IShortService) => {
     const addressResponse = await getAddress({

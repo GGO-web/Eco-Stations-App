@@ -1,6 +1,6 @@
 import React, { FormEvent, useRef, useState } from 'react';
 import { useActions } from '../../hooks/actions';
-import { IServiceFilter } from '../../models/serviceFilter.mode';
+import { IServiceFilter } from '../../models/serviceFilter.model';
 
 export function Sidebar() {
   const filterForm = useRef<HTMLFormElement>(null);
