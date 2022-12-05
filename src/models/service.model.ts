@@ -7,6 +7,7 @@ export interface IService {
   typeOfWastes: Array<string>,
   paymentConditions: Array<string>,
   deliveryOptions: Array<string>,
+  description?: string;
   coordinate: {
     id?: number,
     longitude: number,

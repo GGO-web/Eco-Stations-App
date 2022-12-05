@@ -22,6 +22,7 @@ const initialState: IServiceWithPopup = {
     deliveryOptions: [],
     rating: 0,
     priceOfService: 0,
+    description: '',
   },
 };
 
