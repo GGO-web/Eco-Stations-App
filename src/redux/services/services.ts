@@ -18,7 +18,7 @@ export const serviceApi = createApi({
 
       // If we have a token set in state, let's assume that we should be passing it.
       if (token) {
-        headers.set('authorization', `Bearer ${token}`);
+        headers.set('Authorization', `Bearer ${token}`);
       }
 
       return headers;
@@ -30,12 +30,6 @@ export const serviceApi = createApi({
       query: () => ({
         url: import.meta.env.VITE_BACKEND_URL,
         responseHandler: (response) => response.json(),
-      }),
-      providesTags: ['Service'],
-    }),
-    getAddressFromCoordinates: builder.query<string, ICoordinate>({
-      query: (coord: ICoordinate) => ({
-        url: `${import.meta.env.VITE_GEOCODING_URL}?latlng=${coord.lat},${coord.lng}&key=${import.meta.env.VITE_API_KEY}`,
       }),
       providesTags: ['Service'],
     }),
@@ -58,6 +52,9 @@ export const serviceApi = createApi({
     getServiceById: builder.query<IService, number>({
       query: (id) => ({
         url: `${import.meta.env.VITE_BACKEND_URL}/${id}`,
+        headers: {
+          Auhorization: 'text/plain',
+        },
       }),
       providesTags: ['Service'],
     }),
@@ -92,7 +89,6 @@ export const serviceApi = createApi({
 export const {
   useGetAllServicesQuery,
   useLazyGetServicesFromAnAreaQuery,
-  useLazyGetAddressFromCoordinatesQuery,
   useLazyGetServiceByIdQuery,
   useCreateNewServiceMutation,
   useUpdateExistingServiceMutation,

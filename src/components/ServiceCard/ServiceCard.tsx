@@ -3,7 +3,8 @@ import React, { useEffect, useState } from 'react';
 import { RiDeleteBin5Fill, RiEditFill } from 'react-icons/Ri';
 
 import { v4 as uuidv4 } from 'uuid';
-import { useDeleteExistingServiceMutation, useLazyGetAddressFromCoordinatesQuery } from '../../redux/services/services';
+import { useDeleteExistingServiceMutation } from '../../redux/services/services';
+import { useLazyGetAddressFromCoordinatesQuery } from '../../redux/services/maps';
 
 import { IService } from '../../models/service.model';
 

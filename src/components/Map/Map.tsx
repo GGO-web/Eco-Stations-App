@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react';
 import { GoogleMap, MarkerF } from '@react-google-maps/api';
 
 import {
-  useLazyGetAddressFromCoordinatesQuery,
   useLazyGetServiceByIdQuery,
   useLazyGetServicesFromAnAreaQuery,
 } from '../../redux/services/services';
@@ -22,6 +21,7 @@ import { useDebounce } from '../../hooks/debounce';
 import { useAppSelector } from '../../hooks/redux';
 
 import { Popup } from '../Popup/Popup';
+import { useLazyGetAddressFromCoordinatesQuery } from '../../redux/services/maps';
 
 export function Map({
   mapRef,
