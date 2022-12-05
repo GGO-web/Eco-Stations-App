@@ -10,6 +10,7 @@ import { IconButton, Menu, MenuItem } from '@mui/material';
 import { useAppSelector } from '../../hooks/redux';
 
 import { useActions } from '../../hooks/actions';
+import { useCredentials } from '../../hooks/credentials';
 
 export function Header() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -17,6 +18,7 @@ export function Header() {
   const { role, isAuth } = useAppSelector((store) => store.auth);
 
   const { logOut } = useActions();
+  const [, setCredentialsStore] = useCredentials();
 
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -67,7 +69,10 @@ export function Header() {
             <IconButton
               size="large"
               aria-label="logout button"
-              onClick={logOut}
+              onClick={() => {
+                setCredentialsStore({});
+                logOut();
+              }}
               color="inherit"
             >
               <svg

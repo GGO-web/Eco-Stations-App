@@ -23,6 +23,8 @@ import { ILoginState } from '../../models/login.model';
 import { useUserLoginMutation } from '../../redux/services/auth';
 
 import { useActions } from '../../hooks/actions';
+import { useLocalStorage } from '../../hooks/localStorage';
+import { AUTH_CREDENTIALS } from '../../constants';
 
 export function LoginPage() {
   const [values, setValues] = useState<ILoginState>({
@@ -34,6 +36,7 @@ export function LoginPage() {
   const [loginUser] = useUserLoginMutation();
 
   const { setCredentials } = useActions();
+  const [, setCredentialsStore] = useLocalStorage(AUTH_CREDENTIALS, {});
 
   const navigate = useNavigate();
 
@@ -69,7 +72,14 @@ export function LoginPage() {
 
     const { role, sub }: { role: string, sub: string } = jwt_decode(jwtToken as string);
 
-    setCredentials({ role, username: sub, token: jwtToken as string });
+    const credentials = {
+      role,
+      username: sub,
+      token: jwtToken as string,
+    };
+
+    setCredentials(credentials);
+    setCredentialsStore(credentials);
 
     toast.success('You have been Log In 😎', {
       toastId: 'error-msg',

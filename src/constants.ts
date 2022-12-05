@@ -108,3 +108,5 @@ export const mapDefaultOptions = {
   fullscreenControl: false,
   styles: defaultTheme,
 };
+
+export const AUTH_CREDENTIALS = 'AUTH_CREDENTIALS';

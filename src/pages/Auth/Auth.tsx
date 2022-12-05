@@ -27,8 +27,10 @@ import { toast } from 'react-toastify';
 import { useUserRegisterMutation } from '../../redux/services/auth';
 
 import { useActions } from '../../hooks/actions';
+import { useLocalStorage } from '../../hooks/localStorage';
 
 import { IAuth } from '../../models/auth.model';
+import { AUTH_CREDENTIALS } from '../../constants';
 
 export function Auth() {
   const [values, setValues] = React.useState<IAuth>({
@@ -43,6 +45,7 @@ export function Auth() {
   const [createUser] = useUserRegisterMutation();
 
   const { setCredentials } = useActions();
+  const [credentialsStore, setCredentialsStore] = useLocalStorage(AUTH_CREDENTIALS, {});
 
   const navigate = useNavigate();
 
@@ -88,7 +91,14 @@ export function Auth() {
 
     const { role, sub }: { role: string, sub: string } = jwt_decode(jwtToken as string);
 
-    setCredentials({ role, username: sub, token: jwtToken as string });
+    const credentials = {
+      role,
+      username: sub,
+      token: jwtToken as string,
+    };
+
+    setCredentials(credentials);
+    setCredentialsStore(credentials);
 
     toast.success('You have been Registered 😎', {
       toastId: 'error-msg',

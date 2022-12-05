@@ -16,12 +16,15 @@ import { Header } from './components/Header/Header';
 import { ServicesPage } from './pages/ServicesPage/ServicesPage';
 
 import './App.scss';
+import { useCredentials } from './hooks/credentials';
 
 function App() {
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: import.meta.env.VITE_API_KEY,
     libraries: ['places'],
   });
+
+  const [credentials] = useCredentials();
 
   return (
     <HashRouter>

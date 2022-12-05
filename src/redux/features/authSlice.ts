@@ -1,14 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-export interface IAuthSlice {
-  username: null | string;
-  role: null | string;
-  token: null | string;
-  password?: string;
-  isAuth?: boolean;
-}
+import { ICredentials } from '../../models/credentials.model';
 
-const initialState: IAuthSlice = {
+const initialState: ICredentials = {
   username: null,
   role: null,
   token: null,
@@ -19,7 +13,7 @@ const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    setCredentials: (state, action: PayloadAction<IAuthSlice>) => {
+    setCredentials: (state, action: PayloadAction<ICredentials>) => {
       const {
         username, role, token,
       } = action.payload;
