@@ -2,6 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --filter-sidebar-width: 300px;
+}
 
 #root {
   display: flex;
@@ -20,4 +23,12 @@
 ::-webkit-scrollbar-thumb {
   background-color: #5CDB95;
   border-radius: 20px;
+}
+
+.input-checkbox {
+  @apply border-dark text-dark focus:ring-offset-0 focus:ring-transparent rounded w-6 h-6 mr-[5px];
+}
+
+.input-label:hover {
+  text-shadow: 0 0 1px white;
 }

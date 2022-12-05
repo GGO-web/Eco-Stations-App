@@ -41,11 +41,11 @@ export function PlacesAutocomplete({ setService, service, adrs }:
   return (
     <Combobox onSelect={handleSelect} className="mb-2 relative">
       <ComboboxInput
-        value={value}
+        value={value || adrs}
         onChange={(e) => setValue(e.target.value)}
         disabled={!ready}
         className="w-full p-3 border-dark-green rounded-2xl border-2 outline-none "
-        placeholder={adrs || 'Enter your service address...'}
+        placeholder="Enter your service address..."
       />
       <ComboboxPopover className="absolute z-[1000000] top-0 rounded-2xl overflow-hidden ">
         <ComboboxList>
