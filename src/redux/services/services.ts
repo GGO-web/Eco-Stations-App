@@ -1,8 +1,11 @@
 import {
   createApi, fetchBaseQuery,
 } from '@reduxjs/toolkit/query/react';
+
 import { ICoordinate } from '../../models/coordinates.model';
 import { IService } from '../../models/service.model';
+
+import type { RootState } from '../store';
 
 // Define a service using a base URL and expected endpoints
 export const serviceApi = createApi({
@@ -10,6 +13,16 @@ export const serviceApi = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: '',
     mode: 'cors',
+    prepareHeaders: (headers, { getState }) => {
+      const { token } = (getState() as RootState).auth;
+
+      // If we have a token set in state, let's assume that we should be passing it.
+      if (token) {
+        headers.set('authorization', `Bearer ${token}`);
+      }
+
+      return headers;
+    },
   }),
   tagTypes: ['Service'],
   endpoints: (builder) => ({
