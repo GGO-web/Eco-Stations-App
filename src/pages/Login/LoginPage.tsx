@@ -15,16 +15,30 @@ import {
   Typography,
 } from '@mui/material';
 
+import { toast } from 'react-toastify';
+import jwt_decode from 'jwt-decode';
+import { useNavigate } from 'react-router-dom';
 import { ILoginState } from '../../models/login.model';
+
+import { useUserLoginMutation } from '../../redux/services/auth';
+
+import { useActions } from '../../hooks/actions';
+import { useLocalStorage } from '../../hooks/localStorage';
+import { AUTH_CREDENTIALS } from '../../constants';
 
 export function LoginPage() {
   const [values, setValues] = useState<ILoginState>({
-    amount: '',
     password: '',
-    weight: '',
-    weightRange: '',
     showPassword: false,
+    username: '',
   });
+
+  const [loginUser] = useUserLoginMutation();
+
+  const { setCredentials } = useActions();
+  const [, setCredentialsStore] = useLocalStorage(AUTH_CREDENTIALS, {});
+
+  const navigate = useNavigate();
 
   const handleChange = (prop: string) => (event: ChangeEvent<HTMLInputElement>) => {
     setValues({ ...values, [prop]: event.target.value });
@@ -39,6 +53,41 @@ export function LoginPage() {
 
   const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
+  };
+
+  const handleLogin = async () => {
+    if (values.password === ''
+      || values.username === '') {
+      toast.error('Please fill all the fields 😅', {
+        toastId: 'error-msg',
+        position: toast.POSITION.TOP_RIGHT,
+        autoClose: 1500,
+      });
+    }
+
+    const { jwtToken } = await loginUser({
+      username: values.username,
+      password: values.password,
+    }).unwrap();
+
+    const { role, sub }: { role: string, sub: string } = jwt_decode(jwtToken as string);
+
+    const credentials = {
+      role,
+      username: sub,
+      token: jwtToken as string,
+    };
+
+    setCredentials(credentials);
+    setCredentialsStore(credentials);
+
+    toast.success('You have been Log In 😎', {
+      toastId: 'error-msg',
+      position: toast.POSITION.TOP_RIGHT,
+      autoClose: 1500,
+    });
+
+    navigate('/');
   };
 
   return (
@@ -61,6 +110,8 @@ export function LoginPage() {
               helperText="Please enter your e-mail"
               id="demo-helper-text-aligned"
               label="Email"
+              value={values.username}
+              onChange={handleChange('username')}
             />
           </Box>
           <Box sx={{ minWidth: 100, textAlign: 'start' }} />
@@ -95,7 +146,7 @@ export function LoginPage() {
         </CardContent>
 
         <CardActions>
-          <Button sx={{ marginLeft: 1 }} variant="outlined">Sign in</Button>
+          <Button sx={{ marginLeft: 1 }} variant="outlined" onClick={handleLogin}>Sign in</Button>
         </CardActions>
       </Card>
     </div>

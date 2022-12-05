@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { IService } from '../../models/service.model';
-import { IServiceFilter } from '../../models/serviceFilter.mode';
+import { IServiceFilter } from '../../models/serviceFilter.model';
 
 export interface ITrashBins {
   trashBins: IService[],

@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 
+import { useNavigate } from 'react-router-dom';
+
 import {
   Box,
   Button,
@@ -18,18 +20,34 @@ import {
   Typography,
 } from '@mui/material';
 
+import jwt_decode from 'jwt-decode';
+
+import { toast } from 'react-toastify';
+
+import { useUserRegisterMutation } from '../../redux/services/auth';
+
+import { useActions } from '../../hooks/actions';
+import { useLocalStorage } from '../../hooks/localStorage';
+
 import { IAuth } from '../../models/auth.model';
+import { AUTH_CREDENTIALS } from '../../constants';
 
 export function Auth() {
   const [values, setValues] = React.useState<IAuth>({
-    amount: '',
     password: '',
-    weight: '',
-    weightRange: '',
     showPassword: false,
+    username: '',
+    email: '',
   });
 
-  const [role, setRole] = useState('');
+  const [userRole, setUserRole] = useState('');
+
+  const [createUser] = useUserRegisterMutation();
+
+  const { setCredentials } = useActions();
+  const [credentialsStore, setCredentialsStore] = useLocalStorage(AUTH_CREDENTIALS, {});
+
+  const navigate = useNavigate();
 
   const handleChange = (prop: keyof IAuth) => (event: React.ChangeEvent<HTMLInputElement>) => {
     setValues({ ...values, [prop]: event.target.value });
@@ -47,7 +65,48 @@ export function Auth() {
   };
 
   const handleChangeRole = (event: SelectChangeEvent) => {
-    setRole(event.target.value as string);
+    setUserRole(event.target.value as string);
+  };
+
+  const handleAuth = async () => {
+    if (values.password === ''
+      || values.username === ''
+      || values.email === ''
+      || userRole === '') {
+      toast.error('Please fill all the fields 😅', {
+        toastId: 'error-msg',
+        position: toast.POSITION.TOP_RIGHT,
+        autoClose: 1500,
+      });
+
+      return;
+    }
+
+    const { jwtToken } = await createUser({
+      username: values.username,
+      password: values.password,
+      email: values.email,
+      role: userRole,
+    }).unwrap();
+
+    const { role, sub }: { role: string, sub: string } = jwt_decode(jwtToken as string);
+
+    const credentials = {
+      role,
+      username: sub,
+      token: jwtToken as string,
+    };
+
+    setCredentials(credentials);
+    setCredentialsStore(credentials);
+
+    toast.success('You have been Registered 😎', {
+      toastId: 'error-msg',
+      position: toast.POSITION.TOP_RIGHT,
+      autoClose: 1500,
+    });
+
+    navigate('/');
   };
 
   return (
@@ -68,15 +127,20 @@ export function Auth() {
               helperText="Please enter your name"
               id="demo-helper-text-aligned"
               label="Name"
+              value={values.username}
+              onChange={handleChange('username')}
             />
           </Box>
 
           <Box sx={{ display: 'flex' }}>
             <TextField
               sx={{ width: '50ch' }}
+              type="email"
               helperText="Please enter your e-mail"
               id="demo-helper-text-aligned"
               label="Email"
+              value={values.email}
+              onChange={handleChange('email')}
             />
           </Box>
 
@@ -86,7 +150,7 @@ export function Auth() {
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
-                value={role}
+                value={userRole}
                 label="Role"
                 onChange={handleChangeRole}
               >
@@ -126,7 +190,7 @@ export function Auth() {
         </CardContent>
 
         <CardActions>
-          <Button sx={{ marginLeft: 1 }} variant="outlined">Sign up</Button>
+          <Button sx={{ marginLeft: 1 }} variant="outlined" onClick={handleAuth}>Sign up</Button>
         </CardActions>
       </Card>
     </div>

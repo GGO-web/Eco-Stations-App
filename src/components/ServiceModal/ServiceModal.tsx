@@ -30,17 +30,32 @@ export function ServiceModal({ isUpdateService = false, updateService }:
     },
   });
 
+  const TypeOfWasteInitialCheckers = new Array(TypesOfWaste.length).fill(false);
+  const DeliveryOptionsInitialCheckers = new Array(DeliveryOptions.length).fill(false);
+  const PaymentConditionsInitialCheckers = new Array(PaymentConditions.length).fill(false);
+
   const [createService] = useCreateNewServiceMutation();
   const [updateExistingService] = useUpdateExistingServiceMutation();
 
   const [checkedStateWaste, setCheckedStateWaste] = useState(
-    new Array(TypesOfWaste.length).fill(false),
+    service.typeOfWastes.length > 0
+      ? TypesOfWaste?.map((type:string, index: number) => (service.typeOfWastes.includes(type)
+        ? TypeOfWasteInitialCheckers[index] = true : false))
+      : TypeOfWasteInitialCheckers,
   );
   const [checkedStateOptions, setCheckedStateOptions] = useState(
-    new Array(DeliveryOptions.length).fill(false),
+    service.deliveryOptions.length > 0
+      ? DeliveryOptions
+        ?.map((option: string, index: number) => (service.deliveryOptions.includes(option)
+          ? DeliveryOptionsInitialCheckers[index] = true : false))
+      : DeliveryOptionsInitialCheckers,
   );
   const [checkedStatePayment, setCheckedStatePayment] = useState(
-    new Array(PaymentConditions.length).fill(false),
+    service.paymentConditions.length > 0
+      ? PaymentConditions
+        ?.map((pay: string, index: number) => (service.paymentConditions.includes(pay)
+          ? DeliveryOptionsInitialCheckers[index] = true : false))
+      : PaymentConditionsInitialCheckers,
   );
 
   const { setPopupState, setUpdatePopupState } = useActions();
@@ -89,13 +104,13 @@ export function ServiceModal({ isUpdateService = false, updateService }:
     }
 
     if (isUpdateService) {
-      await updateExistingService(service).unwrap();
       toast.success('Congrats! Your service have been updates 🥳', {
         toastId: 'error-msg',
         position: toast.POSITION.TOP_RIGHT,
         autoClose: 1500,
       });
       setUpdatePopupState(false);
+      await updateExistingService(service).unwrap();
     }
     if (!isUpdateService) {
       toast.success('Congrats! Your service have been created 🥳', {
@@ -103,8 +118,8 @@ export function ServiceModal({ isUpdateService = false, updateService }:
         position: toast.POSITION.TOP_RIGHT,
         autoClose: 1500,
       });
-      await createService(service).unwrap();
       setPopupState(false);
+      await createService(service).unwrap();
     }
   };
 
@@ -211,6 +226,7 @@ export function ServiceModal({ isUpdateService = false, updateService }:
                   checked={checkedStateWaste[index]}
                   id="types"
                   className="cursor-pointer accent-dark-green"
+                  style={{ accentColor: '#379683' }}
                 />
                 <span>{type}</span>
               </div>

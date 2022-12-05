@@ -12,8 +12,12 @@ import { Home } from './pages/Home/Home';
 import { TypesOfWaste } from './pages/TypesOfWaste/TypesOfWaste';
 import { TrashInfo } from './pages/TrashInfo/TrashInfo';
 import { Error } from './pages/Error/Error';
-import { Header } from './components/Header/Header';
 import { ServicesPage } from './pages/ServicesPage/ServicesPage';
+
+import { Header } from './components/Header/Header';
+import { ProtectedRoute } from './components/ProtectedRoute/ProtectedRoute';
+
+import { useCredentials } from './hooks/credentials';
 
 import './App.scss';
 
@@ -22,6 +26,8 @@ function App() {
     googleMapsApiKey: import.meta.env.VITE_API_KEY,
     libraries: ['places'],
   });
+
+  useCredentials();
 
   return (
     <HashRouter>
@@ -34,7 +40,12 @@ function App() {
         <Route path="/detailed/:id" element={<TrashInfo />} />
         <Route path="/Login" element={<LoginPage />} />
         <Route path="/Auth" element={<Auth />} />
-        <Route path="/services" element={<ServicesPage isLoaded={isLoaded} />} />
+        <Route
+          path="/services"
+          element={
+            <ProtectedRoute userRole="Service" element={<ServicesPage isLoaded={isLoaded} />} />
+          }
+        />
         <Route path="/*" element={<Error />} />
       </Routes>
     </HashRouter>

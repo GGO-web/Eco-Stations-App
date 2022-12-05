@@ -1,15 +1,29 @@
 import {
   createApi, fetchBaseQuery,
 } from '@reduxjs/toolkit/query/react';
+
 import { ICoordinate } from '../../models/coordinates.model';
 import { IService } from '../../models/service.model';
 import { IServiceFilter } from '../../models/serviceFilter.model';
 
+import type { RootState } from '../store';
+
+// Define a service using a base URL and expected endpoints
 export const serviceApi = createApi({
   reducerPath: 'serviceApi',
   baseQuery: fetchBaseQuery({
     baseUrl: '',
     mode: 'cors',
+    prepareHeaders: (headers, { getState }) => {
+      const { token } = (getState() as RootState).auth;
+
+      // If we have a token set in state, let's assume that we should be passing it.
+      if (token) {
+        headers.set('Authorization', `Bearer ${token}`);
+      }
+
+      return headers;
+    },
   }),
   tagTypes: ['Service'],
   endpoints: (builder) => ({
@@ -17,12 +31,6 @@ export const serviceApi = createApi({
       query: () => ({
         url: import.meta.env.VITE_BACKEND_URL,
         responseHandler: (response) => response.json(),
-      }),
-      providesTags: ['Service'],
-    }),
-    getAddressFromCoordinates: builder.query<string, ICoordinate>({
-      query: (coord: ICoordinate) => ({
-        url: `${import.meta.env.VITE_GEOCODING_URL}?latlng=${coord.lat},${coord.lng}&key=${import.meta.env.VITE_API_KEY}`,
       }),
       providesTags: ['Service'],
     }),
@@ -65,6 +73,9 @@ export const serviceApi = createApi({
     getServiceById: builder.query<IService, number>({
       query: (id) => ({
         url: `${import.meta.env.VITE_BACKEND_URL}/${id}`,
+        headers: {
+          Auhorization: 'text/plain',
+        },
       }),
       providesTags: ['Service'],
     }),
@@ -97,7 +108,6 @@ export const serviceApi = createApi({
 export const {
   useGetAllServicesQuery,
   useLazyGetServicesFromAnAreaQuery,
-  useLazyGetAddressFromCoordinatesQuery,
   useLazyGetServiceByIdQuery,
   useCreateNewServiceMutation,
   useUpdateExistingServiceMutation,

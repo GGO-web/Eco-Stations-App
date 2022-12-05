@@ -1,7 +1,7 @@
 export interface IAuth {
-  amount: string;
   password: string;
-  weight: string;
-  weightRange: string;
-  showPassword: boolean;
+  showPassword?: boolean;
+  email: string;
+  username: string;
+  role?: string;
 }
