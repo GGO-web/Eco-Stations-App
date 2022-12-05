@@ -4,6 +4,7 @@ import {
 
 import { IAuth } from '../../models/auth.model';
 import { ILoginState } from '../../models/login.model';
+import { IJwtResponse } from '../../models/jwtResponse.model';
 
 // Define a service using a base URL and expected endpoints
 export const authApi = createApi({
@@ -14,7 +15,7 @@ export const authApi = createApi({
   }),
   tagTypes: ['Auth'],
   endpoints: (builder) => ({
-    userRegister: builder.mutation<string, IAuth>({
+    userRegister: builder.mutation<IJwtResponse, IAuth>({
       query: (newUser: IAuth) => ({
         url: '/register',
         method: 'POST',
@@ -22,7 +23,7 @@ export const authApi = createApi({
       }),
       invalidatesTags: ['Auth'],
     }),
-    userLogin: builder.mutation<string, ILoginState>({
+    userLogin: builder.mutation<IJwtResponse, ILoginState>({
       query: (loginUser: ILoginState) => ({
         url: '/authenticate',
         method: 'POST',

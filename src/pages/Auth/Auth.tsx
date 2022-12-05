@@ -26,7 +26,7 @@ import { toast } from 'react-toastify';
 
 import { useUserRegisterMutation } from '../../redux/services/auth';
 
-import {useActions} from "../../hooks/actions";
+import { useActions } from '../../hooks/actions';
 
 import { IAuth } from '../../models/auth.model';
 
@@ -42,9 +42,9 @@ export function Auth() {
 
   const [createUser] = useUserRegisterMutation();
 
-  const {setCredentials} = useActions();
+  const { setCredentials } = useActions();
 
-  let navigate = useNavigate();
+  const navigate = useNavigate();
 
   const handleChange = (prop: keyof IAuth) => (event: React.ChangeEvent<HTMLInputElement>) => {
     setValues({ ...values, [prop]: event.target.value });
@@ -79,18 +79,22 @@ export function Auth() {
       return;
     }
 
-    const {jwtToken} = await createUser({
+    const { jwtToken } = await createUser({
       username: values.username,
       password: values.password,
       email: values.email,
       role: userRole,
     }).unwrap();
 
-    console.log(jwtToken);
+    const { role, sub }: { role: string, sub: string } = jwt_decode(jwtToken as string);
 
-    const {role, sub}: {role: string, sub: string} = jwt_decode(jwtToken);
+    setCredentials({ role, username: sub, token: jwtToken as string });
 
-    setCredentials({role, username: sub, token: jwtToken})
+    toast.success('You have been Registered 😎', {
+      toastId: 'error-msg',
+      position: toast.POSITION.TOP_RIGHT,
+      autoClose: 1500,
+    });
 
     navigate('/');
   };

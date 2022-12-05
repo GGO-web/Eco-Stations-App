@@ -16,15 +16,13 @@ import {
 } from '@mui/material';
 
 import { toast } from 'react-toastify';
+import jwt_decode from 'jwt-decode';
+import { useNavigate } from 'react-router-dom';
 import { ILoginState } from '../../models/login.model';
 
-import jwt_decode from "jwt-decode";
+import { useUserLoginMutation } from '../../redux/services/auth';
 
-import {useUserLoginMutation} from "../../redux/services/auth";
-
-import {useActions} from "../../hooks/actions";
-
-import {useNavigate} from "react-router-dom";
+import { useActions } from '../../hooks/actions';
 
 export function LoginPage() {
   const [values, setValues] = useState<ILoginState>({
@@ -35,9 +33,9 @@ export function LoginPage() {
 
   const [loginUser] = useUserLoginMutation();
 
-  const {setCredentials} = useActions();
+  const { setCredentials } = useActions();
 
-  let navigate = useNavigate();
+  const navigate = useNavigate();
 
   const handleChange = (prop: string) => (event: ChangeEvent<HTMLInputElement>) => {
     setValues({ ...values, [prop]: event.target.value });
@@ -64,14 +62,20 @@ export function LoginPage() {
       });
     }
 
-    const {jwtToken} = await loginUser({
+    const { jwtToken } = await loginUser({
       username: values.username,
       password: values.password,
     }).unwrap();
 
-    const {role, sub}: {role: string, sub: string} = jwt_decode(jwtToken);
+    const { role, sub }: { role: string, sub: string } = jwt_decode(jwtToken as string);
 
-    setCredentials({role, username: sub, token: jwtToken})
+    setCredentials({ role, username: sub, token: jwtToken as string });
+
+    toast.success('You have been Log In 😎', {
+      toastId: 'error-msg',
+      position: toast.POSITION.TOP_RIGHT,
+      autoClose: 1500,
+    });
 
     navigate('/');
   };

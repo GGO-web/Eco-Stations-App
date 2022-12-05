@@ -9,7 +9,7 @@ import {
 
 import { setAllTrashBins, setTrashBinsFilter } from '../redux/features/trashBinsSlice';
 
-import {setCredentials, logOut} from "../redux/features/authSlice";
+import { setCredentials, logOut } from '../redux/features/authSlice';
 
 const actions = {
   setPopupState,
@@ -18,7 +18,7 @@ const actions = {
   setAllTrashBins,
   setTrashBinsFilter,
   setCredentials,
-  logOut
+  logOut,
 };
 
 export const useActions = () => {
