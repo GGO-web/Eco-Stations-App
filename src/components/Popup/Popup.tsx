@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { v4 as uuidv4 } from 'uuid';
 import { useActions } from '../../hooks/actions';
@@ -17,8 +17,22 @@ export function Popup() {
     deliveryOptions,
     rating,
     paymentConditions,
-    priceOfService,
+    // priceOfService,
+    description,
   } = useAppSelector((store) => store.service.service);
+
+  const [textDesc, setText] = useState('');
+  const [, setDelivery] = useState();
+  const [, setPricing] = useState();
+
+  useEffect(() => {
+    if (description) {
+      const [text, delivery, pricing] = JSON.parse(description! as string);
+      setText(text);
+      setDelivery(delivery);
+      setPricing(pricing);
+    }
+  }, []);
 
   const [waste, setWaste] = useState('');
 
@@ -73,11 +87,11 @@ export function Popup() {
             </p>
           </div>
           <div className="flex flex-col flex-auto">
-            <p className="py-2">
-              Price of service:
-              {' '}
-              {priceOfService || 'FREE'}
-            </p>
+            {/* <p className="py-2"> */}
+            {/*  Price of service: */}
+            {/*  {' '} */}
+            {/*  {priceOfService || 'FREE'} */}
+            {/* </p> */}
             <p className="py-2">
               Payment Conditions:
               {' '}
@@ -89,6 +103,13 @@ export function Popup() {
                 </span>
               ))}
             </p>
+            {description && (
+            <p>
+              Description:
+              {' '}
+              {textDesc}
+            </p>
+            )}
             <div className="flex gap-4 items-center py-2">
               Rating:
               {' '}

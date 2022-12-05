@@ -102,6 +102,13 @@ export const serviceApi = createApi({
       }),
       invalidatesTags: ['Service'],
     }),
+    getServicesOfProvider: builder.query<IService[], void>({
+      query: () => ({
+        url: `${import.meta.env.VITE_BACKEND_URL}/user`,
+        responseHandler: (response) => response.json(),
+      }),
+      providesTags: ['Service'],
+    }),
   }),
 });
 
@@ -113,4 +120,5 @@ export const {
   useUpdateExistingServiceMutation,
   useDeleteExistingServiceMutation,
   useFilterServiceInAreaMutation,
+  useGetServicesOfProviderQuery,
 } = serviceApi;

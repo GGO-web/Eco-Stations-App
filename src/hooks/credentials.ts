@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-import { toast } from 'react-toastify';
+// import  { toast } from 'react-toastify';
 
 import { useActions } from './actions';
 import { useLocalStorage } from './localStorage';
@@ -18,11 +18,11 @@ export const useCredentials = () => {
     if (credentials.token) {
       setCredentials(credentials);
 
-      toast.success('You have been Log In 😎', {
-        toastId: 'error-msg',
-        position: toast.POSITION.TOP_RIGHT,
-        autoClose: 1500,
-      });
+      // toast.success('You have been Log In 😎', {
+      //   toastId: 'error-msg',
+      //   position: toast.POSITION.TOP_RIGHT,
+      //   autoClose: 1500,
+      // });
     }
   });
 
