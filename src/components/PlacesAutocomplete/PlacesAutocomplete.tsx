@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import usePlacesAutocomplete, {
   getGeocode,
@@ -26,6 +26,15 @@ export function PlacesAutocomplete({ setService, service, adrs }:
     clearSuggestions,
   } = usePlacesAutocomplete();
 
+  const [adrsVal, setAdrsVal] = useState(value || adrs);
+
+  const handleChanges = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    setAdrsVal(e.target.value);
+
+    setValue(e.target.value);
+  };
+
   const handleSelect = async (address: string) => {
     setValue(address, false);
     clearSuggestions();
@@ -35,14 +44,15 @@ export function PlacesAutocomplete({ setService, service, adrs }:
     const s = { ...service };
     s.coordinate.latitude = lat;
     s.coordinate.longitude = lng;
+
     setService(s);
   };
 
   return (
     <Combobox onSelect={handleSelect} className="mb-2 relative">
       <ComboboxInput
-        value={value || adrs}
-        onChange={(e) => setValue(e.target.value)}
+        value={adrsVal}
+        onChange={handleChanges}
         disabled={!ready}
         className="w-full p-3 border-dark-green rounded-2xl border-2 outline-none "
         placeholder="Enter your service address..."
