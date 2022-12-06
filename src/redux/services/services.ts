@@ -109,6 +109,13 @@ export const serviceApi = createApi({
       }),
       providesTags: ['Service'],
     }),
+    updateServiceRating: builder.mutation<number, { rating: number; id: number }>({
+      query: ({ rating, id }) => ({
+        url: `${import.meta.env.VITE_BACKEND_URL}/manage/${rating}/${id}`,
+        method: 'PUT',
+      }),
+      invalidatesTags: ['Service'],
+    }),
   }),
 });
 
@@ -121,4 +128,5 @@ export const {
   useDeleteExistingServiceMutation,
   useFilterServiceInAreaMutation,
   useGetServicesOfProviderQuery,
+  useUpdateServiceRatingMutation,
 } = serviceApi;

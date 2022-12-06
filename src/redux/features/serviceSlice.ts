@@ -11,6 +11,7 @@ const initialState: IServiceWithPopup = {
   isPopupOpen: false,
   isUpdatePopupOpen: false,
   service: {
+    id: 0,
     address: '',
     serviceName: '',
     paymentConditions: [],
