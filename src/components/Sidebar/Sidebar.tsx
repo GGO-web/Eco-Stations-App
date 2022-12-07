@@ -1,4 +1,5 @@
 import React, { FormEvent, useRef, useState } from 'react';
+import { DELIVERY_OPTIONS, PAYMENT_CONDITIONS, WASTE_TYPES } from '../../constants';
 import { useActions } from '../../hooks/actions';
 import { IServiceFilter } from '../../models/serviceFilter.model';
 
@@ -100,26 +101,14 @@ export function Sidebar() {
             </h3>
 
             <ul className="sidebar-form__options">
-              <li className="sidebar-form__option">
-                <label className="inline-flex cursor-pointer items-center sidebar-form__label">
-                  <input value="SELF" className="input-checkbox cursor-pointer" name="delivery" type="checkbox" />
-                  <span className="input-label uppercase transition-all text-lg">self</span>
-                </label>
-              </li>
-
-              <li className="sidebar-form__option">
-                <label className="inline-flex cursor-pointer items-center sidebar-form__label">
-                  <input value="VAN" className="input-checkbox cursor-pointer" name="delivery" type="checkbox" />
-                  <span className="input-label uppercase transition-all text-lg">van</span>
-                </label>
-              </li>
-
-              <li className="sidebar-form__option">
-                <label className="inline-flex cursor-pointer items-center sidebar-form__label">
-                  <input value="TRUCK" className="input-checkbox cursor-pointer" name="delivery" type="checkbox" />
-                  <span className="input-label uppercase transition-all text-lg">truck</span>
-                </label>
-              </li>
+              {DELIVERY_OPTIONS.map((deliveryOption) => (
+                <li className="sidebar-form__option">
+                  <label className="inline-flex cursor-pointer items-center sidebar-form__label">
+                    <input value={deliveryOption} className="input-checkbox cursor-pointer" name="delivery" type="checkbox" />
+                    <span className="input-label uppercase transition-all text-lg">{deliveryOption}</span>
+                  </label>
+                </li>
+              ))}
             </ul>
           </div>
 
@@ -129,26 +118,14 @@ export function Sidebar() {
             </h3>
 
             <ul className="sidebar-form__options">
-              <li className="sidebar-form__option ">
-                <label className="inline-flex cursor-pointer items-center sidebar-form__label">
-                  <input value="CARD" className="input-checkbox cursor-pointer" name="payment" type="checkbox" />
-                  <span className="input-label uppercase transition-all text-lg">card</span>
-                </label>
-              </li>
-
-              <li className="sidebar-form__option">
-                <label className="inline-flex cursor-pointer items-center sidebar-form__label">
-                  <input value="CASH" className="input-checkbox cursor-pointer" name="payment" type="checkbox" />
-                  <span className="input-label uppercase transition-all text-lg">cash</span>
-                </label>
-              </li>
-
-              <li className="sidebar-form__option">
-                <label className="inline-flex cursor-pointer items-center sidebar-form__label">
-                  <input value="FREE" className="input-checkbox cursor-pointer" name="payment" type="checkbox" />
-                  <span className="input-label uppercase transition-all text-lg">free</span>
-                </label>
-              </li>
+              {PAYMENT_CONDITIONS.map((paymentOption) => (
+                <li className="sidebar-form__option ">
+                  <label className="inline-flex cursor-pointer items-center sidebar-form__label">
+                    <input value={paymentOption} className="input-checkbox cursor-pointer" name="payment" type="checkbox" />
+                    <span className="input-label uppercase transition-all text-lg">{paymentOption}</span>
+                  </label>
+                </li>
+              ))}
             </ul>
           </div>
 
@@ -158,40 +135,14 @@ export function Sidebar() {
             </h3>
 
             <ul className="sidebar-form__options">
-              <li className="sidebar-form__option ">
-                <label className="inline-flex cursor-pointer items-center sidebar-form__label">
-                  <input value="GLASS" className="input-checkbox cursor-pointer" name="waste-type" type="checkbox" />
-                  <span className="input-label uppercase transition-all text-lg">glass</span>
-                </label>
-              </li>
-
-              <li className="sidebar-form__option">
-                <label className="inline-flex cursor-pointer items-center sidebar-form__label">
-                  <input value="PAPER" className="input-checkbox cursor-pointer" name="waste-type" type="checkbox" />
-                  <span className="input-label uppercase transition-all text-lg">paper</span>
-                </label>
-              </li>
-
-              <li className="sidebar-form__option">
-                <label className="inline-flex cursor-pointer items-center sidebar-form__label">
-                  <input value="PLASTICS" className="input-checkbox cursor-pointer" name="waste-type" type="checkbox" />
-                  <span className="input-label uppercase transition-all text-lg">plastic</span>
-                </label>
-              </li>
-
-              <li className="sidebar-form__option">
-                <label className="inline-flex cursor-pointer items-center sidebar-form__label">
-                  <input value="METALS" className="input-checkbox cursor-pointer" name="waste-type" type="checkbox" />
-                  <span className="input-label uppercase transition-all text-lg">metals</span>
-                </label>
-              </li>
-
-              <li className="sidebar-form__option">
-                <label className="inline-flex cursor-pointer items-center sidebar-form__label">
-                  <input value="ELECTRONIC" className="input-checkbox cursor-pointer" name="waste-type" type="checkbox" />
-                  <span className="input-label uppercase transition-all text-lg">electronic</span>
-                </label>
-              </li>
+              {WASTE_TYPES.map((wasteType) => (
+                <li className="sidebar-form__option">
+                  <label className="inline-flex cursor-pointer items-center sidebar-form__label">
+                    <input value={wasteType} className="input-checkbox cursor-pointer" name="waste-type" type="checkbox" />
+                    <span className="input-label uppercase transition-all text-lg">{wasteType}</span>
+                  </label>
+                </li>
+              ))}
             </ul>
           </div>
         </div>

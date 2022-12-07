@@ -116,3 +116,15 @@ export const ROLES = {
   Service: 'Service',
   Anonymous: 'Anonymous',
 };
+
+export const WASTE_TYPES = [
+  'GLASS', 'PAPER', 'PLASTIC', 'METALS', 'ELECTRONIC',
+];
+
+export const PAYMENT_CONDITIONS = [
+  'CARD', 'CASH', 'FREE',
+];
+
+export const DELIVERY_OPTIONS = [
+  'SELF', 'VAN', 'TRUCK',
+];
