@@ -23,12 +23,19 @@ export function ServiceModal({ isUpdateService = false, updateService }:
     typeOfWastes: updateService?.typeOfWastes || [],
     paymentConditions: updateService?.paymentConditions || [],
     deliveryOptions: updateService?.deliveryOptions || [],
+    description: updateService?.description || '',
     coordinate: {
       id: updateService?.coordinate.id || 0,
       latitude: updateService?.coordinate.latitude || 0,
       longitude: updateService?.coordinate.longitude || 0,
     },
   });
+
+  const [descArr, setDescArr] = useState([]);
+
+  const [text, setText] = useState<string>('');
+  const [priceOfWaste, setPriceOfWaste] = useState({});
+  const [priceOfDelivery, setPriceOfDelivery] = useState({});
 
   const TypeOfWasteInitialCheckers = new Array(TypesOfWaste.length).fill(false);
   const DeliveryOptionsInitialCheckers = new Array(DeliveryOptions.length).fill(false);
@@ -118,6 +125,9 @@ export function ServiceModal({ isUpdateService = false, updateService }:
         position: toast.POSITION.TOP_RIGHT,
         autoClose: 1500,
       });
+
+      setService((prevState) => ({ ...prevState, description: desc }));
+
       setPopupState(false);
       await createService(service).unwrap();
     }
@@ -136,6 +146,10 @@ export function ServiceModal({ isUpdateService = false, updateService }:
     const { name, value } = e.target;
 
     setService((prevState) => ({ ...prevState, [name]: value }));
+
+    setDescArr([text, priceOfDelivery, priceOfWaste]);
+    const desc = JSON.stringify(descArr).replace(/"/g, '\\"');
+    console.log(desc);
   };
 
   const handleCheckTypes = (e: React.ChangeEvent<HTMLInputElement>, position: number) => {
@@ -186,7 +200,7 @@ export function ServiceModal({ isUpdateService = false, updateService }:
   return (
     <div
       onClick={(e) => popupHandleClick(e)}
-      className="bg-light fixed w-full h-screen left-0 top-0 grid place-items-center p-5 pt-24 wrapper-popup"
+      className="bg-light fixed w-full h-screen left-0 top-0 grid place-items-center p-5 pt-10 wrapper-popup"
     >
       <div className="bg-white rounded-2xl p-5 max-w-[550px]">
         <h4 className="text-center pb-5 text-2xl">
@@ -214,6 +228,17 @@ export function ServiceModal({ isUpdateService = false, updateService }:
           />
         </div>
         <div className="mb-2">
+          <label htmlFor="serviceName">Service Description</label>
+          <textarea
+            name="serviceDescription"
+            className="w-full p-3 border-dark-green rounded-2xl border-2 outline-none h-14"
+            placeholder="Enter your service description..."
+            id="serviceDescription"
+            onChange={(e) => setText(e.target.value)}
+            value={text}
+          />
+        </div>
+        <div className="mb-2">
           <label htmlFor="types">Waste Types You Can Carry</label>
           <div className="flex gap-4 items-center flex-wrap">
             {TypesOfWaste.map((type, index) => (
@@ -229,7 +254,13 @@ export function ServiceModal({ isUpdateService = false, updateService }:
                 />
                 <span>{type}</span>
                 {checkedStateWaste[index] && (
-                  <input className="grow p-3 border-dark-green rounded-2xl border-2 outline-none" type="text" placeholder="Write down price here. It should be like: 0.01 EUR/kg" />
+                  <input
+                    value={priceOfWaste[type]}
+                    onChange={(e) => setPriceOfWaste({ ...priceOfWaste, [type]: e.target.value })}
+                    className="grow p-3 border-dark-green rounded-2xl border-2 outline-none"
+                    type="text"
+                    placeholder="Write down price here. It should be like: 0.01 EUR/kg"
+                  />
                 )}
               </div>
             ))}
@@ -268,7 +299,15 @@ export function ServiceModal({ isUpdateService = false, updateService }:
                 />
                 <span>{deliver}</span>
                 {checkedStateOptions[index] && (
-                  <input className="grow p-3 border-dark-green rounded-2xl border-2 outline-none" type="text" placeholder="Write down price here. It should be like: 1 EUR/ 20kg" />
+                  <input
+                    value={priceOfDelivery[deliver]}
+                    onChange={(e) => setPriceOfDelivery(
+                      (prevState) => ({ ...prevState, [deliver]: e.target.value }),
+                    )}
+                    className="grow p-3 border-dark-green rounded-2xl border-2 outline-none"
+                    type="text"
+                    placeholder="Write down price here. It should be like: 1 EUR/ 20kg"
+                  />
                 )}
               </div>
             ))}
