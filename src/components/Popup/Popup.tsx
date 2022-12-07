@@ -89,18 +89,20 @@ export function Popup() {
               <p className="py-2">
                 Price for waste:
                 {' '}
-                {priceOfWaste
-                  && getValuesFromObject(priceOfWaste)
-                    .map((priceWaste: IDescArr, index: number) => (
-                      <span key={uuidv4()}>
-                        {priceWaste.type}
-                        {' '}
-                        ➡
-                        {' '}
-                        {priceWaste.price.toUpperCase()}
-                        {index + 1 !== getValuesFromObject(priceOfDelivery).length && ', '}
-                      </span>
-                    ))}
+                <ul className="list-disc pl-7">
+                  {priceOfWaste
+                    && getValuesFromObject(priceOfWaste)
+                      .map((priceWaste: IDescArr) => (
+                        <li key={uuidv4()}>
+                          {priceWaste.type}
+                          {' '}
+                          ➡
+                          {' '}
+                          {priceWaste.price.toUpperCase()}
+                        </li>
+                      ))}
+                </ul>
+
               </p>
             )}
             <p className="py-2">
@@ -117,27 +119,31 @@ export function Popup() {
           </div>
           <div className="flex flex-col flex-auto">
             {JSON.stringify(priceOfDelivery) === '{}' ? (
-              <p className="py-2">
-                Price of service: SELF ➡ FREE
-              </p>
+              <div className="py-2">
+                Price of service:
+                <ul className="list-disc pl-7">
+                  <li>SELF ➡ FREE</li>
+                </ul>
+              </div>
             ) : (
-              <p className="py-2">
+              <div className="py-2">
                 Price of service:
                 {' '}
-                <span>SELF ➡ FREE, </span>
-                {priceOfDelivery
-                  && getValuesFromObject(priceOfDelivery)
-                    .map((priceDelivery: IDescArr, index: number) => (
-                      <span key={uuidv4()}>
-                        {priceDelivery.type}
-                        {' '}
-                        ➡
-                        {' '}
-                        {priceDelivery.price}
-                        {index + 1 !== getValuesFromObject(priceOfDelivery).length && ', '}
-                      </span>
-                    ))}
-              </p>
+                <ul className="list-disc pl-7">
+                  <li>SELF ➡ FREE</li>
+                  {priceOfDelivery
+                    && getValuesFromObject(priceOfDelivery)
+                      .map((priceDelivery: IDescArr) => (
+                        <li key={uuidv4()}>
+                          {priceDelivery.type}
+                          {' '}
+                          ➡
+                          {' '}
+                          {priceDelivery.price.toUpperCase()}
+                        </li>
+                      ))}
+                </ul>
+              </div>
             )}
             {!(paymentConditions.length === 1 && paymentConditions.includes('FREE')) && (
               <p className="py-2">
