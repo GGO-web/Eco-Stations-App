@@ -43,7 +43,6 @@ export function Map({
   );
 
   const [getAddress] = useLazyGetAddressFromCoordinatesQuery();
-  // const [getServicesFromArea] = useLazyGetServicesFromAnAreaQuery();
   const [filterServicesInArea] = useFilterServiceInAreaMutation();
 
   const trashBinsFilter = useAppSelector((store) => store.trashBins.filter);

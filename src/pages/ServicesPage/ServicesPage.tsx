@@ -8,12 +8,12 @@ import { ServiceCard } from '../../components/ServiceCard/ServiceCard';
 import { useAppSelector } from '../../hooks/redux';
 import { useActions } from '../../hooks/actions';
 
-import { useGetAllServicesQuery } from '../../redux/services/services';
+import { useGetServicesOfProviderQuery } from '../../redux/services/services';
 
 import { IService } from '../../models/service.model';
 
 export function ServicesPage({ isLoaded }: { isLoaded: boolean }) {
-  const { data } = useGetAllServicesQuery();
+  const { data } = useGetServicesOfProviderQuery();
 
   const [serviceForUpdate, setServiceForUpdate] = useState<IService>({} as IService);
 

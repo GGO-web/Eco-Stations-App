@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { v4 as uuidv4 } from 'uuid';
 import { useActions } from '../../hooks/actions';
@@ -7,9 +7,12 @@ import { useAppSelector } from '../../hooks/redux';
 import { StarRating } from './StarRating';
 import { AskForm } from '../AskForm/AskForm';
 import { ExampleTrash } from '../ExampleTrash/ExampleTrash';
+import { useCredentials } from '../../hooks/credentials';
 
 import './Popup.scss';
-import { ImagesType } from '../ExampleTrash/Images';
+import { ImagesType, ImagesType } from '../ExampleTrash/Images';
+
+import { ROLES } from '../../constants';
 
 export function Popup() {
   const {
@@ -18,7 +21,8 @@ export function Popup() {
     deliveryOptions,
     rating,
     paymentConditions,
-    priceOfService,
+    // priceOfService,
+    description,
   } = useAppSelector((store) => store.service.service);
 
   const [waste, setWaste] = useState<ImagesType | null>(null);
@@ -26,6 +30,8 @@ export function Popup() {
   const { setPopupState } = useActions();
 
   const [askQuestionField, setAskQuestionField] = useState<boolean>(false);
+
+  const [credentials] = useCredentials();
 
   const popupHandleClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if ((e.target as HTMLDivElement).classList.contains('wrapper-popup')) {
@@ -74,11 +80,11 @@ export function Popup() {
             </p>
           </div>
           <div className="flex flex-col flex-auto">
-            <p className="py-2">
-              Price of service:
-              {' '}
-              {priceOfService || 'FREE'}
-            </p>
+            {/* <p className="py-2"> */}
+            {/*  Price of service: */}
+            {/*  {' '} */}
+            {/*  {priceOfService || 'FREE'} */}
+            {/* </p> */}
             <p className="py-2">
               Payment Conditions:
               {' '}
@@ -90,10 +96,17 @@ export function Popup() {
                 </span>
               ))}
             </p>
+            {description && (
+            <p>
+              Description:
+              {' '}
+              {textDesc}
+            </p>
+            )}
             <div className="flex gap-4 items-center py-2">
               Rating:
               {' '}
-              <StarRating rate={rating} />
+              {credentials.role === ROLES.User ? <StarRating rate={rating as number} /> : rating}
             </div>
           </div>
         </div>

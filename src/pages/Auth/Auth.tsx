@@ -45,7 +45,7 @@ export function Auth() {
   const [createUser] = useUserRegisterMutation();
 
   const { setCredentials } = useActions();
-  const [credentialsStore, setCredentialsStore] = useLocalStorage(AUTH_CREDENTIALS, {});
+  const [, setCredentialsStore] = useLocalStorage(AUTH_CREDENTIALS, {});
 
   const navigate = useNavigate();
 
