@@ -10,7 +10,7 @@ import { ExampleTrash } from '../ExampleTrash/ExampleTrash';
 import { useCredentials } from '../../hooks/credentials';
 
 import './Popup.scss';
-import { ImagesType, ImagesType } from '../ExampleTrash/Images';
+import { ImagesType } from '../ExampleTrash/Images';
 
 import { ROLES } from '../../constants';
 
@@ -100,7 +100,7 @@ export function Popup() {
             <p>
               Description:
               {' '}
-              {textDesc}
+              {/* {textDesc} */}
             </p>
             )}
             <div className="flex gap-4 items-center py-2">
