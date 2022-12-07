@@ -36,8 +36,6 @@ export function Popup() {
       setDelivery(delivery);
       setPricing(pricing);
     }
-
-    console.log(JSON.stringify(JSON.parse(description as string)));
   }, []);
 
   const getValuesFromObject = (obj: any) => {
@@ -61,7 +59,7 @@ export function Popup() {
 
   return (
     <div onClick={(e) => popupHandleClick(e)} className="wrapper-popup">
-      {waste && <ExampleTrash waste={waste} />}
+      {waste && <ExampleTrash waste={waste as any} />}
       <div className="popup-container">
         <h3 className="text-3xl text-center pb-4">Service Info</h3>
         <div className="max-w-[400px]">

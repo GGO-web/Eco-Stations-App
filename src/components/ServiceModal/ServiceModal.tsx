@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { v4 as uuidv4 } from 'uuid';
 import { toast } from 'react-toastify';
@@ -31,11 +31,14 @@ export function ServiceModal({ isUpdateService = false, updateService }:
     },
   });
 
-  const [descArr, setDescArr] = useState([]);
+  const [descArr, setDescArr] = useState(updateService?.description
+    ? JSON.parse(updateService?.description as string) : []);
 
-  const [text, setText] = useState<string>('');
-  const [priceOfWaste, setPriceOfWaste] = useState({});
-  const [priceOfDelivery, setPriceOfDelivery] = useState({});
+  const [text, setText] = useState<string>(descArr[0] || '');
+  const [priceOfWaste, setPriceOfWaste] = useState(descArr[1] || {});
+  const [priceOfDelivery, setPriceOfDelivery] = useState(descArr[2] || {});
+  console.log(priceOfWaste);
+  console.log(priceOfDelivery);
 
   const TypeOfWasteInitialCheckers = new Array(TypesOfWaste.length).fill(false);
   const DeliveryOptionsInitialCheckers = new Array(DeliveryOptions.length).fill(false);
@@ -66,6 +69,11 @@ export function ServiceModal({ isUpdateService = false, updateService }:
   );
 
   const { setPopupState, setUpdatePopupState } = useActions();
+
+  useEffect(() => {
+    setDescArr([text as never, priceOfDelivery as never, priceOfWaste as never]);
+    setService((prevState) => ({ ...prevState, description: JSON.stringify(descArr) }));
+  }, [text, priceOfDelivery, priceOfDelivery]);
 
   const handleSubmitService = async () => {
     if (service.serviceName === '') {
@@ -116,6 +124,7 @@ export function ServiceModal({ isUpdateService = false, updateService }:
         position: toast.POSITION.TOP_RIGHT,
         autoClose: 1500,
       });
+
       setUpdatePopupState(false);
       await updateExistingService(service).unwrap();
     }
@@ -125,8 +134,6 @@ export function ServiceModal({ isUpdateService = false, updateService }:
         position: toast.POSITION.TOP_RIGHT,
         autoClose: 1500,
       });
-
-      setService((prevState) => ({ ...prevState, description: desc }));
 
       setPopupState(false);
       await createService(service).unwrap();
@@ -146,10 +153,6 @@ export function ServiceModal({ isUpdateService = false, updateService }:
     const { name, value } = e.target;
 
     setService((prevState) => ({ ...prevState, [name]: value }));
-
-    setDescArr([text, priceOfDelivery, priceOfWaste]);
-    const desc = JSON.stringify(descArr).replace(/"/g, '\\"');
-    console.log(desc);
   };
 
   const handleCheckTypes = (e: React.ChangeEvent<HTMLInputElement>, position: number) => {
@@ -254,13 +257,16 @@ export function ServiceModal({ isUpdateService = false, updateService }:
                 />
                 <span>{type}</span>
                 {checkedStateWaste[index] && (
-                  <input
-                    value={priceOfWaste[type]}
-                    onChange={(e) => setPriceOfWaste({ ...priceOfWaste, [type]: e.target.value })}
-                    className="grow p-3 border-dark-green rounded-2xl border-2 outline-none"
-                    type="text"
-                    placeholder="Write down price here. It should be like: 0.01 EUR/kg"
-                  />
+                <input
+                  autoFocus
+                  value={priceOfWaste[type as never]}
+                  onChange={(e) => {
+                    setPriceOfWaste({ ...priceOfWaste, [type]: e.target.value });
+                  }}
+                  className="grow p-3 border-dark-green rounded-2xl border-2 outline-none"
+                  type="text"
+                  placeholder="Write down price here. It should be like: 0.01 EUR/kg"
+                />
                 )}
               </div>
             ))}
@@ -300,10 +306,13 @@ export function ServiceModal({ isUpdateService = false, updateService }:
                 <span>{deliver}</span>
                 {checkedStateOptions[index] && (
                   <input
-                    value={priceOfDelivery[deliver]}
-                    onChange={(e) => setPriceOfDelivery(
-                      (prevState) => ({ ...prevState, [deliver]: e.target.value }),
-                    )}
+                    autoFocus
+                    value={priceOfDelivery[deliver as never]}
+                    onChange={(e) => {
+                      setPriceOfDelivery(
+                        (prevState: any) => ({ ...prevState, [deliver]: e.target.value }),
+                      );
+                    }}
                     className="grow p-3 border-dark-green rounded-2xl border-2 outline-none"
                     type="text"
                     placeholder="Write down price here. It should be like: 1 EUR/ 20kg"
