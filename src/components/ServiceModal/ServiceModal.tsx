@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 
 import { v4 as uuidv4 } from 'uuid';
 import { toast } from 'react-toastify';
@@ -50,6 +50,8 @@ export function ServiceModal({ isUpdateService = false, updateService }:
         ? TypeOfWasteInitialCheckers[index] = true : false))
       : TypeOfWasteInitialCheckers,
   );
+  const checkedWasteRef = useRef<HTMLInputElement>(null);
+
   const [checkedStateOptions, setCheckedStateOptions] = useState(
     service.deliveryOptions.length > 0
       ? DeliveryOptions
@@ -255,8 +257,12 @@ export function ServiceModal({ isUpdateService = false, updateService }:
                 <span>{type}</span>
                 {checkedStateWaste[index] && (
                   <input
-                    value={priceOfWaste[type]}
-                    onChange={(e) => setPriceOfWaste({ ...priceOfWaste, [type]: e.target.value })}
+                    ref={checkedWasteRef}
+                    value={checkedWasteRef?.current?.value || priceOfWaste[type as never]}
+                    onChange={(e) => {
+                      checkedWasteRef.current.value = e.target.value;
+                      // setPriceOfWaste({ ...priceOfWaste, [type]: e.target.value });
+                    }}
                     className="grow p-3 border-dark-green rounded-2xl border-2 outline-none"
                     type="text"
                     placeholder="Write down price here. It should be like: 0.01 EUR/kg"
