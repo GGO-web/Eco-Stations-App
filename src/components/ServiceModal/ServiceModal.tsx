@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { v4 as uuidv4 } from 'uuid';
 import { toast } from 'react-toastify';
@@ -23,12 +23,22 @@ export function ServiceModal({ isUpdateService = false, updateService }:
     typeOfWastes: updateService?.typeOfWastes || [],
     paymentConditions: updateService?.paymentConditions || [],
     deliveryOptions: updateService?.deliveryOptions || [],
+    description: updateService?.description || '',
     coordinate: {
       id: updateService?.coordinate.id || 0,
       latitude: updateService?.coordinate.latitude || 0,
       longitude: updateService?.coordinate.longitude || 0,
     },
   });
+
+  const [descArr, setDescArr] = useState(updateService?.description
+    ? JSON.parse(updateService?.description as string) : []);
+
+  const [text, setText] = useState<string>(descArr[0] || '');
+  const [priceOfWaste, setPriceOfWaste] = useState(descArr[1] || {});
+  const [priceOfDelivery, setPriceOfDelivery] = useState(descArr[2] || {});
+  console.log(priceOfWaste);
+  console.log(priceOfDelivery);
 
   const TypeOfWasteInitialCheckers = new Array(TypesOfWaste.length).fill(false);
   const DeliveryOptionsInitialCheckers = new Array(DeliveryOptions.length).fill(false);
@@ -59,6 +69,11 @@ export function ServiceModal({ isUpdateService = false, updateService }:
   );
 
   const { setPopupState, setUpdatePopupState } = useActions();
+
+  useEffect(() => {
+    setDescArr([text as never, priceOfDelivery as never, priceOfWaste as never]);
+    setService((prevState) => ({ ...prevState, description: JSON.stringify(descArr) }));
+  }, [text, priceOfDelivery, priceOfDelivery]);
 
   const handleSubmitService = async () => {
     if (service.serviceName === '') {
@@ -109,6 +124,7 @@ export function ServiceModal({ isUpdateService = false, updateService }:
         position: toast.POSITION.TOP_RIGHT,
         autoClose: 1500,
       });
+
       setUpdatePopupState(false);
       await updateExistingService(service).unwrap();
     }
@@ -118,6 +134,7 @@ export function ServiceModal({ isUpdateService = false, updateService }:
         position: toast.POSITION.TOP_RIGHT,
         autoClose: 1500,
       });
+
       setPopupState(false);
       await createService(service).unwrap();
     }
@@ -186,9 +203,9 @@ export function ServiceModal({ isUpdateService = false, updateService }:
   return (
     <div
       onClick={(e) => popupHandleClick(e)}
-      className="bg-light fixed w-full h-screen left-0 top-0 grid place-items-center p-5 pt-24 wrapper-popup"
+      className="bg-light fixed w-full h-screen left-0 top-0 grid place-items-center p-5 pt-10 wrapper-popup"
     >
-      <div className="bg-white rounded-2xl p-5">
+      <div className="bg-white rounded-2xl p-5 max-w-[550px]">
         <h4 className="text-center pb-5 text-2xl">
           {isUpdateService ? 'Update' : 'Create'}
           {' '}
@@ -209,16 +226,26 @@ export function ServiceModal({ isUpdateService = false, updateService }:
         <div className="mb-2 relative">
           <label htmlFor="serviceAddress">Your Service Address</label>
           <PlacesAutocomplete
-            adrs={updateService?.address as string}
             setService={setService}
             service={service}
           />
         </div>
         <div className="mb-2">
+          <label htmlFor="serviceName">Service Description</label>
+          <textarea
+            name="serviceDescription"
+            className="w-full p-3 border-dark-green rounded-2xl border-2 outline-none h-14"
+            placeholder="Enter your service description..."
+            id="serviceDescription"
+            onChange={(e) => setText(e.target.value)}
+            value={text}
+          />
+        </div>
+        <div className="mb-2">
           <label htmlFor="types">Waste Types You Can Carry</label>
-          <div className="flex gap-4 items-center">
+          <div className="flex gap-4 items-center flex-wrap">
             {TypesOfWaste.map((type, index) => (
-              <div className="flex items-center gap-1" key={uuidv4()}>
+              <div className={`flex items-center gap-1 ${checkedStateWaste[index] && 'w-full'}`} key={uuidv4()}>
                 <input
                   value={type}
                   type="checkbox"
@@ -229,6 +256,18 @@ export function ServiceModal({ isUpdateService = false, updateService }:
                   style={{ accentColor: '#379683' }}
                 />
                 <span>{type}</span>
+                {checkedStateWaste[index] && (
+                <input
+                  autoFocus
+                  value={priceOfWaste[type as never]}
+                  onChange={(e) => {
+                    setPriceOfWaste({ ...priceOfWaste, [type]: e.target.value });
+                  }}
+                  className="grow p-3 border-dark-green rounded-2xl border-2 outline-none"
+                  type="text"
+                  placeholder="Write down price here. It should be like: 0.01 EUR/kg"
+                />
+                )}
               </div>
             ))}
           </div>
@@ -253,9 +292,9 @@ export function ServiceModal({ isUpdateService = false, updateService }:
         </div>
         <div className="mb-5">
           <label htmlFor="delivery">Your Delivery Options</label>
-          <div className="flex gap-4 items-center">
+          <div className="flex gap-4 items-center flex-wrap">
             {DeliveryOptions.map((deliver, index) => (
-              <div className="flex items-center gap-1" key={uuidv4()}>
+              <div className={`flex items-center gap-1 ${checkedStateOptions[index] && 'w-full'}`} key={uuidv4()}>
                 <input
                   value={deliver}
                   type="checkbox"
@@ -265,6 +304,20 @@ export function ServiceModal({ isUpdateService = false, updateService }:
                   className="cursor-pointer accent-dark-green"
                 />
                 <span>{deliver}</span>
+                {checkedStateOptions[index] && (
+                  <input
+                    autoFocus
+                    value={priceOfDelivery[deliver as never]}
+                    onChange={(e) => {
+                      setPriceOfDelivery(
+                        (prevState: any) => ({ ...prevState, [deliver]: e.target.value }),
+                      );
+                    }}
+                    className="grow p-3 border-dark-green rounded-2xl border-2 outline-none"
+                    type="text"
+                    placeholder="Write down price here. It should be like: 1 EUR/ 20kg"
+                  />
+                )}
               </div>
             ))}
           </div>

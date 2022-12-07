@@ -10,9 +10,15 @@ import { ExampleTrash } from '../ExampleTrash/ExampleTrash';
 import { useCredentials } from '../../hooks/credentials';
 
 import './Popup.scss';
+
 import { ImagesType } from '../ExampleTrash/Images';
 
 import { ROLES } from '../../constants';
+
+interface IDescArr {
+  type: string;
+  price: string;
+}
 
 export function Popup() {
   const {
@@ -21,9 +27,28 @@ export function Popup() {
     deliveryOptions,
     rating,
     paymentConditions,
-    // priceOfService,
     description,
   } = useAppSelector((store) => store.service.service);
+
+  const [textDesc, setText] = useState('');
+  const [priceOfDelivery, setDelivery] = useState({});
+  const [priceOfWaste, setPricing] = useState({});
+
+  useEffect(() => {
+    if (description) {
+      const [text, delivery, pricing] = JSON.parse(description as string);
+      setText(text);
+      setDelivery(delivery);
+      setPricing(pricing);
+    }
+  }, []);
+
+  const getValuesFromObject = (obj: any) => {
+    const objKeys = Object.keys(obj);
+    const objVal = Object.values(obj);
+
+    return objKeys.map((key, index) => ({ type: key, price: objVal[index] as string }));
+  };
 
   const [waste, setWaste] = useState<ImagesType | null>(null);
 
@@ -41,7 +66,7 @@ export function Popup() {
 
   return (
     <div onClick={(e) => popupHandleClick(e)} className="wrapper-popup">
-      {waste && <ExampleTrash waste={waste} />}
+      {waste && <ExampleTrash waste={waste as any} />}
       <div className="popup-container">
         <h3 className="text-3xl text-center pb-4">Service Info</h3>
         <div className="max-w-[400px]">
@@ -67,6 +92,26 @@ export function Popup() {
                 </span>
               ))}
             </p>
+            {JSON.stringify(priceOfWaste) !== '{}' && (
+              <p className="py-2">
+                Price for waste:
+                {' '}
+                <ul className="list-disc pl-7">
+                  {priceOfWaste
+                    && getValuesFromObject(priceOfWaste)
+                      .map((priceWaste: IDescArr) => (
+                        <li key={uuidv4()}>
+                          {priceWaste.type}
+                          {' '}
+                          ➡
+                          {' '}
+                          {priceWaste.price.toUpperCase()}
+                        </li>
+                      ))}
+                </ul>
+
+              </p>
+            )}
             <p className="py-2">
               Delivery options:
               {' '}
@@ -80,22 +125,46 @@ export function Popup() {
             </p>
           </div>
           <div className="flex flex-col flex-auto">
-            {/* <p className="py-2"> */}
-            {/*  Price of service: */}
-            {/*  {' '} */}
-            {/*  {priceOfService || 'FREE'} */}
-            {/* </p> */}
-            <p className="py-2">
-              Payment Conditions:
-              {' '}
-              {paymentConditions.map((pay, index) => (
-                <span key={uuidv4()}>
-                  {pay}
-                  {index + 1 !== paymentConditions.length && ', '}
-                  {' '}
-                </span>
-              ))}
-            </p>
+            {JSON.stringify(priceOfDelivery) === '{}' ? (
+              <div className="py-2">
+                Price of service:
+                <ul className="list-disc pl-7">
+                  <li>SELF ➡ FREE</li>
+                </ul>
+              </div>
+            ) : (
+              <div className="py-2">
+                Price of service:
+                {' '}
+                <ul className="list-disc pl-7">
+                  <li>SELF ➡ FREE</li>
+                  {priceOfDelivery
+                    && getValuesFromObject(priceOfDelivery)
+                      .map((priceDelivery: IDescArr) => (
+                        <li key={uuidv4()}>
+                          {priceDelivery.type}
+                          {' '}
+                          ➡
+                          {' '}
+                          {priceDelivery.price.toUpperCase()}
+                        </li>
+                      ))}
+                </ul>
+              </div>
+            )}
+            {!(paymentConditions.length === 1 && paymentConditions.includes('FREE')) && (
+              <p className="py-2">
+                Payment Conditions:
+                {' '}
+                {paymentConditions.map((pay, index) => (
+                  <span key={uuidv4()}>
+                    {pay}
+                    {index + 1 !== paymentConditions.length && ', '}
+                    {' '}
+                  </span>
+                ))}
+              </p>
+            )}
             {description && (
             <p>
               Description:

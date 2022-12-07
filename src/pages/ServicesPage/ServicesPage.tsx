@@ -23,7 +23,7 @@ export function ServicesPage({ isLoaded }: { isLoaded: boolean }) {
   const { setPopupState } = useActions();
 
   return (
-    <div className="min-h-screen bg-light p-5 pt-10">
+    <div className="min-h-screen bg-light p-5 pt-[90px]">
       <div className="border-b-2 border-b-dark flex items-center justify-between pb-2">
         <h3 className="text-3xl font-bold pl-2 text-dark-green">Your Services</h3>
         <button type="button" onClick={() => setPopupState(true)} className="flex items-center gap-2 mr-3 text-white bg-dark-green py-4 px-8 rounded-2xl font-semibold">

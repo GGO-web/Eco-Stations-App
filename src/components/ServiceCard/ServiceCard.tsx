@@ -14,9 +14,10 @@ export function ServiceCard({
   service, setServiceForUpdate,
 }:{ service: IService, setServiceForUpdate: Function }) {
   const [address, setAddress] = useState('');
+  const [text, setText] = useState('');
 
   const {
-    id, serviceName, typeOfWastes, deliveryOptions, paymentConditions, coordinate,
+    id, serviceName, typeOfWastes, deliveryOptions, paymentConditions, coordinate, description,
   } = service;
 
   const { setUpdatePopupState } = useActions();
@@ -25,6 +26,9 @@ export function ServiceCard({
   const [deleteService] = useDeleteExistingServiceMutation();
 
   useEffect(() => {
+    const [descText, ,] = JSON.parse(description as string);
+    setText(descText);
+
     const serviceAddress = async () => {
       const adrs = await getAddress({
         lat: coordinate.latitude,
@@ -37,7 +41,9 @@ export function ServiceCard({
   }, []);
 
   return (
-    <div className="w-full grid gap-8 grid-cols-3 bg-dark-green rounded-2xl min-h-[50px] text-white p-5 items-center">
+    <div className="w-full grid gap-8 grid-cols-4-auto-types bg-dark-green
+    rounded-2xl min-h-[50px] text-white p-5 items-center justify-center place-items-center"
+    >
       <div>
         <h3 className="text-2xl font-semibold">{serviceName}</h3>
         <p>{address}</p>
@@ -76,6 +82,13 @@ export function ServiceCard({
           ))}
         </p>
       </div>
+      <div>
+        <p>
+          Description:
+          {' '}
+          {text}
+        </p>
+      </div>
       <div className="flex gap-8 text-4xl justify-self-end">
         <RiEditFill
           className="cursor-pointer"
@@ -89,6 +102,7 @@ export function ServiceCard({
                 paymentConditions,
                 coordinate,
                 address,
+                description,
               },
             });
           }}

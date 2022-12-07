@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import usePlacesAutocomplete, {
   getGeocode,
@@ -16,8 +16,8 @@ import '@reach/combobox/styles.css';
 
 import { IService } from '../../models/service.model';
 
-export function PlacesAutocomplete({ setService, service, adrs }:
-{ setService: Function, service: IService, adrs: string }) {
+export function PlacesAutocomplete({ setService, service }:
+{ setService: Function, service: IService }) {
   const {
     ready,
     value,
@@ -25,6 +25,12 @@ export function PlacesAutocomplete({ setService, service, adrs }:
     suggestions: { status, data },
     clearSuggestions,
   } = usePlacesAutocomplete();
+
+  const handleChanges = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    setValue(e.target.value);
+    setService((prevService: IService) => ({ ...prevService, address: e.target.value }));
+  };
 
   const handleSelect = async (address: string) => {
     setValue(address, false);
@@ -35,14 +41,15 @@ export function PlacesAutocomplete({ setService, service, adrs }:
     const s = { ...service };
     s.coordinate.latitude = lat;
     s.coordinate.longitude = lng;
+
     setService(s);
   };
 
   return (
     <Combobox onSelect={handleSelect} className="mb-2 relative">
       <ComboboxInput
-        value={value || adrs}
-        onChange={(e) => setValue(e.target.value)}
+        value={value || service.address}
+        onChange={handleChanges}
         disabled={!ready}
         className="w-full p-3 border-dark-green rounded-2xl border-2 outline-none "
         placeholder="Enter your service address..."
