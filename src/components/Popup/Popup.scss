@@ -1,3 +1,7 @@
+$delay: 0.015s;
+$duration: 0.6s;
+$easing: cubic-bezier(0.76, 0, 0.24, 1);
+
 .wrapper-popup {
   padding: 80px 10px 10px 10px;
   position: fixed;
@@ -18,3 +22,79 @@
   }
 }
 
+.popup {
+  &__tabs {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__tab {
+    position: relative;
+    border: none;
+
+    &[aria-selected="true"] .popup__tab-text-letter {
+      transform: translateY(-100%);
+    }
+
+    &-text {
+      display: inline-block;
+      $font-size: 32px;
+      font-size: $font-size;
+      line-height: $font-size * 1.5;
+      height: $font-size * 1.5;
+      text-decoration: none;
+      overflow: hidden;
+      color: #1a1a1a;
+
+      &:hover, &.play {
+        .popup__tab-text-letter {
+          transform: translateY(-100%);
+        }
+      }
+
+      .popup__tab-text-block:last-child {
+        color: #d3a13b;
+      }
+
+      .popup__tab-text-letter {
+        display: inline-block;
+        transition: transform $duration $easing;
+      }
+    }
+  }
+
+  &__tabpanel {
+    &[aria-hidden="true"] {
+      display: none;
+    }
+  }
+
+  &__tabs-info {
+    position: relative;
+    display: flex;
+    align-items: center;
+
+    &::after {
+      content: "";
+      pointer-events: none;
+      position: absolute;
+      right: 0;
+      top: 50%;
+      transform: translate(130%, -50%);
+      display: inline-flex;
+      background-image: url("../../assets/decoration.svg");
+      background-size: cover;
+      background-position: center;
+      width: 30px;
+      height: 50px;
+      margin: 0 10px;
+    }
+  }
+}
+
+@for $i from 0 through 20 {
+  .popup__tab-text-letter:nth-child(#{$i + 1}) {
+    transition-delay: $delay * $i;
+  }
+}

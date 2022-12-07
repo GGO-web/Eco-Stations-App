@@ -10,7 +10,7 @@ import { ImagesPreview, ImagesType } from './Images';
 
 export function ExampleTrash({ waste }: { waste: ImagesType }) {
   return (
-    <div className="absolute top-[5rem] h-32 flex gap-4 bg-main p-2 rounded-2xl w-1/2">
+    <div className="absolute top-[5rem] h-32 flex z-10 gap-4 bg-main p-2 rounded-2xl w-1/2">
       {(ImagesPreview[waste] as string[]).map(
         (image: string) => (
           <LazyLoadImage
