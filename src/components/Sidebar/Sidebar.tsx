@@ -1,12 +1,21 @@
-import React, { FormEvent, useRef, useState } from 'react';
+import React, {
+  FormEvent, useEffect, useRef, useState,
+} from 'react';
+import { v4 } from 'uuid';
+
 import { DELIVERY_OPTIONS, PAYMENT_CONDITIONS, WASTE_TYPES } from '../../constants';
+
 import { useActions } from '../../hooks/actions';
+import { useMediaCondition } from '../../hooks/mediaCondition';
+
 import { IServiceFilter } from '../../models/serviceFilter.model';
 
 export function Sidebar() {
   const filterForm = useRef<HTMLFormElement>(null);
 
-  const [filterMenuIsOpened, setFilterMenuIsOpened] = useState<boolean>(true);
+  const windowMediaStatus = useMediaCondition('(min-width: 768px)');
+
+  const [filterMenuIsOpened, setFilterMenuIsOpened] = useState<boolean>(windowMediaStatus);
 
   const { setTrashBinsFilter } = useActions();
 
@@ -60,6 +69,10 @@ export function Sidebar() {
     setFilterMenuIsOpened((prevFilterOpenState) => !prevFilterOpenState);
   };
 
+  useEffect(() => {
+    setFilterMenuIsOpened(windowMediaStatus);
+  }, [windowMediaStatus]);
+
   return (
     <aside className="sidebar p-5 bg-gradient-to-br from-light-green via-light-green to-blue-500 overflow-hidden" data-open={filterMenuIsOpened}>
       <form ref={filterForm} onSubmit={(e) => formSubmitHandler(e)} className="sidebar__form grid gap-y-[10px] sidebar-form text-white" action="">
@@ -102,7 +115,7 @@ export function Sidebar() {
 
             <ul className="sidebar-form__options">
               {DELIVERY_OPTIONS.map((deliveryOption) => (
-                <li className="sidebar-form__option">
+                <li key={v4()} className="sidebar-form__option">
                   <label className="inline-flex cursor-pointer items-center sidebar-form__label">
                     <input value={deliveryOption} className="input-checkbox cursor-pointer" name="delivery" type="checkbox" />
                     <span className="input-label uppercase transition-all text-lg">{deliveryOption}</span>
@@ -119,7 +132,7 @@ export function Sidebar() {
 
             <ul className="sidebar-form__options">
               {PAYMENT_CONDITIONS.map((paymentOption) => (
-                <li className="sidebar-form__option ">
+                <li key={v4()} className="sidebar-form__option ">
                   <label className="inline-flex cursor-pointer items-center sidebar-form__label">
                     <input value={paymentOption} className="input-checkbox cursor-pointer" name="payment" type="checkbox" />
                     <span className="input-label uppercase transition-all text-lg">{paymentOption}</span>
@@ -136,7 +149,7 @@ export function Sidebar() {
 
             <ul className="sidebar-form__options">
               {WASTE_TYPES.map((wasteType) => (
-                <li className="sidebar-form__option">
+                <li key={v4()} className="sidebar-form__option">
                   <label className="inline-flex cursor-pointer items-center sidebar-form__label">
                     <input value={wasteType} className="input-checkbox cursor-pointer" name="waste-type" type="checkbox" />
                     <span className="input-label uppercase transition-all text-lg">{wasteType}</span>
