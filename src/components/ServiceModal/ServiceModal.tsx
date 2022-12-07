@@ -188,7 +188,7 @@ export function ServiceModal({ isUpdateService = false, updateService }:
       onClick={(e) => popupHandleClick(e)}
       className="bg-light fixed w-full h-screen left-0 top-0 grid place-items-center p-5 pt-24 wrapper-popup"
     >
-      <div className="bg-white rounded-2xl p-5">
+      <div className="bg-white rounded-2xl p-5 max-w-[550px]">
         <h4 className="text-center pb-5 text-2xl">
           {isUpdateService ? 'Update' : 'Create'}
           {' '}
@@ -209,16 +209,15 @@ export function ServiceModal({ isUpdateService = false, updateService }:
         <div className="mb-2 relative">
           <label htmlFor="serviceAddress">Your Service Address</label>
           <PlacesAutocomplete
-            adrs={updateService?.address as string}
             setService={setService}
             service={service}
           />
         </div>
         <div className="mb-2">
           <label htmlFor="types">Waste Types You Can Carry</label>
-          <div className="flex gap-4 items-center">
+          <div className="flex gap-4 items-center flex-wrap">
             {TypesOfWaste.map((type, index) => (
-              <div className="flex items-center gap-1" key={uuidv4()}>
+              <div className={`flex items-center gap-1 ${checkedStateWaste[index] && 'w-full'}`} key={uuidv4()}>
                 <input
                   value={type}
                   type="checkbox"
@@ -229,6 +228,9 @@ export function ServiceModal({ isUpdateService = false, updateService }:
                   style={{ accentColor: '#379683' }}
                 />
                 <span>{type}</span>
+                {checkedStateWaste[index] && (
+                  <input className="grow p-3 border-dark-green rounded-2xl border-2 outline-none" type="text" placeholder="Write down price here. It should be like: 0.01 EUR/kg" />
+                )}
               </div>
             ))}
           </div>
@@ -253,9 +255,9 @@ export function ServiceModal({ isUpdateService = false, updateService }:
         </div>
         <div className="mb-5">
           <label htmlFor="delivery">Your Delivery Options</label>
-          <div className="flex gap-4 items-center">
+          <div className="flex gap-4 items-center flex-wrap">
             {DeliveryOptions.map((deliver, index) => (
-              <div className="flex items-center gap-1" key={uuidv4()}>
+              <div className={`flex items-center gap-1 ${checkedStateOptions[index] && 'w-full'}`} key={uuidv4()}>
                 <input
                   value={deliver}
                   type="checkbox"
@@ -265,6 +267,9 @@ export function ServiceModal({ isUpdateService = false, updateService }:
                   className="cursor-pointer accent-dark-green"
                 />
                 <span>{deliver}</span>
+                {checkedStateOptions[index] && (
+                  <input className="grow p-3 border-dark-green rounded-2xl border-2 outline-none" type="text" placeholder="Write down price here. It should be like: 1 EUR/ 20kg" />
+                )}
               </div>
             ))}
           </div>

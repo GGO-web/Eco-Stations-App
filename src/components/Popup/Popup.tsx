@@ -10,6 +10,11 @@ import { ExampleTrash } from '../ExampleTrash/ExampleTrash';
 
 import './Popup.scss';
 
+interface IDescArr {
+  type: string;
+  price: string;
+}
+
 export function Popup() {
   const {
     address,
@@ -17,22 +22,30 @@ export function Popup() {
     deliveryOptions,
     rating,
     paymentConditions,
-    // priceOfService,
     description,
   } = useAppSelector((store) => store.service.service);
 
   const [textDesc, setText] = useState('');
-  const [, setDelivery] = useState();
-  const [, setPricing] = useState();
+  const [priceOfDelivery, setDelivery] = useState({});
+  const [priceOfWaste, setPricing] = useState({});
 
   useEffect(() => {
     if (description) {
-      const [text, delivery, pricing] = JSON.parse(description! as string);
+      const [text, delivery, pricing] = JSON.parse(description as string);
       setText(text);
       setDelivery(delivery);
       setPricing(pricing);
     }
+
+    console.log(JSON.stringify(JSON.parse(description as string)));
   }, []);
+
+  const getValuesFromObject = (obj: any) => {
+    const objKeys = Object.keys(obj);
+    const objVal = Object.values(obj);
+
+    return objKeys.map((key, index) => ({ type: key, price: objVal[index] as string }));
+  };
 
   const [waste, setWaste] = useState('');
 
@@ -74,6 +87,24 @@ export function Popup() {
                 </span>
               ))}
             </p>
+            {JSON.stringify(priceOfWaste) !== '{}' && (
+              <p className="py-2">
+                Price for waste:
+                {' '}
+                {priceOfWaste
+                  && getValuesFromObject(priceOfWaste)
+                    .map((priceWaste: IDescArr, index: number) => (
+                      <span key={uuidv4()}>
+                        {priceWaste.type}
+                        {' '}
+                        ➡
+                        {' '}
+                        {priceWaste.price.toUpperCase()}
+                        {index + 1 !== getValuesFromObject(priceOfDelivery).length && ', '}
+                      </span>
+                    ))}
+              </p>
+            )}
             <p className="py-2">
               Delivery options:
               {' '}
@@ -87,22 +118,42 @@ export function Popup() {
             </p>
           </div>
           <div className="flex flex-col flex-auto">
-            {/* <p className="py-2"> */}
-            {/*  Price of service: */}
-            {/*  {' '} */}
-            {/*  {priceOfService || 'FREE'} */}
-            {/* </p> */}
-            <p className="py-2">
-              Payment Conditions:
-              {' '}
-              {paymentConditions.map((pay, index) => (
-                <span key={uuidv4()}>
-                  {pay}
-                  {index + 1 !== paymentConditions.length && ', '}
-                  {' '}
-                </span>
-              ))}
-            </p>
+            {JSON.stringify(priceOfDelivery) === '{}' ? (
+              <p className="py-2">
+                Price of service: SELF ➡ FREE
+              </p>
+            ) : (
+              <p className="py-2">
+                Price of service:
+                {' '}
+                <span>SELF ➡ FREE, </span>
+                {priceOfDelivery
+                  && getValuesFromObject(priceOfDelivery)
+                    .map((priceDelivery: IDescArr, index: number) => (
+                      <span key={uuidv4()}>
+                        {priceDelivery.type}
+                        {' '}
+                        ➡
+                        {' '}
+                        {priceDelivery.price}
+                        {index + 1 !== getValuesFromObject(priceOfDelivery).length && ', '}
+                      </span>
+                    ))}
+              </p>
+            )}
+            {!(paymentConditions.length === 1 && paymentConditions.includes('FREE')) && (
+              <p className="py-2">
+                Payment Conditions:
+                {' '}
+                {paymentConditions.map((pay, index) => (
+                  <span key={uuidv4()}>
+                    {pay}
+                    {index + 1 !== paymentConditions.length && ', '}
+                    {' '}
+                  </span>
+                ))}
+              </p>
+            )}
             {description && (
             <p>
               Description:
