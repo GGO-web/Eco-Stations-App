@@ -15,7 +15,8 @@ module.exports = {
         "light-red": "#E67865"
       },
       gridTemplateColumns: {
-        'auto-types': 'repeat(auto-fit, minmax(420px, 1fr))'
+        'auto-types': 'repeat(auto-fit, minmax(420px, 1fr))',
+        '4-auto-types': 'repeat(auto-fit, minmax(320px, 1fr))',
       }
     }
   },
