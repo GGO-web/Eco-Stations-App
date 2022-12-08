@@ -19,7 +19,7 @@ export function TypesOfWaste() {
         <h2 className="text-4xl text-center mb-4 tracking-wider font-bold text-dark">Types Of Waste</h2>
       </div>
 
-      <div className="grid w-full place-items-center grid-cols-auto-types gap-4 max-[425px]:grid-cols-1">
+      <div className="grid w-full place-items-center grid-cols-auto-types gap-4 max-[425px]:grid-cols-1 pb-4">
         {waste.types.map((type: IType) => (
           <Link to={`${type.id}`} key={uuidv4()}>
             <article className="w-full bg-lime-400 rounded-2xl text-center overflow-hidden hover:scale-105 transition relative">

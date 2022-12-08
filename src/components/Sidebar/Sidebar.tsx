@@ -1,4 +1,6 @@
-import React, { FormEvent, useRef, useState } from 'react';
+import React, {
+  FormEvent, useRef, useState,
+} from 'react';
 
 import BestRecommendations from '../BestRecommendations/BestRecommendations';
 
@@ -13,22 +15,12 @@ export function Sidebar() {
   const [bestRecIsOpened, setBestRecIsOpened] = useState<boolean>(false);
   const [filterServicesIsOpened, setFilterServicesIsOpened] = useState<boolean>(false);
 
-  const { setTrashBinsFilter, setUserLocation } = useActions();
+  const { setTrashBinsFilter } = useActions();
 
   const handleBestRecClick = (e: any) => {
     e.preventDefault();
 
     setBestRecIsOpened((prevState) => !prevState);
-
-    if (!bestRecIsOpened) {
-      // the way you can get user coordinate
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const { latitude, longitude } = position.coords;
-          setUserLocation({ lat: latitude, lng: longitude });
-        },
-      );
-    }
   };
 
   const setCheckState = (checked: boolean, revert: boolean = false) => {
@@ -84,7 +76,7 @@ export function Sidebar() {
   };
 
   return (
-    <aside className="sidebar p-5 bg-gradient-to-br from-light-green via-light-green to-blue-500 overflow-hidden" data-open={sidebarIsOpened}>
+    <aside className="sidebar p-5 bg-gradient-to-br from-light-green via-light-green to-blue-500 overflow-hidden overflow-y-scroll" data-open={sidebarIsOpened}>
       <header className="sidebar-form__header flex items-center gap-4 mb-5">
         <button type="button" className="sidebar-form__toggler" onClick={() => toggleFilterMenu()}>
           <svg width="30" className="fill-dark" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 377 377" xmlSpace="preserve">
@@ -102,7 +94,7 @@ export function Sidebar() {
         <legend className="text-3xl font-semibold leading-none text-white">Feature Sidebar</legend>
       </header>
       <div
-        className="flex items-center gap-4 text-white text-xl min-h-[50px] cursor-pointer"
+        className={`flex items-center gap-4 text-white text-xl min-h-[50px] cursor-pointer ${!sidebarIsOpened && 'pointer-events-none'}`}
         onClick={handleBestRecClick}
       >
         <svg
@@ -125,7 +117,7 @@ export function Sidebar() {
       </div>
       {bestRecIsOpened && <BestRecommendations />}
       <div
-        className="flex items-center gap-4 text-white text-xl min-h-[50px] cursor-pointer"
+        className={`flex items-center gap-4 text-white text-xl min-h-[50px] cursor-pointer ${!sidebarIsOpened && 'pointer-events-none'}`}
         onClick={() => setFilterServicesIsOpened((prevState) => !prevState)}
       >
         <svg

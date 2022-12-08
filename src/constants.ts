@@ -110,6 +110,7 @@ export const mapDefaultOptions = {
 };
 
 export const AUTH_CREDENTIALS = 'AUTH_CREDENTIALS';
+export const USER_LOCATION = 'USER_LOCATION';
 
 export const ROLES = {
   User: 'User',
