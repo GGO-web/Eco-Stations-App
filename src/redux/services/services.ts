@@ -5,6 +5,7 @@ import {
 import { ICoordinate } from '../../models/coordinates.model';
 import { IService } from '../../models/service.model';
 import { IServiceFilter } from '../../models/serviceFilter.model';
+import { IComment } from '../../models/comment.model';
 
 import type { RootState } from '../store';
 
@@ -116,6 +117,21 @@ export const serviceApi = createApi({
       }),
       invalidatesTags: ['Service'],
     }),
+    getAllServiceComments: builder.query<IComment[], Partial<number>>({
+      query: (id) => ({
+        url: `${import.meta.env.VITE_BACKEND_URL}/comment/${id}`,
+        responseHandler: (response) => response.json(),
+      }),
+      providesTags: ['Service'],
+    }),
+    createServiceComment: builder.mutation<IService, IComment>({
+      query: (newComment) => ({
+        url: `${import.meta.env.VITE_BACKEND_URL}/comment/${newComment.id}`,
+        method: 'POST',
+        body: newComment,
+      }),
+      invalidatesTags: ['Service'],
+    }),
   }),
 });
 
@@ -129,4 +145,6 @@ export const {
   useFilterServiceInAreaMutation,
   useGetServicesOfProviderQuery,
   useUpdateServiceRatingMutation,
+  useGetAllServiceCommentsQuery,
+  useCreateServiceCommentMutation,
 } = serviceApi;

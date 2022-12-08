@@ -1,10 +1,12 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
+import { AUTH_CREDENTIALS } from '../../constants';
+
 import { ICredentials } from '../../models/credentials.model';
 
 const initialState: ICredentials = {
   username: null,
-  role: null,
+  role: 'Anonymous',
   token: null,
   isAuth: false,
 };
@@ -22,11 +24,10 @@ const authSlice = createSlice({
       state.token = token;
       state.isAuth = true;
     },
-    logOut: (state) => {
-      state.username = null;
-      state.role = null;
-      state.token = null;
-      state.isAuth = false;
+    logOut: () => {
+      localStorage.removeItem(AUTH_CREDENTIALS);
+
+      return initialState;
     },
   },
 });

@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from 'react';
 
 import { v4 as uuidv4, v4 } from 'uuid';
+
 import { useActions } from '../../hooks/actions';
 import { useAppSelector } from '../../hooks/redux';
+import { useCredentials } from '../../hooks/credentials';
+import { useGetAllServiceCommentsQuery } from '../../redux/services/services';
 
 import { StarRating } from './StarRating';
 import { AskForm } from '../AskForm/AskForm';
 import { ExampleTrash } from '../ExampleTrash/ExampleTrash';
-import { useCredentials } from '../../hooks/credentials';
+import { Comments } from './Comments';
 
 import './Popup.scss';
 
@@ -30,6 +33,7 @@ interface ITab {
 
 export function Popup() {
   const {
+    id: serviceId,
     address,
     typeOfWastes,
     deliveryOptions,
@@ -82,6 +86,8 @@ export function Popup() {
       controls: 'tabpanel-questions',
     },
   ]);
+
+  const { data: comments } = useGetAllServiceCommentsQuery(serviceId as number);
 
   const popupHandleClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if ((e.target as HTMLDivElement).classList.contains('wrapper-popup')) {
@@ -145,6 +151,7 @@ export function Popup() {
                 {' '}
                 {address}
               </p>
+
               <p className="py-2">
                 Types of waste:
                 {' '}
@@ -161,8 +168,9 @@ export function Popup() {
                   </span>
                 ))}
               </p>
+
               {JSON.stringify(priceOfWaste) !== '{}' && (
-              <p className="py-2">
+              <div className="py-2">
                 Price for waste:
                 {' '}
                 <ul className="list-disc pl-7">
@@ -178,9 +186,9 @@ export function Popup() {
                         </li>
                       ))}
                 </ul>
-
-              </p>
+              </div>
               )}
+
               <p className="py-2">
                 Delivery options:
                 {' '}
@@ -193,12 +201,13 @@ export function Popup() {
                 ))}
               </p>
             </div>
+
             <div className="flex flex-col flex-auto">
               {JSON.stringify(priceOfDelivery) === '{}' ? (
                 <div className="py-2">
                   Price of service:
                   <ul className="list-disc pl-7">
-                    <li>SELF ➡ FREE</li>
+                    <li key={uuidv4()}>SELF ➡ FREE</li>
                   </ul>
                 </div>
               ) : (
@@ -206,7 +215,7 @@ export function Popup() {
                   Price of service:
                   {' '}
                   <ul className="list-disc pl-7">
-                    <li>SELF ➡ FREE</li>
+                    <li key={uuidv4()}>SELF ➡ FREE</li>
                     {priceOfDelivery
                     && getValuesFromObject(priceOfDelivery)
                       .map((priceDelivery: IDescArr) => (
@@ -221,6 +230,7 @@ export function Popup() {
                   </ul>
                 </div>
               )}
+
               {!(paymentConditions.length === 1 && paymentConditions.includes('FREE')) && (
               <p className="py-2">
                 Payment Conditions:
@@ -234,6 +244,7 @@ export function Popup() {
                 ))}
               </p>
               )}
+
               {description && (
               <p>
                 Description:
@@ -241,6 +252,7 @@ export function Popup() {
                 {textDesc}
               </p>
               )}
+
               <div className="flex gap-4 items-center py-2">
                 Rating:
                 {' '}
@@ -250,13 +262,21 @@ export function Popup() {
           </div>
 
           <div id="tabpanel-questions" aria-hidden={getTabpanelStatus('tabpanel-questions')} role="tabpanel" className="popup__tabpanel popup-questions w-[400px] w-md-[300px]">
+            <Comments comments={comments} />
+
             {!askQuestionField && (
             <>
               <p className="text-center py-4">If you have any questions, feel free to ask 😉</p>
               <button onClick={() => setAskQuestionField(true)} type="button" className="p-3 rounded-2xl bg-[#7483bd] text-white w-full">Ask a Question</button>
             </>
             )}
-            {askQuestionField && <AskForm setQuestion={setAskQuestionField} />}
+
+            {askQuestionField && (
+              <AskForm
+                serviceId={serviceId as number}
+                setQuestion={setAskQuestionField}
+              />
+            )}
           </div>
         </div>
       </div>
