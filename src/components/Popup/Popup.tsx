@@ -104,7 +104,7 @@ export function Popup() {
       {waste && <ExampleTrash waste={waste as any} />}
 
       <div className="popup popup-container">
-        <div className="popup__tabs gap-8 pb-4">
+        <div className="popup__tabs gap-8">
           {tabs.map((tab: ITab) => (
             <button
               type="button"
@@ -116,10 +116,21 @@ export function Popup() {
             >
               <div className="popup__tab-text">
                 <div className="popup__tab-text-block">
-                  {[...tab.title].map((letter) => <span className="popup__tab-text-letter">{letter}</span>)}
+                  {[...tab.title].map(
+                    (letter) => (
+                      letter === ' ' ? letter
+                        : <div className="popup__tab-text-letter">{letter}</div>
+                    ),
+                  )}
                 </div>
+
                 <div className="popup__tab-text-block">
-                  {[...tab.title].map((letter) => <span className="popup__tab-text-letter">{letter}</span>)}
+                  {[...tab.title].map(
+                    (letter) => (
+                      letter === ' ' ? letter
+                        : <div className="popup__tab-text-letter">{letter}</div>
+                    ),
+                  )}
                 </div>
               </div>
             </button>
