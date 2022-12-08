@@ -7,6 +7,7 @@ import { useAppSelector } from '../../hooks/redux';
 import { StarRating } from './StarRating';
 import { AskForm } from '../AskForm/AskForm';
 import { ExampleTrash } from '../ExampleTrash/ExampleTrash';
+import { useCredentials } from '../../hooks/credentials';
 
 import './Popup.scss';
 
@@ -14,6 +15,9 @@ interface IDescArr {
   type: string;
   price: string;
 }
+
+import { ImagesType } from '../ExampleTrash/Images';
+import { ROLES } from '../../constants';
 
 export function Popup() {
   const {
@@ -45,11 +49,13 @@ export function Popup() {
     return objKeys.map((key, index) => ({ type: key, price: objVal[index] as string }));
   };
 
-  const [waste, setWaste] = useState('');
+  const [waste, setWaste] = useState<ImagesType | null>(null);
 
   const { setPopupState } = useActions();
 
   const [askQuestionField, setAskQuestionField] = useState<boolean>(false);
+
+  const [credentials] = useCredentials();
 
   const popupHandleClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if ((e.target as HTMLDivElement).classList.contains('wrapper-popup')) {
@@ -74,8 +80,8 @@ export function Popup() {
               {' '}
               {typeOfWastes.map((type, index) => (
                 <span
-                  onMouseEnter={() => setWaste(type)}
-                  onMouseLeave={() => setWaste('')}
+                  onMouseEnter={() => setWaste(type as ImagesType)}
+                  onMouseLeave={() => setWaste(null)}
                   key={uuidv4()}
                   className="cursor-pointer"
                 >
@@ -168,7 +174,7 @@ export function Popup() {
             <div className="flex gap-4 items-center py-2">
               Rating:
               {' '}
-              <StarRating rate={rating} />
+              {credentials.role === ROLES.User ? <StarRating rate={rating as number} /> : rating}
             </div>
           </div>
         </div>
