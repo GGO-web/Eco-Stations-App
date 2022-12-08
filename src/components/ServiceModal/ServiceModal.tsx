@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import { v4 as uuidv4 } from 'uuid';
 import { toast } from 'react-toastify';
@@ -34,11 +34,12 @@ export function ServiceModal({ isUpdateService = false, updateService }:
   const [descArr, setDescArr] = useState(updateService?.description
     ? JSON.parse(updateService?.description as string) : []);
 
+  const priceWasteRef = useRef<HTMLInputElement>(null);
+  const priceDeliveryRef = useRef<HTMLInputElement>(null);
+
   const [text, setText] = useState<string>(descArr[0] || '');
-  const [priceOfWaste, setPriceOfWaste] = useState(descArr[1] || {});
-  const [priceOfDelivery, setPriceOfDelivery] = useState(descArr[2] || {});
-  console.log(priceOfWaste);
-  console.log(priceOfDelivery);
+  const [priceOfWaste, setPriceOfWaste] = useState(descArr[2] || {});
+  const [priceOfDelivery, setPriceOfDelivery] = useState(descArr[1] || {});
 
   const TypeOfWasteInitialCheckers = new Array(TypesOfWaste.length).fill(false);
   const DeliveryOptionsInitialCheckers = new Array(DeliveryOptions.length).fill(false);
@@ -75,9 +76,24 @@ export function ServiceModal({ isUpdateService = false, updateService }:
     setService((prevState) => ({ ...prevState, description: JSON.stringify(descArr) }));
   }, [text, priceOfDelivery, priceOfDelivery]);
 
+  useEffect(() => {
+    priceWasteRef?.current?.focus();
+  }, [priceOfWaste]);
+  useEffect(() => {
+    priceDeliveryRef?.current?.focus();
+  }, [priceOfDelivery]);
+
   const handleSubmitService = async () => {
     if (service.serviceName === '') {
       toast.error('Please write your service name 😅', {
+        toastId: 'error-msg',
+        position: toast.POSITION.TOP_RIGHT,
+        autoClose: 1500,
+      });
+
+      return;
+    } if (service.description === '') {
+      toast.error('Please write your service description 😅', {
         toastId: 'error-msg',
         position: toast.POSITION.TOP_RIGHT,
         autoClose: 1500,
@@ -258,7 +274,7 @@ export function ServiceModal({ isUpdateService = false, updateService }:
                 <span>{type}</span>
                 {checkedStateWaste[index] && (
                 <input
-                  autoFocus
+                  ref={priceWasteRef}
                   value={priceOfWaste[type as never]}
                   onChange={(e) => {
                     setPriceOfWaste({ ...priceOfWaste, [type]: e.target.value });
@@ -306,7 +322,7 @@ export function ServiceModal({ isUpdateService = false, updateService }:
                 <span>{deliver}</span>
                 {checkedStateOptions[index] && (
                   <input
-                    autoFocus
+                    ref={priceDeliveryRef}
                     value={priceOfDelivery[deliver as never]}
                     onChange={(e) => {
                       setPriceOfDelivery(
