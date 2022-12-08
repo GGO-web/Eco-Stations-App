@@ -1,21 +1,17 @@
-.logo {
-  will-change: filter;
-  padding: 1.5em;
-  height: 6em;
+html {
+  height: 100%;
+  box-sizing: border-box;
 }
 
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+body {
+  height: 100%;
 }
 
 @keyframes logo-spin {
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
@@ -33,4 +29,18 @@
 
 .read-the-docs {
   color: #888;
+}
+
+.sidebar {
+  flex-basis: var(--filter-sidebar-width);
+  will-change: margin-right;
+  transition: margin-right 0.3s ease-in-out;
+}
+
+.sidebar[data-open="true"] {
+  margin-right: 0;
+}
+
+.sidebar[data-open="false"] {
+  margin-right: calc(var(--filter-sidebar-width) * -1 + 65px);
 }

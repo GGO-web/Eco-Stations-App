@@ -4,7 +4,6 @@ const defaultOptions = {
   clickable: false,
   draggable: false,
   editable: false,
-  visible: true,
 };
 export const closeOptions = {
   ...defaultOptions,
