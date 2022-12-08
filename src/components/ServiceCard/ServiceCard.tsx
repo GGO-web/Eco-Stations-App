@@ -26,18 +26,20 @@ export function ServiceCard({
   const [deleteService] = useDeleteExistingServiceMutation();
 
   useEffect(() => {
-    const [descText, ,] = JSON.parse(description as string);
-    setText(descText);
+    if (description) {
+      const [descText, ,] = JSON.parse(description as string);
+      setText(descText);
 
-    const serviceAddress = async () => {
-      const adrs = await getAddress({
-        lat: coordinate.latitude,
-        lng: coordinate.longitude,
-      }).unwrap();
-      setAddress((adrs as any).results[0].formatted_address);
-    };
+      const serviceAddress = async () => {
+        const adrs = await getAddress({
+          lat: coordinate.latitude,
+          lng: coordinate.longitude,
+        }).unwrap();
+        setAddress((adrs as any).results[0].formatted_address);
+      };
 
-    serviceAddress();
+      serviceAddress();
+    }
   }, []);
 
   return (
