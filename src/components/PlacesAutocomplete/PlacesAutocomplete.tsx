@@ -15,9 +15,10 @@ import {
 import '@reach/combobox/styles.css';
 
 import { IService } from '../../models/service.model';
+import { useActions } from '../../hooks/actions';
 
-export function PlacesAutocomplete({ setService, service, adrs }:
-{ setService?: any, service?: IService, adrs?: string }) {
+export function PlacesAutocomplete({ setService, service, placeholder }:
+{ setService?: Function, service?: IService, placeholder?: string }) {
   const {
     ready,
     value,
@@ -26,11 +27,7 @@ export function PlacesAutocomplete({ setService, service, adrs }:
     clearSuggestions,
   } = usePlacesAutocomplete();
 
-  const handleChanges = (e: React.ChangeEvent<HTMLInputElement>) => {
-    e.preventDefault();
-    setValue(e.target.value);
-    setService((prevService: IService) => ({ ...prevService, address: e.target.value }));
-  };
+  const { setUserLocation } = useActions();
 
   const handleSelect = async (address: string) => {
     setValue(address, false);
@@ -39,25 +36,24 @@ export function PlacesAutocomplete({ setService, service, adrs }:
     const results = await getGeocode({ address });
     const { lat, lng } = await getLatLng(results[0]);
 
-    const s = {
-      ...service,
-      coordinate: {
-        latitude: lat,
-        longitude: lng,
-      },
-    };
-
-    setService(s as IService);
+    if (service && setService) {
+      const s = { ...service };
+      s.coordinate.latitude = lat;
+      s.coordinate.longitude = lng;
+      setService(s as IService);
+    }
+    setUserLocation({ lat, lng });
   };
 
   return (
     <Combobox onSelect={handleSelect} className="mb-2 relative">
       <ComboboxInput
-        value={value || adrs}
-        onChange={handleChanges}
+        value={value || service?.address}
+        onChange={(e) => setValue(e.target.value)}
         disabled={!ready}
-        className="w-full p-3 border-dark-green rounded-2xl border-2 outline-none "
-        placeholder="Enter your service address..."
+        className={`w-full p-3 border-dark-green rounded-2xl border-2 outline-none
+        ${placeholder && 'text-md placeholder:text-sm'}`}
+        placeholder={placeholder || 'Enter your service address...'}
       />
       <ComboboxPopover className="absolute z-[1000000] top-0 rounded-2xl overflow-hidden ">
         <ComboboxList>

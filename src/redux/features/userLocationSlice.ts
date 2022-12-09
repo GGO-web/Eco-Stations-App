@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { ICoordinate } from '../../models/coordinates.model';
+import { USER_LOCATION } from '../../constants';
 
 export interface IRecommendState {
   farDistance: boolean,
@@ -9,12 +10,12 @@ export interface IRecommendState {
 }
 
 export interface IUserLocationState {
-  userLocation: null | ICoordinate,
+  userLocation: ICoordinate | null,
   recommend: IRecommendState
 }
 
 const initialState: IUserLocationState = {
-  userLocation: null,
+  userLocation: JSON.parse(localStorage.getItem(USER_LOCATION) as string) || null,
   recommend: {
     farDistance: false,
     midDistance: false,

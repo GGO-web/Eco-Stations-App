@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import { Circle, GoogleMap, MarkerF } from '@react-google-maps/api';
+import { CircleF, GoogleMap, MarkerF } from '@react-google-maps/api';
 
 import {
   useFilterServiceInAreaMutation,
@@ -24,6 +24,7 @@ import { useActions } from '../../hooks/actions';
 import { useAppSelector } from '../../hooks/redux';
 
 import { Popup } from '../Popup/Popup';
+
 import { useLazyGetAddressFromCoordinatesQuery } from '../../redux/services/maps';
 
 export function Map({
@@ -81,7 +82,7 @@ export function Map({
 
   useEffect(() => {
 
-  }, [farDistance, midDistance, smallDistance]);
+  }, [userLocation]);
 
   const handleClick = async (trashBinService: IShortService) => {
     const addressResponse = await getAddress({
@@ -138,7 +139,7 @@ export function Map({
       <GoogleMap
         mapContainerStyle={{ width: '100%', height: '100%' }}
         mapContainerClassName="flex-1 border-t-2 border-r-2 border-r-blue-500 border-t-blue-500"
-        center={center}
+        center={userLocation || center}
         zoom={12}
         onLoad={handleOnLoad}
         onBoundsChanged={() => handleCenterChanged(mapRef)}
@@ -170,7 +171,7 @@ export function Map({
             <MarkerF position={userLocation} icon={{ url: '/people.png', scaledSize: new google.maps.Size(100, 100) }} />
             {smallDistance
               && (
-              <Circle
+              <CircleF
                 center={userLocation}
                 radius={15000}
                 options={closeOptions}
@@ -178,7 +179,7 @@ export function Map({
               />
               )}
             {midDistance && (
-            <Circle
+            <CircleF
               center={userLocation}
               visible={midDistance}
               radius={30000}
@@ -186,7 +187,7 @@ export function Map({
             />
             )}
             {farDistance && (
-            <Circle
+            <CircleF
               center={userLocation}
               radius={45000}
               options={farOptions}

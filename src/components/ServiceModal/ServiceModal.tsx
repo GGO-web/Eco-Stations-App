@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import { v4 as uuidv4 } from 'uuid';
 import { toast } from 'react-toastify';
@@ -34,11 +34,12 @@ export function ServiceModal({ isUpdateService = false, updateService }:
   const [descArr, setDescArr] = useState(updateService?.description
     ? JSON.parse(updateService?.description as string) : []);
 
+  const priceWasteRef = useRef<HTMLInputElement[]>([]);
+  const priceDeliveryRef = useRef<HTMLInputElement[]>([]);
+
   const [text, setText] = useState<string>(descArr[0] || '');
-  const [priceOfWaste, setPriceOfWaste] = useState(descArr[1] || {});
-  const [priceOfDelivery, setPriceOfDelivery] = useState(descArr[2] || {});
-  console.log(priceOfWaste);
-  console.log(priceOfDelivery);
+  const [priceOfWaste, setPriceOfWaste] = useState(descArr[2] || {});
+  const [priceOfDelivery, setPriceOfDelivery] = useState(descArr[1] || {});
 
   const TypeOfWasteInitialCheckers = new Array(TypesOfWaste.length).fill(false);
   const DeliveryOptionsInitialCheckers = new Array(DeliveryOptions.length).fill(false);
@@ -53,6 +54,7 @@ export function ServiceModal({ isUpdateService = false, updateService }:
         ? TypeOfWasteInitialCheckers[index] = true : false))
       : TypeOfWasteInitialCheckers,
   );
+
   const [checkedStateOptions, setCheckedStateOptions] = useState(
     service.deliveryOptions.length > 0
       ? DeliveryOptions
@@ -75,9 +77,43 @@ export function ServiceModal({ isUpdateService = false, updateService }:
     setService((prevState) => ({ ...prevState, description: JSON.stringify(descArr) }));
   }, [text, priceOfDelivery, priceOfDelivery]);
 
+  useEffect(() => {
+    priceWasteRef?.current[0]?.focus();
+  }, [priceWasteRef.current[0]?.value]);
+  useEffect(() => {
+    priceWasteRef?.current[1]?.focus();
+  }, [priceWasteRef.current[1]?.value]);
+  useEffect(() => {
+    priceWasteRef?.current[2]?.focus();
+  }, [priceWasteRef.current[2]?.value]);
+  useEffect(() => {
+    priceWasteRef?.current[3]?.focus();
+  }, [priceWasteRef.current[3]?.value]);
+  useEffect(() => {
+    priceWasteRef?.current[4]?.focus();
+  }, [priceWasteRef.current[4]?.value]);
+
+  useEffect(() => {
+    priceDeliveryRef?.current[0]?.focus();
+  }, [priceDeliveryRef.current[0]?.value]);
+  useEffect(() => {
+    priceDeliveryRef?.current[1]?.focus();
+  }, [priceDeliveryRef.current[1]?.value]);
+  useEffect(() => {
+    priceDeliveryRef?.current[2]?.focus();
+  }, [priceDeliveryRef.current[2]?.value]);
+
   const handleSubmitService = async () => {
     if (service.serviceName === '') {
       toast.error('Please write your service name 😅', {
+        toastId: 'error-msg',
+        position: toast.POSITION.TOP_RIGHT,
+        autoClose: 1500,
+      });
+
+      return;
+    } if (service.description === '') {
+      toast.error('Please write your service description 😅', {
         toastId: 'error-msg',
         position: toast.POSITION.TOP_RIGHT,
         autoClose: 1500,
@@ -257,16 +293,16 @@ export function ServiceModal({ isUpdateService = false, updateService }:
                 />
                 <span>{type}</span>
                 {checkedStateWaste[index] && (
-                <input
-                  autoFocus
-                  value={priceOfWaste[type as never]}
-                  onChange={(e) => {
-                    setPriceOfWaste({ ...priceOfWaste, [type]: e.target.value });
-                  }}
-                  className="grow p-3 border-dark-green rounded-2xl border-2 outline-none"
-                  type="text"
-                  placeholder="Write down price here. It should be like: 0.01 EUR/kg"
-                />
+                  <input
+                    ref={(el) => (priceWasteRef.current[index] = el)}
+                    value={priceOfWaste[type as never]}
+                    onChange={(e) => {
+                      setPriceOfWaste({ ...priceOfWaste, [type]: e.target.value });
+                    }}
+                    className="grow p-3 border-dark-green rounded-2xl border-2 outline-none"
+                    type="text"
+                    placeholder="Write down price here. It should be like: 0.01 EUR/kg"
+                  />
                 )}
               </div>
             ))}
@@ -306,7 +342,7 @@ export function ServiceModal({ isUpdateService = false, updateService }:
                 <span>{deliver}</span>
                 {checkedStateOptions[index] && (
                   <input
-                    autoFocus
+                    ref={(el) => (priceDeliveryRef.current[index] = el)}
                     value={priceOfDelivery[deliver as never]}
                     onChange={(e) => {
                       setPriceOfDelivery(

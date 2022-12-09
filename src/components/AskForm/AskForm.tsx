@@ -14,7 +14,7 @@ export function AskForm({ serviceId, setQuestion }: { serviceId: number, setQues
 
   const [createServiceComment] = useCreateServiceCommentMutation();
 
-  const isAuth = useAppSelector((store) => store.auth.isAuth);
+  const { isAuth } = useAppSelector((store) => store.auth);
 
   const handleSubmit = () => {
     if (!isAuth) {
