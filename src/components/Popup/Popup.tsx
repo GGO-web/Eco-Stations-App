@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import { v4 as uuidv4, v4 } from 'uuid';
 
+import { Link } from 'react-router-dom';
 import { useActions } from '../../hooks/actions';
 import { useAppSelector } from '../../hooks/redux';
 import { useCredentials } from '../../hooks/credentials';
@@ -17,6 +18,7 @@ import './Popup.scss';
 import { ImagesType } from '../ExampleTrash/Images';
 
 import { ROLES } from '../../constants';
+import { Loader } from '../Loader/Loader';
 
 interface IDescArr {
   type: string;
@@ -87,7 +89,7 @@ export function Popup() {
     },
   ]);
 
-  const { data: comments } = useGetAllServiceCommentsQuery(serviceId as number);
+  const { data: comments, isLoading } = useGetAllServiceCommentsQuery(serviceId as number);
 
   const popupHandleClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if ((e.target as HTMLDivElement).classList.contains('wrapper-popup')) {
@@ -104,6 +106,8 @@ export function Popup() {
   const getTabpanelStatus = (controls: string) => !tabs.find(
     (tab: ITab) => tab.controls === controls,
   )?.selected;
+
+  if (isLoading) return <Loader />;
 
   return (
     <div onClick={(e) => popupHandleClick(e)} className="wrapper-popup">
@@ -156,7 +160,8 @@ export function Popup() {
                 Types of waste:
                 {' '}
                 {typeOfWastes.map((type, index) => (
-                  <span
+                  <Link
+                    to={`/detailed/${type.toLowerCase()}`}
                     onMouseEnter={() => setWaste(type as ImagesType)}
                     onMouseLeave={() => setWaste(null)}
                     key={uuidv4()}
@@ -165,7 +170,7 @@ export function Popup() {
                     {type}
                     {index + 1 !== typeOfWastes.length && ', '}
                     {' '}
-                  </span>
+                  </Link>
                 ))}
               </p>
 

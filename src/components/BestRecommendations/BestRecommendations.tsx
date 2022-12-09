@@ -44,7 +44,7 @@ export function BestRecommendations() {
   }, [userLocation]);
 
   return (
-    <div className="text-white text-lg font-semibold flex flex-col gap-4 overflow-hidden overflow-y-scroll">
+    <div className="text-white text-lg font-semibold flex flex-col gap-4 overflow-hidden overflow-y-scroll p-1.5">
       <div className="flex items-center gap-2">
         <input
           ref={refFar}

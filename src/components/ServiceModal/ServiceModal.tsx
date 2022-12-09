@@ -239,7 +239,7 @@ export function ServiceModal({ isUpdateService = false, updateService }:
   return (
     <div
       onClick={(e) => popupHandleClick(e)}
-      className="bg-light fixed w-full h-screen left-0 top-0 grid place-items-center p-5 pt-10 wrapper-popup"
+      className="bg-light fixed w-full h-screen left-0 top-0 grid place-items-center p-5 pt-[90px] wrapper-popup"
     >
       <div className="bg-white rounded-2xl p-5 max-w-[550px]">
         <h4 className="text-center pb-5 text-2xl">

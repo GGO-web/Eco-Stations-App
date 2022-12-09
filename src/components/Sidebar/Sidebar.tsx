@@ -12,6 +12,8 @@ import { DELIVERY_OPTIONS, PAYMENT_CONDITIONS, WASTE_TYPES } from '../../constan
 
 import { IServiceFilter } from '../../models/serviceFilter.model';
 
+import rightArrow from '../../assets/right-arrow.svg';
+
 export function Sidebar() {
   const filterForm = useRef<HTMLFormElement>(null);
 
@@ -86,9 +88,9 @@ export function Sidebar() {
   }, [windowMediaStatus]);
 
   return (
-    <aside className="sidebar p-5 bg-gradient-to-br from-light-green via-light-green to-blue-500 overflow-hidden overflow-y-scroll" data-open={sidebarIsOpened}>
-      <header className="sidebar-form__header flex items-center gap-4 mb-5">
-        <button type="button" className="sidebar-form__toggler" onClick={() => toggleFilterMenu()}>
+    <aside className="sidebar py-5 px-3 bg-gradient-to-br from-light-green via-light-green to-blue-500 overflow-hidden overflow-y-scroll" data-open={sidebarIsOpened}>
+      <header className="sidebar-form__header flex items-center gap-3 mb-5">
+        <button type="button" className="sidebar-form__toggler pl-1" onClick={() => toggleFilterMenu()}>
           <svg width="30" className="fill-dark" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 377 377" xmlSpace="preserve">
             <g>
               <rect x="75" y="73.5" width="302" height="30" />
@@ -104,54 +106,23 @@ export function Sidebar() {
         <legend className="text-3xl font-semibold leading-none text-white">Feature Sidebar</legend>
       </header>
       <div
-        className={`flex items-center gap-4 text-white text-xl min-h-[50px] cursor-pointer ${!sidebarIsOpened && 'pointer-events-none'}`}
+        className={`flex items-center gap-2 p-1 text-white text-xl min-h-[50px] rounded-2xl hover:bg-white hover:bg-opacity-10 transition cursor-pointer ${!sidebarIsOpened && 'pointer-events-none'}`}
         onClick={handleBestRecClick}
       >
-        <svg
-          width="24"
-          height="24"
-          xmlns="http://www.w3.org/2000/svg"
-          fillRule="evenodd"
-          clipRule="evenodd"
-          className={`stroke-[1.5px] transition-all ${bestRecIsOpened && 'rotate-90'}`}
-        >
-          <path
-            style={{
-              stroke: '#ffffff',
-              fill: '#ffffff',
-            }}
-            d="M12 0c6.623 0 12 5.377 12 12s-5.377 12-12 12-12-5.377-12-12 5.377-12 12-12zm0 1c6.071 0 11 4.929 11 11s-4.929 11-11 11-11-4.929-11-11 4.929-11 11-11zm-3 5.753l6.44 5.247-6.44 5.263.678.737 7.322-6-7.335-6-.665.753z"
-          />
-        </svg>
+        <img src={rightArrow} alt="arrow" className={`rounded-full transition-all ${bestRecIsOpened && 'rotate-90'} right-arrow`} />
         <h6>Best Recommendations</h6>
       </div>
       {bestRecIsOpened && <BestRecommendations />}
       <div
-        className={`flex items-center gap-4 text-white text-xl min-h-[50px] cursor-pointer ${!sidebarIsOpened && 'pointer-events-none'}`}
+        className={`flex items-center gap-2 p-1 text-white text-xl min-h-[50px] rounded-2xl hover:bg-white hover:bg-opacity-10 transition cursor-pointer ${!sidebarIsOpened && 'pointer-events-none'}`}
         onClick={() => setFilterServicesIsOpened((prevState) => !prevState)}
       >
-        <svg
-          width="24"
-          height="24"
-          xmlns="http://www.w3.org/2000/svg"
-          fillRule="evenodd"
-          clipRule="evenodd"
-          className={`stroke-[1.5px] transition-all ${filterServicesIsOpened && 'rotate-90'}`}
-        >
-          <path
-            style={{
-              stroke: '#ffffff',
-              fill: '#ffffff',
-
-            }}
-            d="M12 0c6.623 0 12 5.377 12 12s-5.377 12-12 12-12-5.377-12-12 5.377-12 12-12zm0 1c6.071 0 11 4.929 11 11s-4.929 11-11 11-11-4.929-11-11 4.929-11 11-11zm-3 5.753l6.44 5.247-6.44 5.263.678.737 7.322-6-7.335-6-.665.753z"
-          />
-        </svg>
+        <img src={rightArrow} alt="arrow" className={`rounded-full transition-all ${filterServicesIsOpened && 'rotate-90'} right-arrow`} />
         <h6>Filter services</h6>
       </div>
 
       {filterServicesIsOpened && (
-      <form ref={filterForm} onSubmit={(e) => formSubmitHandler(e)} className="sidebar__form grid gap-y-[10px] sidebar-form text-white" action="">
+      <form ref={filterForm} onSubmit={(e) => formSubmitHandler(e)} className="sidebar__form p-1.5 grid gap-y-[10px] sidebar-form text-white" action="">
         <div className="flex gap-3 sidebar-form__controls">
           <button type="button" className="sidebar-form__controls-button font-semibold bg-purple rounded-lg py-1 px-2" onClick={() => setCheckState(true)}>
             Check

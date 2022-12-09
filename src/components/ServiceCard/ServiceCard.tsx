@@ -43,12 +43,12 @@ export function ServiceCard({
   }, []);
 
   return (
-    <div className="w-full grid gap-8 grid-cols-4-auto-types bg-dark-green
+    <div className="w-full grid gap-6 grid-cols-4-auto-types bg-main
     rounded-2xl min-h-[50px] text-white p-5 items-center justify-center place-items-center"
     >
-      <div>
-        <h3 className="text-2xl font-semibold">{serviceName}</h3>
-        <p>{address}</p>
+      <div className="w-full">
+        <h3 className="text-2xl font-semibold text-dark pb-3">{serviceName}</h3>
+        <p className="text-sm">{address}</p>
       </div>
       <div>
         <p className="pb-1">
