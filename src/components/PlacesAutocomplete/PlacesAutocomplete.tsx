@@ -48,7 +48,7 @@ export function PlacesAutocomplete({ setService, service, adrs }:
   return (
     <Combobox onSelect={handleSelect} className="mb-2 relative">
       <ComboboxInput
-        value={value || service.address}
+        value={value || adrs}
         onChange={handleChanges}
         disabled={!ready}
         className="w-full p-3 border-dark-green rounded-2xl border-2 outline-none "
