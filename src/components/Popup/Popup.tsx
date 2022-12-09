@@ -7,10 +7,10 @@ import { useAppSelector } from '../../hooks/redux';
 import { useCredentials } from '../../hooks/credentials';
 import { useGetAllServiceCommentsQuery } from '../../redux/services/services';
 
-import { StarRating } from './StarRating';
+import { StarRating } from './components/StarRating/StarRating';
 import { AskForm } from '../AskForm/AskForm';
 import { ExampleTrash } from '../ExampleTrash/ExampleTrash';
-import { Comments } from './Comments';
+import { Comments } from './components/Comments/Comments';
 
 import './Popup.scss';
 

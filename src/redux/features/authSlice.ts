@@ -3,12 +3,14 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { AUTH_CREDENTIALS } from '../../constants';
 
 import { ICredentials } from '../../models/credentials.model';
+import { IService } from '../../models/service.model';
 
-const initialState: ICredentials = {
+const initialState: ICredentials & { services: IService[] } = {
   username: null,
   role: 'Anonymous',
   token: null,
   isAuth: false,
+  services: [],
 };
 
 const authSlice = createSlice({
@@ -29,9 +31,12 @@ const authSlice = createSlice({
 
       return initialState;
     },
+    setServicesOfProvider: (state, action: PayloadAction<IService[]>) => {
+      state.services = action.payload;
+    },
   },
 });
 
-export const { setCredentials, logOut } = authSlice.actions;
+export const { setCredentials, logOut, setServicesOfProvider } = authSlice.actions;
 
 export const authReducer = authSlice.reducer;

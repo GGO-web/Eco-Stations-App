@@ -9,7 +9,7 @@ import {
 
 import { setAllTrashBins, setTrashBinsFilter } from '../redux/features/trashBinsSlice';
 
-import { setCredentials, logOut } from '../redux/features/authSlice';
+import { setCredentials, logOut, setServicesOfProvider } from '../redux/features/authSlice';
 
 import {
   setMidCircles, setSmallCircles, setFarCircles, setUserLocation,
@@ -27,6 +27,7 @@ const actions = {
   setSmallCircles,
   setFarCircles,
   setUserLocation,
+  setServicesOfProvider,
 };
 
 export const useActions = () => {
