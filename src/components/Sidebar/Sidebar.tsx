@@ -17,8 +17,7 @@ export function Sidebar() {
 
   const windowMediaStatus = useMediaCondition('(min-width: 768px)');
 
-  const [filterMenuIsOpened, setFilterMenuIsOpened] = useState<boolean>(windowMediaStatus);
-  const [sidebarIsOpened, setSidebarIsOpened] = useState<boolean>(true);
+  const [sidebarIsOpened, setSidebarIsOpened] = useState<boolean>(windowMediaStatus);
   const [bestRecIsOpened, setBestRecIsOpened] = useState<boolean>(false);
   const [filterServicesIsOpened, setFilterServicesIsOpened] = useState<boolean>(false);
 
@@ -93,7 +92,7 @@ export function Sidebar() {
   };
 
   useEffect(() => {
-    setFilterMenuIsOpened(windowMediaStatus);
+    setSidebarIsOpened(windowMediaStatus);
   }, [windowMediaStatus]);
 
   return (
@@ -160,6 +159,7 @@ export function Sidebar() {
         </svg>
         <h6>Filter services</h6>
       </div>
+
       {filterServicesIsOpened && (
       <form ref={filterForm} onSubmit={(e) => formSubmitHandler(e)} className="sidebar__form grid gap-y-[10px] sidebar-form text-white" action="">
         <div className="flex gap-3 sidebar-form__controls">
