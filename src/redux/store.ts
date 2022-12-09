@@ -11,12 +11,14 @@ import { mapsApi } from './services/maps';
 import { serviceReducer } from './features/serviceSlice';
 import { trashBinsReducer } from './features/trashBinsSlice';
 import { authReducer } from './features/authSlice';
+import { userLocationsReducer } from './features/userLocationSlice';
 
 export const store = configureStore({
   reducer: {
     service: serviceReducer,
     trashBins: trashBinsReducer,
     auth: authReducer,
+    userLocations: userLocationsReducer,
     [serviceApi.reducerPath]: serviceApi.reducer,
     [authApi.reducerPath]: authApi.reducer,
     [mapsApi.reducerPath]: mapsApi.reducer,

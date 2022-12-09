@@ -11,6 +11,10 @@ import { setAllTrashBins, setTrashBinsFilter } from '../redux/features/trashBins
 
 import { setCredentials, logOut } from '../redux/features/authSlice';
 
+import {
+  setMidCircles, setSmallCircles, setFarCircles, setUserLocation,
+} from '../redux/features/userLocationSlice';
+
 const actions = {
   setPopupState,
   setCurrentService,
@@ -19,6 +23,10 @@ const actions = {
   setTrashBinsFilter,
   setCredentials,
   logOut,
+  setMidCircles,
+  setSmallCircles,
+  setFarCircles,
+  setUserLocation,
 };
 
 export const useActions = () => {

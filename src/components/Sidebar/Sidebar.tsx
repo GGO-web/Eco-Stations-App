@@ -5,8 +5,11 @@ import { v4 } from 'uuid';
 
 import { DELIVERY_OPTIONS, PAYMENT_CONDITIONS, WASTE_TYPES } from '../../constants';
 
-import { useActions } from '../../hooks/actions';
 import { useMediaCondition } from '../../hooks/mediaCondition';
+
+import BestRecommendations from '../BestRecommendations/BestRecommendations';
+
+import { useActions } from '../../hooks/actions';
 
 import { IServiceFilter } from '../../models/serviceFilter.model';
 
@@ -15,9 +18,17 @@ export function Sidebar() {
 
   const windowMediaStatus = useMediaCondition('(min-width: 768px)');
 
-  const [filterMenuIsOpened, setFilterMenuIsOpened] = useState<boolean>(windowMediaStatus);
+  const [sidebarIsOpened, setSidebarIsOpened] = useState<boolean>(windowMediaStatus);
+  const [bestRecIsOpened, setBestRecIsOpened] = useState<boolean>(false);
+  const [filterServicesIsOpened, setFilterServicesIsOpened] = useState<boolean>(false);
 
   const { setTrashBinsFilter } = useActions();
+
+  const handleBestRecClick = (e: any) => {
+    e.preventDefault();
+
+    setBestRecIsOpened((prevState) => !prevState);
+  };
 
   const setCheckState = (checked: boolean, revert: boolean = false) => {
     const checkboxes: NodeListOf<HTMLInputElement> = document.querySelectorAll('.input-checkbox');
@@ -66,33 +77,81 @@ export function Sidebar() {
   };
 
   const toggleFilterMenu = () => {
-    setFilterMenuIsOpened((prevFilterOpenState) => !prevFilterOpenState);
+    setSidebarIsOpened((prevSidebarOpenState) => !prevSidebarOpenState);
+    setBestRecIsOpened(false);
+    setFilterServicesIsOpened(false);
   };
 
   useEffect(() => {
-    setFilterMenuIsOpened(windowMediaStatus);
+    setSidebarIsOpened(windowMediaStatus);
   }, [windowMediaStatus]);
 
   return (
-    <aside className="sidebar p-5 bg-gradient-to-br from-light-green via-light-green to-blue-500 overflow-hidden" data-open={filterMenuIsOpened}>
+    <aside className="sidebar p-5 bg-gradient-to-br from-light-green via-light-green to-blue-500 overflow-hidden overflow-y-scroll" data-open={sidebarIsOpened}>
+      <header className="sidebar-form__header flex items-center gap-4 mb-5">
+        <button type="button" className="sidebar-form__toggler" onClick={() => toggleFilterMenu()}>
+          <svg width="30" className="fill-dark" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 377 377" xmlSpace="preserve">
+            <g>
+              <rect x="75" y="73.5" width="302" height="30" />
+              <rect y="73.5" width="30" height="30" />
+              <rect y="273.5" width="30" height="30" />
+              <rect x="75" y="273.5" width="302" height="30" />
+              <rect y="173.5" width="30" height="30" />
+              <rect x="75" y="173.5" width="302" height="30" />
+            </g>
+          </svg>
+        </button>
+
+        <legend className="text-3xl font-semibold leading-none text-white">Feature Sidebar</legend>
+      </header>
+      <div
+        className={`flex items-center gap-4 text-white text-xl min-h-[50px] cursor-pointer ${!sidebarIsOpened && 'pointer-events-none'}`}
+        onClick={handleBestRecClick}
+      >
+        <svg
+          width="24"
+          height="24"
+          xmlns="http://www.w3.org/2000/svg"
+          fillRule="evenodd"
+          clipRule="evenodd"
+          className={`stroke-[1.5px] transition-all ${bestRecIsOpened && 'rotate-90'}`}
+        >
+          <path
+            style={{
+              stroke: '#ffffff',
+              fill: '#ffffff',
+            }}
+            d="M12 0c6.623 0 12 5.377 12 12s-5.377 12-12 12-12-5.377-12-12 5.377-12 12-12zm0 1c6.071 0 11 4.929 11 11s-4.929 11-11 11-11-4.929-11-11 4.929-11 11-11zm-3 5.753l6.44 5.247-6.44 5.263.678.737 7.322-6-7.335-6-.665.753z"
+          />
+        </svg>
+        <h6>Best Recommendations</h6>
+      </div>
+      {bestRecIsOpened && <BestRecommendations />}
+      <div
+        className={`flex items-center gap-4 text-white text-xl min-h-[50px] cursor-pointer ${!sidebarIsOpened && 'pointer-events-none'}`}
+        onClick={() => setFilterServicesIsOpened((prevState) => !prevState)}
+      >
+        <svg
+          width="24"
+          height="24"
+          xmlns="http://www.w3.org/2000/svg"
+          fillRule="evenodd"
+          clipRule="evenodd"
+          className={`stroke-[1.5px] transition-all ${filterServicesIsOpened && 'rotate-90'}`}
+        >
+          <path
+            style={{
+              stroke: '#ffffff',
+              fill: '#ffffff',
+
+            }}
+            d="M12 0c6.623 0 12 5.377 12 12s-5.377 12-12 12-12-5.377-12-12 5.377-12 12-12zm0 1c6.071 0 11 4.929 11 11s-4.929 11-11 11-11-4.929-11-11 4.929-11 11-11zm-3 5.753l6.44 5.247-6.44 5.263.678.737 7.322-6-7.335-6-.665.753z"
+          />
+        </svg>
+        <h6>Filter services</h6>
+      </div>
+      {filterServicesIsOpened && (
       <form ref={filterForm} onSubmit={(e) => formSubmitHandler(e)} className="sidebar__form grid gap-y-[10px] sidebar-form text-white" action="">
-        <header className="sidebar-form__header flex items-center gap-4 mb-5">
-          <button type="button" className="sidebar-form__toggler" onClick={() => toggleFilterMenu()}>
-            <svg width="30" className="fill-dark" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 377 377" xmlSpace="preserve">
-              <g>
-                <rect x="75" y="73.5" width="302" height="30" />
-                <rect y="73.5" width="30" height="30" />
-                <rect y="273.5" width="30" height="30" />
-                <rect x="75" y="273.5" width="302" height="30" />
-                <rect y="173.5" width="30" height="30" />
-                <rect x="75" y="173.5" width="302" height="30" />
-              </g>
-            </svg>
-          </button>
-
-          <legend className="text-3xl font-semibold leading-none">Filter services</legend>
-        </header>
-
         <div className="flex gap-3 sidebar-form__controls">
           <button type="button" className="sidebar-form__controls-button font-semibold bg-purple rounded-lg py-1 px-2" onClick={() => setCheckState(true)}>
             Check
@@ -164,6 +223,7 @@ export function Sidebar() {
           Apply Filters
         </button>
       </form>
+      )}
     </aside>
   );
 }
