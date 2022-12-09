@@ -17,7 +17,7 @@ import '@reach/combobox/styles.css';
 import { IService } from '../../models/service.model';
 
 export function PlacesAutocomplete({ setService, service, adrs }:
-{ setService?: Function, service?: IService, adrs?: string }) {
+{ setService?: any, service?: IService, adrs?: string }) {
   const {
     ready,
     value,
@@ -38,11 +38,16 @@ export function PlacesAutocomplete({ setService, service, adrs }:
 
     const results = await getGeocode({ address });
     const { lat, lng } = await getLatLng(results[0]);
-    const s = { ...service };
-    s.coordinate.latitude = lat;
-    s.coordinate.longitude = lng;
 
-    setService(s);
+    const s = {
+      ...service,
+      coordinate: {
+        latitude: lat,
+        longitude: lng,
+      },
+    };
+
+    setService(s as IService);
   };
 
   return (
