@@ -23,9 +23,9 @@ export function ServicesPage({ isLoaded }: { isLoaded: boolean }) {
 
   return (
     <div className="min-h-screen bg-light p-5">
-      <div className="border-b-2 border-b-dark flex items-center justify-between pb-2">
-        <h3 className="text-3xl font-bold pl-2 text-dark-green">Your Services</h3>
-        <button type="button" onClick={() => setPopupState(true)} className="flex items-center gap-2 mr-3 text-white bg-dark-green py-4 px-8 rounded-2xl font-semibold">
+      <div className="border-b-2 border-b-dark flex items-center justify-between pb-2 max-[500px]:flex-col">
+        <h3 className="text-3xl font-bold pl-2 text-dark-green max-[500px]:text-xl">Your Services</h3>
+        <button type="button" onClick={() => setPopupState(true)} className="flex items-center gap-2 mr-3 text-white bg-dark-green py-4 px-8 rounded-2xl font-semibold max-[500px]:text-sm max-[500px]:m-3">
           Add Service
           <BsPlusLg />
         </button>
