@@ -34,8 +34,8 @@ export function ServiceModal({ isUpdateService = false, updateService }:
   const [descArr, setDescArr] = useState(updateService?.description
     ? JSON.parse(updateService?.description as string) : []);
 
-  const priceWasteRef = useRef<HTMLInputElement>(null);
-  const priceDeliveryRef = useRef<HTMLInputElement>(null);
+  const priceWasteRef = useRef<HTMLInputElement[]>([]);
+  const priceDeliveryRef = useRef<HTMLInputElement[]>([]);
 
   const [text, setText] = useState<string>(descArr[0] || '');
   const [priceOfWaste, setPriceOfWaste] = useState(descArr[2] || {});
@@ -54,6 +54,7 @@ export function ServiceModal({ isUpdateService = false, updateService }:
         ? TypeOfWasteInitialCheckers[index] = true : false))
       : TypeOfWasteInitialCheckers,
   );
+
   const [checkedStateOptions, setCheckedStateOptions] = useState(
     service.deliveryOptions.length > 0
       ? DeliveryOptions
@@ -77,11 +78,30 @@ export function ServiceModal({ isUpdateService = false, updateService }:
   }, [text, priceOfDelivery, priceOfDelivery]);
 
   useEffect(() => {
-    priceWasteRef?.current?.focus();
-  }, [priceOfWaste]);
+    priceWasteRef?.current[0]?.focus();
+  }, [priceWasteRef.current[0]?.value]);
   useEffect(() => {
-    priceDeliveryRef?.current?.focus();
-  }, [priceOfDelivery]);
+    priceWasteRef?.current[1]?.focus();
+  }, [priceWasteRef.current[1]?.value]);
+  useEffect(() => {
+    priceWasteRef?.current[2]?.focus();
+  }, [priceWasteRef.current[2]?.value]);
+  useEffect(() => {
+    priceWasteRef?.current[3]?.focus();
+  }, [priceWasteRef.current[3]?.value]);
+  useEffect(() => {
+    priceWasteRef?.current[4]?.focus();
+  }, [priceWasteRef.current[4]?.value]);
+
+  useEffect(() => {
+    priceDeliveryRef?.current[0]?.focus();
+  }, [priceDeliveryRef.current[0]?.value]);
+  useEffect(() => {
+    priceDeliveryRef?.current[1]?.focus();
+  }, [priceDeliveryRef.current[1]?.value]);
+  useEffect(() => {
+    priceDeliveryRef?.current[2]?.focus();
+  }, [priceDeliveryRef.current[2]?.value]);
 
   const handleSubmitService = async () => {
     if (service.serviceName === '') {
@@ -273,16 +293,16 @@ export function ServiceModal({ isUpdateService = false, updateService }:
                 />
                 <span>{type}</span>
                 {checkedStateWaste[index] && (
-                <input
-                  ref={priceWasteRef}
-                  value={priceOfWaste[type as never]}
-                  onChange={(e) => {
-                    setPriceOfWaste({ ...priceOfWaste, [type]: e.target.value });
-                  }}
-                  className="grow p-3 border-dark-green rounded-2xl border-2 outline-none"
-                  type="text"
-                  placeholder="Write down price here. It should be like: 0.01 EUR/kg"
-                />
+                  <input
+                    ref={(el) => (priceWasteRef.current[index] = el)}
+                    value={priceOfWaste[type as never]}
+                    onChange={(e) => {
+                      setPriceOfWaste({ ...priceOfWaste, [type]: e.target.value });
+                    }}
+                    className="grow p-3 border-dark-green rounded-2xl border-2 outline-none"
+                    type="text"
+                    placeholder="Write down price here. It should be like: 0.01 EUR/kg"
+                  />
                 )}
               </div>
             ))}
@@ -322,7 +342,7 @@ export function ServiceModal({ isUpdateService = false, updateService }:
                 <span>{deliver}</span>
                 {checkedStateOptions[index] && (
                   <input
-                    ref={priceDeliveryRef}
+                    ref={(el) => (priceDeliveryRef.current[index] = el)}
                     value={priceOfDelivery[deliver as never]}
                     onChange={(e) => {
                       setPriceOfDelivery(
