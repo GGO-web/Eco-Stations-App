@@ -1,23 +1,26 @@
 import React, { useEffect, useState } from 'react';
 
-import { GoogleMap, MarkerF } from '@react-google-maps/api';
+import { Circle, GoogleMap, MarkerF } from '@react-google-maps/api';
 
 import {
   useFilterServiceInAreaMutation,
   useLazyGetServiceByIdQuery,
 } from '../../redux/services/services';
 
-import { truncateCoordinate } from '../../helpers/truncateCoordinate';
-
 import { mapDefaultOptions } from '../../constants';
 
 import { ICoordinate } from '../../models/coordinates.model';
 import { IService } from '../../models/service.model';
+
 import { IMapOptions } from '../../models/bounds.model';
 import { IShortService } from '../../models/shortService.model';
 
-import { useActions } from '../../hooks/actions';
+import { truncateCoordinate } from '../../helpers/truncateCoordinate';
+import { closeOptions, farOptions, middleOptions } from '../../helpers/circleOptions';
+
 import { useDebounce } from '../../hooks/debounce';
+
+import { useActions } from '../../hooks/actions';
 import { useAppSelector } from '../../hooks/redux';
 
 import { Popup } from '../Popup/Popup';
@@ -46,6 +49,10 @@ export function Map({
   const [filterServicesInArea] = useFilterServiceInAreaMutation();
 
   const trashBinsFilter = useAppSelector((store) => store.trashBins.filter);
+  const {
+    userLocation,
+    recommend: { farDistance, midDistance, smallDistance },
+  } = useAppSelector((store) => store.userLocations);
 
   const { setPopupState, setCurrentService, setAllTrashBins } = useActions();
 
@@ -71,6 +78,10 @@ export function Map({
 
     getServicesInAnArea();
   }, [debouncedMapOptions, trashBinsFilter]);
+
+  useEffect(() => {
+
+  }, [farDistance, midDistance, smallDistance]);
 
   const handleClick = async (trashBinService: IShortService) => {
     const addressResponse = await getAddress({
@@ -154,6 +165,36 @@ export function Map({
             />
           );
         })}
+        {userLocation && (
+          <>
+            <MarkerF position={userLocation} icon={{ url: '/people.png', scaledSize: new google.maps.Size(100, 100) }} />
+            {smallDistance
+              && (
+              <Circle
+                center={userLocation}
+                radius={15000}
+                options={closeOptions}
+                visible={smallDistance}
+              />
+              )}
+            {midDistance && (
+            <Circle
+              center={userLocation}
+              visible={midDistance}
+              radius={30000}
+              options={middleOptions}
+            />
+            )}
+            {farDistance && (
+            <Circle
+              center={userLocation}
+              radius={45000}
+              options={farOptions}
+              visible={farDistance}
+            />
+            )}
+          </>
+        )}
       </GoogleMap>
     </>
   );

@@ -16,8 +16,8 @@ import '@reach/combobox/styles.css';
 
 import { IService } from '../../models/service.model';
 
-export function PlacesAutocomplete({ setService, service }:
-{ setService: Function, service: IService }) {
+export function PlacesAutocomplete({ setService, service, adrs }:
+{ setService?: Function, service?: IService, adrs?: string }) {
   const {
     ready,
     value,
