@@ -36,7 +36,11 @@ export function StarRating({ rate }: { rate: number | undefined }) {
           <button
             type="button"
             key={uuidv4()}
-            className={index <= (hover || rating) ? 'text-[#9300FE]' : 'text-[#010101]'}
+            className={`inline-flex items-center justify-center w-[30px] h-[30px] ${
+              index <= (hover || rating)
+                ? 'text-[#9300FE]'
+                : 'text-[#010101]'
+            }`}
             onClick={() => updateRatingHandler(index)}
             onMouseEnter={() => setHover(index)}
             onMouseLeave={() => setHover(rating)}

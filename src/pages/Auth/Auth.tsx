@@ -83,7 +83,7 @@ export function Auth() {
     }
 
     const { jwtToken } = await createUser({
-      username: values.username,
+      username: values.email,
       password: values.password,
       email: values.email,
       role: userRole,
