@@ -155,38 +155,39 @@ export function Popup() {
         </div>
 
         <div className="popup__tabpanels">
-          <div id="tabpanel-info" aria-hidden={getTabpanelStatus('tabpanel-info')} role="tabpanel" className="popup__tabpanel popup-info w-[400px] w-md-[300px]">
-            <div className="flex flex-col flex-auto">
-              <p className="py-2">
-                Address:
-                {' '}
-                {address}
-              </p>
+          {tabs[0].selected && (
+            <div id="tabpanel-info" aria-hidden={getTabpanelStatus('tabpanel-info')} role="tabpanel" className="popup__tabpanel popup-info w-[400px] w-md-[300px]">
+              <div className="flex flex-col flex-auto">
+                <p className="py-2">
+                  Address:
+                  {' '}
+                  {address}
+                </p>
 
-              <p className="py-2">
-                Types of waste:
-                {' '}
-                {typeOfWastes.map((type, index) => (
-                  <Link
-                    to={`/detailed/${type.toLowerCase()}`}
-                    onMouseEnter={() => setWaste(type as ImagesType)}
-                    onMouseLeave={() => setWaste(null)}
-                    key={uuidv4()}
-                    className="cursor-pointer"
-                  >
-                    {type}
-                    {index + 1 !== typeOfWastes.length && ', '}
-                    {' '}
-                  </Link>
-                ))}
-              </p>
+                <p className="py-2">
+                  Types of waste:
+                  {' '}
+                  {typeOfWastes.map((type, index) => (
+                    <Link
+                      to={`/detailed/${type.toLowerCase()}`}
+                      onMouseEnter={() => setWaste(type as ImagesType)}
+                      onMouseLeave={() => setWaste(null)}
+                      key={uuidv4()}
+                      className="cursor-pointer"
+                    >
+                      {type}
+                      {index + 1 !== typeOfWastes.length && ', '}
+                      {' '}
+                    </Link>
+                  ))}
+                </p>
 
-              {JSON.stringify(priceOfWaste) !== '{}' && (
-              <div className="py-2">
-                Price for waste:
-                {' '}
-                <ul className="list-disc pl-7">
-                  {priceOfWaste
+                {JSON.stringify(priceOfWaste) !== '{}' && (
+                <div className="py-2">
+                  Price for waste:
+                  {' '}
+                  <ul className="list-disc pl-7">
+                    {priceOfWaste
                     && getValuesFromObject(priceOfWaste)
                       .map((priceWaste: IDescArr) => (
                         <li key={uuidv4()}>
@@ -197,38 +198,38 @@ export function Popup() {
                           {priceWaste.price.toUpperCase()}
                         </li>
                       ))}
-                </ul>
-              </div>
-              )}
-
-              <p className="py-2">
-                Delivery options:
-                {' '}
-                {deliveryOptions.map((option, index) => (
-                  <span key={uuidv4()}>
-                    {option}
-                    {index + 1 !== deliveryOptions.length && ', '}
-                    {' '}
-                  </span>
-                ))}
-              </p>
-            </div>
-
-            <div className="flex flex-col flex-auto">
-              {JSON.stringify(priceOfDelivery) === '{}' ? (
-                <div className="py-2">
-                  Price of service:
-                  <ul className="list-disc pl-7">
-                    <li key={uuidv4()}>SELF ➡ FREE</li>
                   </ul>
                 </div>
-              ) : (
-                <div className="py-2">
-                  Price of service:
+                )}
+
+                <p className="py-2">
+                  Delivery options:
                   {' '}
-                  <ul className="list-disc pl-7">
-                    <li key={uuidv4()}>SELF ➡ FREE</li>
-                    {priceOfDelivery
+                  {deliveryOptions.map((option, index) => (
+                    <span key={uuidv4()}>
+                      {option}
+                      {index + 1 !== deliveryOptions.length && ', '}
+                      {' '}
+                    </span>
+                  ))}
+                </p>
+              </div>
+
+              <div className="flex flex-col flex-auto">
+                {JSON.stringify(priceOfDelivery) === '{}' ? (
+                  <div className="py-2">
+                    Price of service:
+                    <ul className="list-disc pl-7">
+                      <li key={uuidv4()}>SELF ➡ FREE</li>
+                    </ul>
+                  </div>
+                ) : (
+                  <div className="py-2">
+                    Price of service:
+                    {' '}
+                    <ul className="list-disc pl-7">
+                      <li key={uuidv4()}>SELF ➡ FREE</li>
+                      {priceOfDelivery
                     && getValuesFromObject(priceOfDelivery)
                       .map((priceDelivery: IDescArr) => (
                         <li key={uuidv4()}>
@@ -239,40 +240,44 @@ export function Popup() {
                           {priceDelivery.price.toUpperCase()}
                         </li>
                       ))}
-                  </ul>
+                    </ul>
+                  </div>
+                )}
+
+                {!(paymentConditions.length === 1 && paymentConditions.includes('FREE')) && (
+                <p className="py-2">
+                  Payment Conditions:
+                  {' '}
+                  {paymentConditions.map((pay, index) => (
+                    <span key={uuidv4()}>
+                      {pay}
+                      {index + 1 !== paymentConditions.length && ', '}
+                      {' '}
+                    </span>
+                  ))}
+                </p>
+                )}
+
+                {description && (
+                <p>
+                  Description:
+                  {' '}
+                  {textDesc}
+                </p>
+                )}
+
+                <div className="flex gap-4 items-center py-2">
+                  Rating:
+                  {' '}
+                  {credentials.role === ROLES.User
+                    ? <StarRating rate={rating as number} />
+                    : rating}
                 </div>
-              )}
-
-              {!(paymentConditions.length === 1 && paymentConditions.includes('FREE')) && (
-              <p className="py-2">
-                Payment Conditions:
-                {' '}
-                {paymentConditions.map((pay, index) => (
-                  <span key={uuidv4()}>
-                    {pay}
-                    {index + 1 !== paymentConditions.length && ', '}
-                    {' '}
-                  </span>
-                ))}
-              </p>
-              )}
-
-              {description && (
-              <p>
-                Description:
-                {' '}
-                {textDesc}
-              </p>
-              )}
-
-              <div className="flex gap-4 items-center py-2">
-                Rating:
-                {' '}
-                {credentials.role === ROLES.User ? <StarRating rate={rating as number} /> : rating}
               </div>
             </div>
-          </div>
+          )}
 
+          {tabs[1].selected && (
           <div id="tabpanel-questions" aria-hidden={getTabpanelStatus('tabpanel-questions')} role="tabpanel" className="popup__tabpanel popup-questions w-[400px] w-md-[300px]">
             <Comments comments={commentsStore} />
 
@@ -284,12 +289,13 @@ export function Popup() {
             )}
 
             {askQuestionField && (
-              <AskForm
-                serviceId={serviceId as number}
-                setQuestion={setAskQuestionField}
-              />
+            <AskForm
+              serviceId={serviceId as number}
+              setQuestion={setAskQuestionField}
+            />
             )}
           </div>
+          )}
         </div>
       </div>
     </div>
