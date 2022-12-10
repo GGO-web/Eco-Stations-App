@@ -21,9 +21,16 @@ export const commentsSlice = createSlice({
         ),
       );
     },
+    deleteComment: (state, action: PayloadAction<number>) => {
+      state.comments = state.comments.filter(
+        (comment: IComment) => (
+          comment.id !== action.payload
+        ),
+      );
+    },
   },
 });
 
-export const { setComments, setComment } = commentsSlice.actions;
+export const { setComments, setComment, deleteComment } = commentsSlice.actions;
 
 export const commentsReducer = commentsSlice.reducer;

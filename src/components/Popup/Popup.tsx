@@ -110,7 +110,7 @@ export function Popup() {
   )?.selected;
 
   useEffect(() => {
-    if (comments && commentsStore?.length === 0) {
+    if (comments) {
       setComments(comments);
     }
   }, [comments]);

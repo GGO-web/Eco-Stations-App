@@ -139,6 +139,13 @@ export const serviceApi = createApi({
       }),
       invalidatesTags: ['Service'],
     }),
+    deleteCommentWithId: builder.mutation<IComment, Partial<number>>({
+      query: (id) => ({
+        url: `${import.meta.env.VITE_BACKEND_URL}/comment/${id}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: ['Service'],
+    }),
   }),
 });
 
@@ -156,4 +163,5 @@ export const {
   useCreateServiceCommentMutation,
   useLazyGetServicesOfProviderQuery,
   useChangeCommentPersistentMutation,
+  useDeleteCommentWithIdMutation,
 } = serviceApi;
