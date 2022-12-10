@@ -129,3 +129,28 @@ export const PAYMENT_CONDITIONS = [
 export const DELIVERY_OPTIONS = [
   'SELF', 'VAN', 'TRUCK',
 ];
+
+export const AUTH_STATUS_DESCRIPTION = {
+  LoginSizeError: 'Nickname size is too small 🥶',
+  LoginError: 'Error with nickname has caused 😉',
+  PasswordError: 'Ohhh, error with password has caused 😅',
+  PasswordSizeError: 'Password size is too small 😶',
+  EmailError: 'Ohhh, email isn`t valid 🙃',
+  EmailEmptyError: 'Email field shouldn`t be empty 🫥',
+  RoleError: 'Invalid role provided, you`re hacker? 😱',
+  USER_ALREADY_EXISTS: 'User with this email already exists 🥲',
+  COMMON_ERROR: 'Sorry, SERVER-ERROR, try again later 😨',
+};
+
+export const LOGIN_STATUS_DESCRIPTION = {
+  INVALID_CREDENTIALS: 'Invalid credentials provided 🥺',
+  USER_LOCKED: 'You has been blocked, contact with admins 🙃',
+  COMMON_ERROR: 'Sorry, SERVER-ERROR, try again later 😨',
+};
+
+export type TError = {
+  data: {
+    message: string[]
+  },
+  status: number
+};

@@ -266,13 +266,15 @@ export function Popup() {
                 </p>
                 )}
 
-                <div className="flex gap-4 items-center py-2">
-                  Rating:
-                  {' '}
-                  {credentials.role === ROLES.User
-                    ? <StarRating rate={rating as number} />
-                    : rating}
-                </div>
+                {(rating && rating > 0) ? (
+                  <div className="flex gap-4 items-center py-2">
+                    Rating:
+                    {' '}
+                    {credentials.role === ROLES.User
+                      ? <StarRating rate={rating as number} />
+                      : `${rating}⭐`}
+                  </div>
+                ) : null}
               </div>
             </div>
           )}
