@@ -155,4 +155,5 @@ export const {
   useGetAllServiceCommentsQuery,
   useCreateServiceCommentMutation,
   useLazyGetServicesOfProviderQuery,
+  useChangeCommentPersistentMutation,
 } = serviceApi;
