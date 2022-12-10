@@ -1,24 +1,50 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 
 import { useActions } from '../../hooks/actions';
 import { useAppSelector } from '../../hooks/redux';
+import { useLocalStorage } from '../../hooks/localStorage';
+
 import { PlacesAutocomplete } from '../PlacesAutocomplete/PlacesAutocomplete';
 
-function BestRecommendations() {
+import { ICoordinate } from '../../models/coordinates.model';
+
+import { USER_LOCATION } from '../../constants';
+
+export function BestRecommendations() {
   const {
     farDistance,
     midDistance,
     smallDistance,
   } = useAppSelector((store) => store.userLocations.recommend);
 
+  const [, setLocation] = useLocalStorage<ICoordinate>(USER_LOCATION, {} as ICoordinate);
+
+  const { userLocation } = useAppSelector((store) => store.userLocations);
+
   const refFar = useRef<HTMLInputElement>(null);
   const refMid = useRef<HTMLInputElement>(null);
-  const refSmall = useRef<HTMLInputElement>(null);
+  const refSmall = useRef<HTMLInputElement >(null);
 
-  const { setSmallCircles, setFarCircles, setMidCircles } = useActions();
+  const {
+    setSmallCircles, setFarCircles, setMidCircles, setUserLocation,
+  } = useActions();
+
+  const setUserPosition = () => {
+    // the way you can get user coordinate
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const { latitude, longitude } = position.coords;
+        setUserLocation({ lat: latitude, lng: longitude });
+      },
+    );
+  };
+
+  useEffect(() => {
+    setLocation(userLocation as ICoordinate);
+  }, [userLocation]);
 
   return (
-    <div className="text-white text-lg font-semibold flex flex-col gap-4">
+    <div className="text-white text-lg font-semibold flex flex-col gap-4 overflow-hidden overflow-y-scroll p-1.5">
       <div className="flex items-center gap-2">
         <input
           ref={refFar}
@@ -52,11 +78,22 @@ function BestRecommendations() {
         {' '}
         <h5>Small-distance (Self related)</h5>
       </div>
+      <div>
+        <p className="text-sm font-light text-center mb-2">If you want to set your current exact position, press the button bellow</p>
+        <button
+          onClick={setUserPosition}
+          className="sidebar-form__controls-button w-full font-semibold bg-gradient-to-r from-yellow-400 to-pink-500 rounded-lg transition-all hover:opacity-90 p-3"
+          type="submit"
+        >
+          Set My Current Position
+        </button>
+      </div>
       <div className="text-dark text-md">
-        <PlacesAutocomplete />
+        <p className="text-white text-sm font-light text-center mb-2">
+          If you want to set your approximate position, just start to type on input field
+        </p>
+        <PlacesAutocomplete placeholder="Write your current approximate location" />
       </div>
     </div>
   );
 }
-
-export default BestRecommendations;

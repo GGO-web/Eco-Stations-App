@@ -90,7 +90,7 @@ import contact from '../../assets/Pics/CanNotBeDisposed/Waste that came into con
 export const waste = {
   types: [
     {
-      id: 'plastics',
+      id: 'plastic',
       name: 'PLASTICS',
       image: plastics,
       specificTypes: [
@@ -231,7 +231,7 @@ export const waste = {
       ],
     },
     {
-      id: 'metal',
+      id: 'metals',
       name: 'METAL',
       image: metal,
       specificTypes: [
@@ -303,7 +303,7 @@ export const waste = {
       ],
     },
     {
-      id: 'e-waste',
+      id: 'electronic',
       name: 'Electronic waste',
       image: eWaste,
       specificTypes: [

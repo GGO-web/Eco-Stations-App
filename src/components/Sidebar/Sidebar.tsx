@@ -3,7 +3,7 @@ import React, {
 } from 'react';
 import { v4 } from 'uuid';
 
-import BestRecommendations from '../BestRecommendations/BestRecommendations';
+import { BestRecommendations } from '../BestRecommendations/BestRecommendations';
 
 import { useMediaCondition } from '../../hooks/mediaCondition';
 import { useActions } from '../../hooks/actions';
@@ -11,6 +11,9 @@ import { useActions } from '../../hooks/actions';
 import { DELIVERY_OPTIONS, PAYMENT_CONDITIONS, WASTE_TYPES } from '../../constants';
 
 import { IServiceFilter } from '../../models/serviceFilter.model';
+
+import rightArrow from '../../assets/right-arrow.svg';
+import './Sidebar.scss';
 
 export function Sidebar() {
   const filterForm = useRef<HTMLFormElement>(null);
@@ -21,23 +24,7 @@ export function Sidebar() {
   const [bestRecIsOpened, setBestRecIsOpened] = useState<boolean>(false);
   const [filterServicesIsOpened, setFilterServicesIsOpened] = useState<boolean>(false);
 
-  const { setTrashBinsFilter, setUserLocation } = useActions();
-
-  const handleBestRecClick = (e: any) => {
-    e.preventDefault();
-
-    setBestRecIsOpened((prevState) => !prevState);
-
-    if (!bestRecIsOpened) {
-      // the way you can get user coordinate
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const { latitude, longitude } = position.coords;
-          setUserLocation({ lat: latitude, lng: longitude });
-        },
-      );
-    }
-  };
+  const { setTrashBinsFilter } = useActions();
 
   const setCheckState = (checked: boolean, revert: boolean = false) => {
     const checkboxes: NodeListOf<HTMLInputElement> = document.querySelectorAll('.input-checkbox');
@@ -93,11 +80,16 @@ export function Sidebar() {
 
   useEffect(() => {
     setSidebarIsOpened(windowMediaStatus);
+
+    if (windowMediaStatus === false) {
+      setBestRecIsOpened(false);
+      setFilterServicesIsOpened(false);
+    }
   }, [windowMediaStatus]);
 
   return (
-    <aside className="sidebar p-5 bg-gradient-to-br from-light-green via-light-green to-blue-500 overflow-hidden" data-open={sidebarIsOpened}>
-      <header className="sidebar-form__header flex items-center gap-4 mb-5">
+    <aside className="sidebar py-5 px-3 bg-gradient-to-br from-light-green via-light-green to-blue-500" data-open={sidebarIsOpened}>
+      <header className="sidebar-form__header flex items-center gap-3 mb-5 p-1">
         <button type="button" className="sidebar-form__toggler" onClick={() => toggleFilterMenu()}>
           <svg width="30" className="fill-dark" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 377 377" xmlSpace="preserve">
             <g>
@@ -111,57 +103,35 @@ export function Sidebar() {
           </svg>
         </button>
 
-        <legend className="text-3xl font-semibold leading-none text-white">Feature Sidebar</legend>
+        <h2 className="text-3xl font-semibold leading-none text-white">Feature Sidebar</h2>
       </header>
+
       <div
-        className="flex items-center gap-4 text-white text-xl min-h-[50px] cursor-pointer"
-        onClick={handleBestRecClick}
+        className={`flex items-center gap-3 p-1 text-white text-xl min-h-[50px] rounded-2xl hover:bg-white hover:bg-opacity-10 transition cursor-pointer ${!sidebarIsOpened && 'pointer-events-none'}`}
+        onClick={() => {
+          setFilterServicesIsOpened(false);
+          setBestRecIsOpened((prevState) => !prevState);
+        }}
       >
-        <svg
-          width="24"
-          height="24"
-          xmlns="http://www.w3.org/2000/svg"
-          fillRule="evenodd"
-          clipRule="evenodd"
-          className={`stroke-[1.5px] transition-all ${bestRecIsOpened && 'rotate-90'}`}
-        >
-          <path
-            style={{
-              stroke: '#ffffff',
-              fill: '#ffffff',
-            }}
-            d="M12 0c6.623 0 12 5.377 12 12s-5.377 12-12 12-12-5.377-12-12 5.377-12 12-12zm0 1c6.071 0 11 4.929 11 11s-4.929 11-11 11-11-4.929-11-11 4.929-11 11-11zm-3 5.753l6.44 5.247-6.44 5.263.678.737 7.322-6-7.335-6-.665.753z"
-          />
-        </svg>
+        <img src={rightArrow} alt="arrow" className={`rounded-full transition-all ${bestRecIsOpened && 'rotate-90'} right-arrow`} />
         <h6>Best Recommendations</h6>
       </div>
-      {bestRecIsOpened && <BestRecommendations />}
-      <div
-        className="flex items-center gap-4 text-white text-xl min-h-[50px] cursor-pointer"
-        onClick={() => setFilterServicesIsOpened((prevState) => !prevState)}
-      >
-        <svg
-          width="24"
-          height="24"
-          xmlns="http://www.w3.org/2000/svg"
-          fillRule="evenodd"
-          clipRule="evenodd"
-          className={`stroke-[1.5px] transition-all ${filterServicesIsOpened && 'rotate-90'}`}
-        >
-          <path
-            style={{
-              stroke: '#ffffff',
-              fill: '#ffffff',
 
-            }}
-            d="M12 0c6.623 0 12 5.377 12 12s-5.377 12-12 12-12-5.377-12-12 5.377-12 12-12zm0 1c6.071 0 11 4.929 11 11s-4.929 11-11 11-11-4.929-11-11 4.929-11 11-11zm-3 5.753l6.44 5.247-6.44 5.263.678.737 7.322-6-7.335-6-.665.753z"
-          />
-        </svg>
+      {bestRecIsOpened && <BestRecommendations />}
+
+      <div
+        className={`flex items-center gap-3 p-1 text-white text-xl min-h-[50px] rounded-2xl hover:bg-white hover:bg-opacity-10 transition cursor-pointer ${!sidebarIsOpened && 'pointer-events-none'}`}
+        onClick={() => {
+          setBestRecIsOpened(false);
+          setFilterServicesIsOpened((prevState) => !prevState);
+        }}
+      >
+        <img src={rightArrow} alt="arrow" className={`rounded-full transition-all ${filterServicesIsOpened && 'rotate-90'} right-arrow`} />
         <h6>Filter services</h6>
       </div>
 
       {filterServicesIsOpened && (
-      <form ref={filterForm} onSubmit={(e) => formSubmitHandler(e)} className="sidebar__form grid gap-y-[10px] sidebar-form text-white" action="">
+      <form ref={filterForm} onSubmit={(e) => formSubmitHandler(e)} className="sidebar__form p-1.5 gap-y-[10px] sidebar-form text-white" action="">
         <div className="flex gap-3 sidebar-form__controls">
           <button type="button" className="sidebar-form__controls-button font-semibold bg-purple rounded-lg py-1 px-2" onClick={() => setCheckState(true)}>
             Check
@@ -176,7 +146,7 @@ export function Sidebar() {
           </button>
         </div>
 
-        <div className="sidebar-form__filters max-h-[400px] overflow-auto">
+        <div className="sidebar-form__filters overflow-auto">
           <div className="sidebar-form__group">
             <h3 className="sidebar-form__group-title text-xl mb-1">
               Delivery options:

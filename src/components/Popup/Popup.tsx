@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import { v4 as uuidv4, v4 } from 'uuid';
 
+import { Link } from 'react-router-dom';
 import { useActions } from '../../hooks/actions';
 import { useAppSelector } from '../../hooks/redux';
 import { useCredentials } from '../../hooks/credentials';
@@ -64,7 +65,7 @@ export function Popup() {
 
   const [waste, setWaste] = useState<ImagesType | null>(null);
 
-  const { setPopupState } = useActions();
+  const { setPopupState, setComments } = useActions();
 
   const [askQuestionField, setAskQuestionField] = useState<boolean>(false);
 
@@ -87,7 +88,10 @@ export function Popup() {
     },
   ]);
 
-  const { data: comments } = useGetAllServiceCommentsQuery(serviceId as number);
+  const {
+    data: comments,
+  } = useGetAllServiceCommentsQuery(serviceId as number);
+  const commentsStore = useAppSelector((store) => store.comments.comments);
 
   const popupHandleClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if ((e.target as HTMLDivElement).classList.contains('wrapper-popup')) {
@@ -105,6 +109,12 @@ export function Popup() {
     (tab: ITab) => tab.controls === controls,
   )?.selected;
 
+  useEffect(() => {
+    if (comments) {
+      setComments(comments);
+    }
+  }, [comments]);
+
   return (
     <div onClick={(e) => popupHandleClick(e)} className="wrapper-popup">
       {waste && <ExampleTrash waste={waste as any} />}
@@ -115,6 +125,7 @@ export function Popup() {
             <button
               type="button"
               role="tab"
+              key={uuidv4()}
               aria-selected={tab.selected}
               aria-controls={tab.controls}
               onClick={() => handleActiveTab(tab.id)}
@@ -124,8 +135,8 @@ export function Popup() {
                 <div className="popup__tab-text-block">
                   {[...tab.title].map(
                     (letter) => (
-                      letter === ' ' ? letter
-                        : <div className="popup__tab-text-letter">{letter}</div>
+                      letter === ' ' ? <span key={uuidv4()}>&nbsp;</span>
+                        : <div key={uuidv4()} className="popup__tab-text-letter">{letter}</div>
                     ),
                   )}
                 </div>
@@ -133,8 +144,8 @@ export function Popup() {
                 <div className="popup__tab-text-block">
                   {[...tab.title].map(
                     (letter) => (
-                      letter === ' ' ? letter
-                        : <div className="popup__tab-text-letter">{letter}</div>
+                      letter === ' ' ? <span key={uuidv4()}>&nbsp;</span>
+                        : <div key={uuidv4()} className="popup__tab-text-letter">{letter}</div>
                     ),
                   )}
                 </div>
@@ -156,7 +167,8 @@ export function Popup() {
                 Types of waste:
                 {' '}
                 {typeOfWastes.map((type, index) => (
-                  <span
+                  <Link
+                    to={`/detailed/${type.toLowerCase()}`}
                     onMouseEnter={() => setWaste(type as ImagesType)}
                     onMouseLeave={() => setWaste(null)}
                     key={uuidv4()}
@@ -165,7 +177,7 @@ export function Popup() {
                     {type}
                     {index + 1 !== typeOfWastes.length && ', '}
                     {' '}
-                  </span>
+                  </Link>
                 ))}
               </p>
 
@@ -262,7 +274,7 @@ export function Popup() {
           </div>
 
           <div id="tabpanel-questions" aria-hidden={getTabpanelStatus('tabpanel-questions')} role="tabpanel" className="popup__tabpanel popup-questions w-[400px] w-md-[300px]">
-            <Comments comments={comments} />
+            <Comments comments={commentsStore} />
 
             {!askQuestionField && (
             <>

@@ -4,6 +4,7 @@
 
 :root {
   --filter-sidebar-width: 300px;
+  --header-height: 70px;
 }
 
 #root {
