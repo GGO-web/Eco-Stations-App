@@ -119,6 +119,7 @@ export function Popup() {
             <button
               type="button"
               role="tab"
+              key={uuidv4()}
               aria-selected={tab.selected}
               aria-controls={tab.controls}
               onClick={() => handleActiveTab(tab.id)}
@@ -129,7 +130,7 @@ export function Popup() {
                   {[...tab.title].map(
                     (letter) => (
                       letter === ' ' ? letter
-                        : <div className="popup__tab-text-letter">{letter}</div>
+                        : <div key={uuidv4()} className="popup__tab-text-letter">{letter}</div>
                     ),
                   )}
                 </div>
