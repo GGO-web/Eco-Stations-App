@@ -31,7 +31,7 @@ import { useActions } from '../../hooks/actions';
 import { useLocalStorage } from '../../hooks/localStorage';
 
 import { IAuth } from '../../models/auth.model';
-import { AUTH_CREDENTIALS, AUTH_STATUS_DESCRIPTION, TAuthError } from '../../constants';
+import { AUTH_CREDENTIALS, AUTH_STATUS_DESCRIPTION, TError } from '../../constants';
 
 export function Auth() {
   const [values, setValues] = React.useState<IAuth>({
@@ -109,7 +109,7 @@ export function Auth() {
       });
       navigate('/');
     } catch (err: any) {
-      const toastErrors = (err as TAuthError).data.message.map(
+      const toastErrors = (err as TError).data.message.map(
         (errorMessage) => (
           <div key={v4()}>
             {AUTH_STATUS_DESCRIPTION[errorMessage as never]}

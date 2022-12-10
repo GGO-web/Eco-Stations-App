@@ -138,9 +138,17 @@ export const AUTH_STATUS_DESCRIPTION = {
   EmailError: 'Ohhh, email isn`t valid 🙃',
   EmailEmptyError: 'Email field shouldn`t be empty 🫥',
   RoleError: 'Invalid role provided, you`re hacker? 😱',
+  USER_ALREADY_EXISTS: 'User with this email already exists 🥲',
+  COMMON_ERROR: 'Sorry, SERVER-ERROR, try again later 😨',
 };
 
-export type TAuthError = {
+export const LOGIN_STATUS_DESCRIPTION = {
+  INVALID_CREDENTIALS: 'Invalid credentials provided 🥺',
+  USER_LOCKED: 'You has been blocked, contact with admins 🙃',
+  COMMON_ERROR: 'Sorry, SERVER-ERROR, try again later 😨',
+};
+
+export type TError = {
   data: {
     message: string[]
   },

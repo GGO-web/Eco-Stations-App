@@ -18,13 +18,14 @@ import {
 import { toast } from 'react-toastify';
 import jwt_decode from 'jwt-decode';
 import { useNavigate } from 'react-router-dom';
+import { v4 } from 'uuid';
 import { ILoginState } from '../../models/login.model';
 
 import { useUserLoginMutation } from '../../redux/services/auth';
 
 import { useActions } from '../../hooks/actions';
 import { useLocalStorage } from '../../hooks/localStorage';
-import { AUTH_CREDENTIALS } from '../../constants';
+import { AUTH_CREDENTIALS, LOGIN_STATUS_DESCRIPTION, TError } from '../../constants';
 
 export function LoginPage() {
   const [values, setValues] = useState<ILoginState>({
@@ -65,29 +66,45 @@ export function LoginPage() {
       });
     }
 
-    const { jwtToken } = await loginUser({
-      username: values.username,
-      password: values.password,
-    }).unwrap();
+    try {
+      const { jwtToken } = await loginUser({
+        username: values.username,
+        password: values.password,
+      }).unwrap();
 
-    const { role, sub }: { role: string, sub: string } = jwt_decode(jwtToken as string);
+      const { role, sub }: { role: string, sub: string } = jwt_decode(jwtToken as string);
 
-    const credentials = {
-      role,
-      username: sub,
-      token: jwtToken as string,
-    };
+      const credentials = {
+        role,
+        username: sub,
+        token: jwtToken as string,
+      };
 
-    setCredentials(credentials);
-    setCredentialsStore(credentials);
+      setCredentials(credentials);
+      setCredentialsStore(credentials);
 
-    toast.success('You have been Log In 😎', {
-      toastId: 'error-msg',
-      position: toast.POSITION.TOP_RIGHT,
-      autoClose: 1500,
-    });
+      toast.success('You have been Log In 😎', {
+        toastId: 'error-msg',
+        position: toast.POSITION.TOP_RIGHT,
+        autoClose: 1500,
+      });
 
-    navigate('/');
+      navigate('/');
+    } catch (err: any) {
+      const toastErrors = (err as TError).data.message.map(
+        (errorMessage) => (
+          <div key={v4()}>
+            {LOGIN_STATUS_DESCRIPTION[errorMessage as never]}
+          </div>
+        ),
+      );
+
+      toast.error(<div>{toastErrors}</div>, {
+        toastId: 'error-msg',
+        position: toast.POSITION.TOP_RIGHT,
+        autoClose: 2500,
+      });
+    }
   };
 
   return (
