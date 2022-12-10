@@ -1,6 +1,10 @@
 .sidebar {
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100vh - var(--header-height));
   flex-basis: var(--filter-sidebar-width);
   will-change: margin-right;
+  overflow: hidden;
   transition: margin-right 0.3s ease-in-out;
 }
 
@@ -10,4 +14,8 @@
 
 .sidebar[data-open="false"] {
   margin-right: calc(var(--filter-sidebar-width) * -1 + 60px);
+}
+
+.sidebar-form {
+  flex: 1 1 auto;
 }

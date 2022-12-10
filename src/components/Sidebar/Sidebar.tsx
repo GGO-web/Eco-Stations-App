@@ -26,12 +26,6 @@ export function Sidebar() {
 
   const { setTrashBinsFilter } = useActions();
 
-  const handleBestRecClick = (e: any) => {
-    e.preventDefault();
-
-    setBestRecIsOpened((prevState) => !prevState);
-  };
-
   const setCheckState = (checked: boolean, revert: boolean = false) => {
     const checkboxes: NodeListOf<HTMLInputElement> = document.querySelectorAll('.input-checkbox');
 
@@ -86,10 +80,15 @@ export function Sidebar() {
 
   useEffect(() => {
     setSidebarIsOpened(windowMediaStatus);
+
+    if (windowMediaStatus === false) {
+      setBestRecIsOpened(false);
+      setFilterServicesIsOpened(false);
+    }
   }, [windowMediaStatus]);
 
   return (
-    <aside className="sidebar py-5 px-3 bg-gradient-to-br from-light-green via-light-green to-blue-500 overflow-hidden overflow-y-scroll" data-open={sidebarIsOpened}>
+    <aside className="sidebar py-5 px-3 bg-gradient-to-br from-light-green via-light-green to-blue-500" data-open={sidebarIsOpened}>
       <header className="sidebar-form__header flex items-center gap-3 mb-5 p-1">
         <button type="button" className="sidebar-form__toggler" onClick={() => toggleFilterMenu()}>
           <svg width="30" className="fill-dark" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 377 377" xmlSpace="preserve">
@@ -109,7 +108,10 @@ export function Sidebar() {
 
       <div
         className={`flex items-center gap-3 p-1 text-white text-xl min-h-[50px] rounded-2xl hover:bg-white hover:bg-opacity-10 transition cursor-pointer ${!sidebarIsOpened && 'pointer-events-none'}`}
-        onClick={handleBestRecClick}
+        onClick={() => {
+          setFilterServicesIsOpened(false);
+          setBestRecIsOpened((prevState) => !prevState);
+        }}
       >
         <img src={rightArrow} alt="arrow" className={`rounded-full transition-all ${bestRecIsOpened && 'rotate-90'} right-arrow`} />
         <h6>Best Recommendations</h6>
@@ -119,7 +121,10 @@ export function Sidebar() {
 
       <div
         className={`flex items-center gap-3 p-1 text-white text-xl min-h-[50px] rounded-2xl hover:bg-white hover:bg-opacity-10 transition cursor-pointer ${!sidebarIsOpened && 'pointer-events-none'}`}
-        onClick={() => setFilterServicesIsOpened((prevState) => !prevState)}
+        onClick={() => {
+          setBestRecIsOpened(false);
+          setFilterServicesIsOpened((prevState) => !prevState);
+        }}
       >
         <img src={rightArrow} alt="arrow" className={`rounded-full transition-all ${filterServicesIsOpened && 'rotate-90'} right-arrow`} />
         <h6>Filter services</h6>
@@ -141,7 +146,7 @@ export function Sidebar() {
           </button>
         </div>
 
-        <div className="sidebar-form__filters max-h-[400px] overflow-auto">
+        <div className="sidebar-form__filters overflow-auto">
           <div className="sidebar-form__group">
             <h3 className="sidebar-form__group-title text-xl mb-1">
               Delivery options:
