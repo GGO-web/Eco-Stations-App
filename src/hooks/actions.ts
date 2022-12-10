@@ -15,7 +15,7 @@ import {
   setMidCircles, setSmallCircles, setFarCircles, setUserLocation,
 } from '../redux/features/userLocationSlice';
 import { serviceApi } from '../redux/services/services';
-import { setComment, setComments } from '../redux/features/commentsSlice';
+import { setComment, setComments, deleteComment } from '../redux/features/commentsSlice';
 
 const actions = {
   setPopupState,
@@ -32,6 +32,7 @@ const actions = {
   setServicesOfProvider,
   setComments,
   setComment,
+  deleteComment,
   changePersistentOfComment: serviceApi.endpoints.changeCommentPersistent.initiate,
 };
 
