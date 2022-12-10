@@ -132,12 +132,19 @@ export const serviceApi = createApi({
       }),
       invalidatesTags: ['Service'],
     }),
-    changeCommentPersistent: builder.query<IComment, { id: number, persistent: boolean }>({
+    changeCommentPersistent: builder.mutation<IComment, { id: number, persistent: boolean }>({
       query: ({ id, persistent }) => ({
         url: `${import.meta.env.VITE_BACKEND_URL}/comment/${id}?is_persistence=${persistent}`,
         method: 'PUT',
       }),
-      providesTags: ['Service'],
+      invalidatesTags: ['Service'],
+    }),
+    deleteCommentWithId: builder.mutation<IComment, Partial<number>>({
+      query: (id) => ({
+        url: `${import.meta.env.VITE_BACKEND_URL}/comment/${id}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: ['Service'],
     }),
   }),
 });
@@ -154,6 +161,7 @@ export const {
   useUpdateServiceRatingMutation,
   useGetAllServiceCommentsQuery,
   useCreateServiceCommentMutation,
-  useLazyChangeCommentPersistentQuery,
   useLazyGetServicesOfProviderQuery,
+  useChangeCommentPersistentMutation,
+  useDeleteCommentWithIdMutation,
 } = serviceApi;

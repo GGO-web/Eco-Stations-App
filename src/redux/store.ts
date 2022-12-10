@@ -12,6 +12,7 @@ import { serviceReducer } from './features/serviceSlice';
 import { trashBinsReducer } from './features/trashBinsSlice';
 import { authReducer } from './features/authSlice';
 import { userLocationsReducer } from './features/userLocationSlice';
+import { commentsReducer } from './features/commentsSlice';
 
 export const store = configureStore({
   reducer: {
@@ -19,6 +20,7 @@ export const store = configureStore({
     trashBins: trashBinsReducer,
     auth: authReducer,
     userLocations: userLocationsReducer,
+    comments: commentsReducer,
     [serviceApi.reducerPath]: serviceApi.reducer,
     [authApi.reducerPath]: authApi.reducer,
     [mapsApi.reducerPath]: mapsApi.reducer,

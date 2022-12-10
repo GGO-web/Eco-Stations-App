@@ -18,7 +18,6 @@ import './Popup.scss';
 import { ImagesType } from '../ExampleTrash/Images';
 
 import { ROLES } from '../../constants';
-import { Loader } from '../Loader/Loader';
 
 interface IDescArr {
   type: string;
@@ -66,7 +65,7 @@ export function Popup() {
 
   const [waste, setWaste] = useState<ImagesType | null>(null);
 
-  const { setPopupState } = useActions();
+  const { setPopupState, setComments } = useActions();
 
   const [askQuestionField, setAskQuestionField] = useState<boolean>(false);
 
@@ -89,7 +88,10 @@ export function Popup() {
     },
   ]);
 
-  const { data: comments, isLoading } = useGetAllServiceCommentsQuery(serviceId as number);
+  const {
+    data: comments,
+  } = useGetAllServiceCommentsQuery(serviceId as number);
+  const commentsStore = useAppSelector((store) => store.comments.comments);
 
   const popupHandleClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if ((e.target as HTMLDivElement).classList.contains('wrapper-popup')) {
@@ -107,7 +109,11 @@ export function Popup() {
     (tab: ITab) => tab.controls === controls,
   )?.selected;
 
-  if (isLoading) return <Loader />;
+  useEffect(() => {
+    if (comments) {
+      setComments(comments);
+    }
+  }, [comments]);
 
   return (
     <div onClick={(e) => popupHandleClick(e)} className="wrapper-popup">
@@ -119,6 +125,7 @@ export function Popup() {
             <button
               type="button"
               role="tab"
+              key={uuidv4()}
               aria-selected={tab.selected}
               aria-controls={tab.controls}
               onClick={() => handleActiveTab(tab.id)}
@@ -128,8 +135,8 @@ export function Popup() {
                 <div className="popup__tab-text-block">
                   {[...tab.title].map(
                     (letter) => (
-                      letter === ' ' ? letter
-                        : <div className="popup__tab-text-letter">{letter}</div>
+                      letter === ' ' ? <span key={uuidv4()}>&nbsp;</span>
+                        : <div key={uuidv4()} className="popup__tab-text-letter">{letter}</div>
                     ),
                   )}
                 </div>
@@ -137,8 +144,8 @@ export function Popup() {
                 <div className="popup__tab-text-block">
                   {[...tab.title].map(
                     (letter) => (
-                      letter === ' ' ? letter
-                        : <div className="popup__tab-text-letter">{letter}</div>
+                      letter === ' ' ? <span key={uuidv4()}>&nbsp;</span>
+                        : <div key={uuidv4()} className="popup__tab-text-letter">{letter}</div>
                     ),
                   )}
                 </div>
@@ -267,7 +274,7 @@ export function Popup() {
           </div>
 
           <div id="tabpanel-questions" aria-hidden={getTabpanelStatus('tabpanel-questions')} role="tabpanel" className="popup__tabpanel popup-questions w-[400px] w-md-[300px]">
-            <Comments comments={comments} />
+            <Comments comments={commentsStore} />
 
             {!askQuestionField && (
             <>
