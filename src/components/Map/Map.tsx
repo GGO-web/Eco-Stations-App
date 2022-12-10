@@ -157,7 +157,8 @@ export function Map({
               key={trashBin.id}
               position={trashBinCenter}
               label={{
-                text: trashBin.serviceName,
+                text: `${trashBin.serviceName}
+                ${trashBin.rating && trashBin?.rating > 0 ? `(${trashBin?.rating}⭐)` : ''}`,
                 className: 'absolute left-0 top-[-5px]',
                 fontSize: '1.5rem',
                 fontWeight: 'bold',

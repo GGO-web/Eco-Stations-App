@@ -123,7 +123,7 @@ export function Auth() {
 
           <Box sx={{ display: 'flex' }}>
             <TextField
-              sx={{ width: '50ch' }}
+              sx={{ width: '50ch', outlineColor: 'none' }}
               helperText="Please enter your name"
               id="demo-helper-text-aligned"
               label="Name"
