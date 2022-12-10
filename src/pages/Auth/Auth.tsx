@@ -24,13 +24,14 @@ import jwt_decode from 'jwt-decode';
 
 import { toast } from 'react-toastify';
 
+import { v4 } from 'uuid';
 import { useUserRegisterMutation } from '../../redux/services/auth';
 
 import { useActions } from '../../hooks/actions';
 import { useLocalStorage } from '../../hooks/localStorage';
 
 import { IAuth } from '../../models/auth.model';
-import { AUTH_CREDENTIALS } from '../../constants';
+import { AUTH_CREDENTIALS, AUTH_STATUS_DESCRIPTION, TAuthError } from '../../constants';
 
 export function Auth() {
   const [values, setValues] = React.useState<IAuth>({
@@ -82,31 +83,46 @@ export function Auth() {
       return;
     }
 
-    const { jwtToken } = await createUser({
-      username: values.email,
-      password: values.password,
-      email: values.email,
-      role: userRole,
-    }).unwrap();
+    try {
+      const { jwtToken } = await createUser({
+        username: values.email,
+        password: values.password,
+        email: values.email,
+        role: userRole,
+      }).unwrap();
 
-    const { role, sub }: { role: string, sub: string } = jwt_decode(jwtToken as string);
+      const { role, sub }: { role: string, sub: string } = jwt_decode(jwtToken as string);
 
-    const credentials = {
-      role,
-      username: sub,
-      token: jwtToken as string,
-    };
+      const credentials = {
+        role,
+        username: sub,
+        token: jwtToken as string,
+      };
 
-    setCredentials(credentials);
-    setCredentialsStore(credentials);
+      setCredentials(credentials);
+      setCredentialsStore(credentials);
 
-    toast.success('You have been Registered 😎', {
-      toastId: 'error-msg',
-      position: toast.POSITION.TOP_RIGHT,
-      autoClose: 1500,
-    });
+      toast.success('You have been Registered 😎', {
+        toastId: 'error-msg',
+        position: toast.POSITION.TOP_RIGHT,
+        autoClose: 1500,
+      });
+      navigate('/');
+    } catch (err: any) {
+      const toastErrors = (err as TAuthError).data.message.map(
+        (errorMessage) => (
+          <div key={v4()}>
+            {AUTH_STATUS_DESCRIPTION[errorMessage as never]}
+          </div>
+        ),
+      );
 
-    navigate('/');
+      toast.error(<div>{toastErrors}</div>, {
+        toastId: 'error-msg',
+        position: toast.POSITION.TOP_RIGHT,
+        autoClose: 2500,
+      });
+    }
   };
 
   return (

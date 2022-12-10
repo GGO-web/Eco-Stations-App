@@ -129,3 +129,20 @@ export const PAYMENT_CONDITIONS = [
 export const DELIVERY_OPTIONS = [
   'SELF', 'VAN', 'TRUCK',
 ];
+
+export const AUTH_STATUS_DESCRIPTION = {
+  LoginSizeError: 'Nickname size is too small 🥶',
+  LoginError: 'Error with nickname has caused 😉',
+  PasswordError: 'Ohhh, error with password has caused 😅',
+  PasswordSizeError: 'Password size is too small 😶',
+  EmailError: 'Ohhh, email isn`t valid 🙃',
+  EmailEmptyError: 'Email field shouldn`t be empty 🫥',
+  RoleError: 'Invalid role provided, you`re hacker? 😱',
+};
+
+export type TAuthError = {
+  data: {
+    message: string[]
+  },
+  status: number
+};
