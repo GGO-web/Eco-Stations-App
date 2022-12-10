@@ -17,5 +17,16 @@
 }
 
 .sidebar-form {
+  display: flex;
+  flex-direction: column;
   flex: 1 1 auto;
+
+  &__filters {
+    flex: 1 1 0;
+    max-height: 445px;
+  }
+
+  &__controls-button {
+    margin-bottom: auto;
+  }
 }

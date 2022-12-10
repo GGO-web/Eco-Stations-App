@@ -131,7 +131,7 @@ export function Sidebar() {
       </div>
 
       {filterServicesIsOpened && (
-      <form ref={filterForm} onSubmit={(e) => formSubmitHandler(e)} className="sidebar__form p-1.5 grid gap-y-[10px] sidebar-form text-white" action="">
+      <form ref={filterForm} onSubmit={(e) => formSubmitHandler(e)} className="sidebar__form p-1.5 gap-y-[10px] sidebar-form text-white" action="">
         <div className="flex gap-3 sidebar-form__controls">
           <button type="button" className="sidebar-form__controls-button font-semibold bg-purple rounded-lg py-1 px-2" onClick={() => setCheckState(true)}>
             Check
