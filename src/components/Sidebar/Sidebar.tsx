@@ -13,6 +13,7 @@ import { DELIVERY_OPTIONS, PAYMENT_CONDITIONS, WASTE_TYPES } from '../../constan
 import { IServiceFilter } from '../../models/serviceFilter.model';
 
 import rightArrow from '../../assets/right-arrow.svg';
+import './Sidebar.scss';
 
 export function Sidebar() {
   const filterForm = useRef<HTMLFormElement>(null);
@@ -89,8 +90,8 @@ export function Sidebar() {
 
   return (
     <aside className="sidebar py-5 px-3 bg-gradient-to-br from-light-green via-light-green to-blue-500 overflow-hidden overflow-y-scroll" data-open={sidebarIsOpened}>
-      <header className="sidebar-form__header flex items-center gap-3 mb-5">
-        <button type="button" className="sidebar-form__toggler pl-1" onClick={() => toggleFilterMenu()}>
+      <header className="sidebar-form__header flex items-center gap-3 mb-5 p-1">
+        <button type="button" className="sidebar-form__toggler" onClick={() => toggleFilterMenu()}>
           <svg width="30" className="fill-dark" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 377 377" xmlSpace="preserve">
             <g>
               <rect x="75" y="73.5" width="302" height="30" />
@@ -103,18 +104,21 @@ export function Sidebar() {
           </svg>
         </button>
 
-        <legend className="text-3xl font-semibold leading-none text-white">Feature Sidebar</legend>
+        <h2 className="text-3xl font-semibold leading-none text-white">Feature Sidebar</h2>
       </header>
+
       <div
-        className={`flex items-center gap-2 p-1 text-white text-xl min-h-[50px] rounded-2xl hover:bg-white hover:bg-opacity-10 transition cursor-pointer ${!sidebarIsOpened && 'pointer-events-none'}`}
+        className={`flex items-center gap-3 p-1 text-white text-xl min-h-[50px] rounded-2xl hover:bg-white hover:bg-opacity-10 transition cursor-pointer ${!sidebarIsOpened && 'pointer-events-none'}`}
         onClick={handleBestRecClick}
       >
         <img src={rightArrow} alt="arrow" className={`rounded-full transition-all ${bestRecIsOpened && 'rotate-90'} right-arrow`} />
         <h6>Best Recommendations</h6>
       </div>
+
       {bestRecIsOpened && <BestRecommendations />}
+
       <div
-        className={`flex items-center gap-2 p-1 text-white text-xl min-h-[50px] rounded-2xl hover:bg-white hover:bg-opacity-10 transition cursor-pointer ${!sidebarIsOpened && 'pointer-events-none'}`}
+        className={`flex items-center gap-3 p-1 text-white text-xl min-h-[50px] rounded-2xl hover:bg-white hover:bg-opacity-10 transition cursor-pointer ${!sidebarIsOpened && 'pointer-events-none'}`}
         onClick={() => setFilterServicesIsOpened((prevState) => !prevState)}
       >
         <img src={rightArrow} alt="arrow" className={`rounded-full transition-all ${filterServicesIsOpened && 'rotate-90'} right-arrow`} />

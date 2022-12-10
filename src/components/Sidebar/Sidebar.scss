@@ -1,0 +1,13 @@
+.sidebar {
+  flex-basis: var(--filter-sidebar-width);
+  will-change: margin-right;
+  transition: margin-right 0.3s ease-in-out;
+}
+
+.sidebar[data-open="true"] {
+  margin-right: 0;
+}
+
+.sidebar[data-open="false"] {
+  margin-right: calc(var(--filter-sidebar-width) * -1 + 60px);
+}
