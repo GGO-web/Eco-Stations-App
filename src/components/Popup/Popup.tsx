@@ -119,8 +119,8 @@ export function Popup() {
     <div onClick={(e) => popupHandleClick(e)} className="wrapper-popup">
       {waste && <ExampleTrash waste={waste as any} />}
 
-      <div className="popup popup-container">
-        <div className="popup__tabs gap-8">
+      <div className="popup popup-container" onMouseEnter={() => setWaste(null)}>
+        <div className="popup__tabs gap-8 max-[520px]:gap-4" onMouseEnter={() => setWaste(null)}>
           {tabs.map((tab: ITab) => (
             <button
               type="button"
@@ -129,7 +129,7 @@ export function Popup() {
               aria-selected={tab.selected}
               aria-controls={tab.controls}
               onClick={() => handleActiveTab(tab.id)}
-              className={`${tab.classes} popup__tab text-2xl p-2 text-center`}
+              className={`${tab.classes} popup__tab text-2xl p-2 text-center max-[520px]:text-xl`}
             >
               <div className="popup__tab-text">
                 <div className="popup__tab-text-block">
@@ -154,9 +154,9 @@ export function Popup() {
           ))}
         </div>
 
-        <div className="popup__tabpanels">
+        <div className="popup__tabpanels max-[520px]:text-sm">
           {tabs[0].selected && (
-            <div id="tabpanel-info" aria-hidden={getTabpanelStatus('tabpanel-info')} role="tabpanel" className="popup__tabpanel popup-info w-[400px] w-md-[300px]">
+            <div id="tabpanel-info" aria-hidden={getTabpanelStatus('tabpanel-info')} role="tabpanel" className="popup__tabpanel popup-info w-[400px] max-[520px]:w-[300px]">
               <div className="flex flex-col flex-auto">
                 <p className="py-2">
                   Address:
@@ -280,7 +280,7 @@ export function Popup() {
           )}
 
           {tabs[1].selected && (
-          <div id="tabpanel-questions" aria-hidden={getTabpanelStatus('tabpanel-questions')} role="tabpanel" className="popup__tabpanel popup-questions w-[400px] w-md-[300px]">
+          <div id="tabpanel-questions" aria-hidden={getTabpanelStatus('tabpanel-questions')} role="tabpanel" className="popup__tabpanel popup-questions w-[400px] max-[520px]:w-[300px]">
             <Comments comments={commentsStore} />
 
             {!askQuestionField && (

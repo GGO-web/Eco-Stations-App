@@ -169,7 +169,7 @@ export function Map({
         })}
         {userLocation && (
           <>
-            <MarkerF position={userLocation} icon={{ url: '/people.png', scaledSize: new google.maps.Size(100, 100) }} />
+            <MarkerF position={userLocation} icon={{ url: 'people.png', scaledSize: new google.maps.Size(100, 100) }} />
             {smallDistance
               && (
               <CircleF

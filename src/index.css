@@ -37,3 +37,11 @@
 .input-label:hover {
   text-shadow: 0 0 1px white;
 }
+
+.input {
+  @apply w-full rounded-md min-w-[100px] border-2 border-[#05386B] outline-none text-dark px-4 py-3 text-sm;
+}
+
+.input::placeholder {
+  @apply text-[gray];
+}

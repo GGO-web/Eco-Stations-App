@@ -14,7 +14,6 @@ import { TrashInfo } from './pages/TrashInfo/TrashInfo';
 import { Error } from './pages/Error/Error';
 import { ServicesPage } from './pages/ServicesPage/ServicesPage';
 
-import { Header } from './components/Header/Header';
 import { ProtectedRoute } from './components/ProtectedRoute/ProtectedRoute';
 
 import { useCredentials } from './hooks/credentials';
@@ -31,7 +30,6 @@ function App() {
 
   return (
     <Router>
-      <Header />
       <ToastContainer limit={1} />
 
       <Routes>
