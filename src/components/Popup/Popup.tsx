@@ -156,7 +156,7 @@ export function Popup() {
 
         <div className="popup__tabpanels max-[520px]:text-sm">
           {tabs[0].selected && (
-            <div id="tabpanel-info" aria-hidden={getTabpanelStatus('tabpanel-info')} role="tabpanel" className="popup__tabpanel popup-info w-[400px] max-[520px]:w-[300px]">
+            <div id="tabpanel-info" aria-hidden={getTabpanelStatus('tabpanel-info')} role="tabpanel" className="popup__tabpanel popup-info w-[400px] max-[520px]:w-[300px] max-[370px]:w-[250px]">
               <div className="flex flex-col flex-auto">
                 <p className="py-2">
                   Address:
@@ -280,7 +280,7 @@ export function Popup() {
           )}
 
           {tabs[1].selected && (
-          <div id="tabpanel-questions" aria-hidden={getTabpanelStatus('tabpanel-questions')} role="tabpanel" className="popup__tabpanel popup-questions w-[400px] max-[520px]:w-[300px]">
+          <div id="tabpanel-questions" aria-hidden={getTabpanelStatus('tabpanel-questions')} role="tabpanel" className="popup__tabpanel popup-questions w-[400px] max-[520px]:w-[300px] max-[370px]:w-[250px]">
             <Comments comments={commentsStore} />
 
             {!askQuestionField && (

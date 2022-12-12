@@ -6,14 +6,15 @@ import jwt_decode from 'jwt-decode';
 
 import { v4 } from 'uuid';
 
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+
 import { useActions } from '../../hooks/actions';
 import { useLocalStorage } from '../../hooks/localStorage';
 import { useUserLoginMutation } from '../../redux/services/auth';
 
 import { ILoginState } from '../../models/login.model';
 
-import { AUTH_CREDENTIALS, AUTH_STATUS_DESCRIPTION, TError } from '../../constants';
+import { AUTH_CREDENTIALS, LOGIN_STATUS_DESCRIPTION, TError } from '../../constants';
 
 export function LoginPage() {
   const [values, setValues] = useState<ILoginState>({
@@ -52,6 +53,8 @@ export function LoginPage() {
         position: toast.POSITION.TOP_RIGHT,
         autoClose: 1500,
       });
+
+      return;
     }
 
     try {
@@ -91,8 +94,8 @@ export function LoginPage() {
 
       (err as TError).data.message.map(
         (errorMessage) => (
-          toast.error(<div key={v4()}>{AUTH_STATUS_DESCRIPTION[errorMessage as never]}</div>, {
-            toastId: v4(),
+          toast.warn(<div key={v4()}>{LOGIN_STATUS_DESCRIPTION[errorMessage as never]}</div>, {
+            toastId: 'error-msg',
             position: toast.POSITION.TOP_RIGHT,
             autoClose: 2500,
           })
@@ -102,9 +105,9 @@ export function LoginPage() {
   };
 
   return (
-    <div className="grid place-items-center fixed w-full h-screen bg-light">
+    <div className="grid place-items-center fixed w-full h-screen bg-light p-5">
       <form
-        className="auth-form rounded-[20px] bg-white p-5 w-[480px]"
+        className="auth-form rounded-[20px] bg-white p-5 w-[480px] max-[520px]:w-full"
         action="#"
         onSubmit={(e) => e.preventDefault()}
       >
@@ -153,6 +156,15 @@ export function LoginPage() {
         </div>
 
         <button className="p-3 rounded-2xl bg-[#7483bd] text-white w-full" type="button" onClick={handleLogin}>Sign in</button>
+
+        <p className="text-sm mt-2 text-center min-[520px]:text-base">
+          If you don't have account yet,
+          {' '}
+          <Link to="/Auth" className="underline text-dark font-semibold">register</Link>
+          {' '}
+          now
+          🙏🏻
+        </p>
       </form>
     </div>
 

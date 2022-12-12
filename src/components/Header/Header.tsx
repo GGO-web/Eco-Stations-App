@@ -26,6 +26,7 @@ export function Header() {
         justifyContent: 'space-between',
         alignItems: 'center',
         overflow: 'hidden',
+        zIndex: 1111111111,
       }}
     >
       <NavLink className="h-[70px]" to="/">

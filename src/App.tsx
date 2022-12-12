@@ -30,7 +30,7 @@ function App() {
 
   return (
     <Router>
-      <ToastContainer limit={1} />
+      <ToastContainer />
 
       <Routes>
         <Route path="/" element={<Home isLoaded={isLoaded} />} />
