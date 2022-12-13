@@ -21,7 +21,6 @@ import { IAuth } from '../../models/auth.model';
 import {
   AUTH_CREDENTIALS, AUTH_STATUS_DESCRIPTION, TError,
 } from '../../constants';
-import { sleep } from '../../helpers/sleep';
 
 export function Auth() {
   const [values, setValues] = React.useState<IAuth>({
@@ -42,7 +41,7 @@ export function Auth() {
 
   const roleOptions = useMemo(() => ([
     { value: 'User', label: 'User' },
-    { value: 'Service Provider', label: 'Service Provider' },
+    { value: 'Service', label: 'Service Provider' },
   ]), []);
 
   const roleColourStyles: any = {
