@@ -29,7 +29,10 @@ export function Header() {
       }}
     >
       <NavLink className="h-[70px]" to="/">
-        <img src="ecofinder.svg" alt="Logo" className="bg-white h-full object-cover object-center w-[300px]" />
+        <picture>
+          <source srcSet="ecofinder-mobile.jpg" media="(max-width: 600px)" />
+          <img src="ecofinder.svg" alt="Logo" className="bg-white h-full object-cover object-center w-[300px] max-[600px]:w-[70px]" />
+        </picture>
       </NavLink>
 
       <div className="header-menu flex items-center gap-2 pl-3 pr-3">
