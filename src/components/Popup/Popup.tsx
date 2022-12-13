@@ -266,7 +266,7 @@ export function Popup() {
                 </p>
                 )}
 
-                {(rating && rating > 0) ? (
+                {(rating && rating > 0) || credentials.role === ROLES.User ? (
                   <div className="flex gap-4 items-center py-2">
                     Rating:
                     {' '}
