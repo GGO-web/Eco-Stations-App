@@ -15,6 +15,7 @@ import { useUserLoginMutation } from '../../redux/services/auth';
 import { ILoginState } from '../../models/login.model';
 
 import { AUTH_CREDENTIALS, LOGIN_STATUS_DESCRIPTION, TError } from '../../constants';
+import { Header } from '../../components/Header/Header';
 
 export function LoginPage() {
   const [values, setValues] = useState<ILoginState>({
@@ -105,69 +106,72 @@ export function LoginPage() {
   };
 
   return (
-    <div className="grid place-items-center w-full bg-light p-5 min-[500px]:h-screen">
-      <form
-        className="auth-form rounded-[20px] bg-white p-5 w-[480px] max-[520px]:w-full"
-        action="#"
-        onSubmit={(e) => e.preventDefault()}
-      >
-        <div className="card__content flex flex-col gap-[10px] mb-6">
-          <p className="text-blue-400 text-2xl mb-5">
-            Login
-          </p>
+    <>
+      <Header />
 
-          <label className="auth-form__group">
-            <span className="block mb-2">Email</span>
+      <div className="grid place-items-center w-full bg-light p-5 h-screen">
+        <form
+          className="auth-form rounded-[20px] bg-white p-5 w-[480px] max-[520px]:w-full"
+          action="#"
+          onSubmit={(e) => e.preventDefault()}
+        >
+          <div className="card__content flex flex-col gap-[10px] mb-6">
+            <p className="text-blue-400 text-2xl mb-5">
+              Login
+            </p>
 
-            <input
-              className="input"
-              placeholder="Please enter your email"
-              value={values.username}
-              onChange={handleChange('username')}
-            />
-          </label>
+            <label className="auth-form__group">
+              <span className="block mb-2">Email</span>
 
-          <label className="auth-form__group">
-            <span className="block mb-2">Password</span>
-
-            <div className="relative">
               <input
                 className="input"
-                style={{ paddingRight: '50px' }}
-                placeholder="Please enter your password"
-                value={values.password}
-                type={!values.showPassword ? 'password' : 'text'}
-                onChange={handleChange('password')}
+                placeholder="Please enter your email"
+                value={values.username}
+                onChange={handleChange('username')}
               />
+            </label>
 
-              <button
-                className="absolute top-[50%] p-1 right-3 translate-y-[-50%]"
-                type="button"
-                aria-label="toggle password visibility"
-                onClick={handleClickShowPassword}
-                onMouseDown={handleMouseDownPassword}
-                onMouseUp={handleMouseDownPassword}
-              >
-                {values.showPassword
-                  ? <svg width="24" height="24" className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="VisibilityOffIcon"><path d="M12 7c2.76 0 5 2.24 5 5 0 .65-.13 1.26-.36 1.83l2.92 2.92c1.51-1.26 2.7-2.89 3.43-4.75-1.73-4.39-6-7.5-11-7.5-1.4 0-2.74.25-3.98.7l2.16 2.16C10.74 7.13 11.35 7 12 7zM2 4.27l2.28 2.28.46.46C3.08 8.3 1.78 10.02 1 12c1.73 4.39 6 7.5 11 7.5 1.55 0 3.03-.3 4.38-.84l.42.42L19.73 22 21 20.73 3.27 3 2 4.27zM7.53 9.8l1.55 1.55c-.05.21-.08.43-.08.65 0 1.66 1.34 3 3 3 .22 0 .44-.03.65-.08l1.55 1.55c-.67.33-1.41.53-2.2.53-2.76 0-5-2.24-5-5 0-.79.2-1.53.53-2.2zm4.31-.78 3.15 3.15.02-.16c0-1.66-1.34-3-3-3l-.17.01z" /></svg>
-                  : <svg width="24" height="24" className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="VisibilityIcon"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z" /></svg>}
-              </button>
-            </div>
-          </label>
-        </div>
+            <label className="auth-form__group">
+              <span className="block mb-2">Password</span>
 
-        <button className="p-3 rounded-2xl bg-[#7483bd] text-white w-full" type="button" onClick={handleLogin}>Sign in</button>
+              <div className="relative">
+                <input
+                  className="input"
+                  style={{ paddingRight: '50px' }}
+                  placeholder="Please enter your password"
+                  value={values.password}
+                  type={!values.showPassword ? 'password' : 'text'}
+                  onChange={handleChange('password')}
+                />
 
-        <p className="text-sm mt-2 text-center min-[520px]:text-base">
-          If you don't have account yet,
-          {' '}
-          <Link to="/Auth" className="underline text-dark font-semibold">register</Link>
-          {' '}
-          now
-          🙏🏻
-        </p>
-      </form>
-    </div>
+                <button
+                  className="absolute top-[50%] p-1 right-3 translate-y-[-50%]"
+                  type="button"
+                  aria-label="toggle password visibility"
+                  onClick={handleClickShowPassword}
+                  onMouseDown={handleMouseDownPassword}
+                  onMouseUp={handleMouseDownPassword}
+                >
+                  {values.showPassword
+                    ? <svg width="24" height="24" className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="VisibilityOffIcon"><path d="M12 7c2.76 0 5 2.24 5 5 0 .65-.13 1.26-.36 1.83l2.92 2.92c1.51-1.26 2.7-2.89 3.43-4.75-1.73-4.39-6-7.5-11-7.5-1.4 0-2.74.25-3.98.7l2.16 2.16C10.74 7.13 11.35 7 12 7zM2 4.27l2.28 2.28.46.46C3.08 8.3 1.78 10.02 1 12c1.73 4.39 6 7.5 11 7.5 1.55 0 3.03-.3 4.38-.84l.42.42L19.73 22 21 20.73 3.27 3 2 4.27zM7.53 9.8l1.55 1.55c-.05.21-.08.43-.08.65 0 1.66 1.34 3 3 3 .22 0 .44-.03.65-.08l1.55 1.55c-.67.33-1.41.53-2.2.53-2.76 0-5-2.24-5-5 0-.79.2-1.53.53-2.2zm4.31-.78 3.15 3.15.02-.16c0-1.66-1.34-3-3-3l-.17.01z" /></svg>
+                    : <svg width="24" height="24" className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="VisibilityIcon"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z" /></svg>}
+                </button>
+              </div>
+            </label>
+          </div>
 
+          <button className="p-3 rounded-2xl bg-[#7483bd] text-white w-full" type="button" onClick={handleLogin}>Sign in</button>
+
+          <p className="text-sm mt-2 text-center min-[520px]:text-base">
+            If you don't have account yet,
+            {' '}
+            <Link to="/Auth" className="underline text-dark font-semibold">register</Link>
+            {' '}
+            now
+            🙏🏻
+          </p>
+        </form>
+      </div>
+    </>
   );
 }
