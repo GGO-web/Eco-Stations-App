@@ -13,7 +13,7 @@ export function Header() {
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const { role, isAuth } = useAppSelector((store) => store.auth);
 
-  const { logOut } = useActions();
+  const { logOut, setLogOutFilter, setLogoutRecommend } = useActions();
   const [, setCredentialsStore] = useCredentials();
 
   return (
@@ -22,24 +22,24 @@ export function Header() {
         background: '#8EE4AF',
         color: '#05386B',
         display: 'flex',
-        height: '70px',
+        maxHeight: '70px',
         justifyContent: 'space-between',
         alignItems: 'center',
       }}
     >
       <NavLink className="h-[70px]" to="/">
         <picture>
-          <source srcSet="ecofinder-mobile.jpg" media="(max-width: 600px)" />
-          <img src="ecofinder.svg" alt="Logo" className="bg-white h-full object-cover object-center w-[300px] max-[600px]:w-[70px]" />
+          <source srcSet="ecofinder-mobile.svg" media="(max-width: 600px)" />
+          <img src="ecofinder.svg" alt="Logo" className="h-full object-cover object-center w-[300px] max-[600px]:w-[70px]" />
         </picture>
       </NavLink>
 
-      <div className="header-menu flex items-center gap-2 pl-3 pr-3">
-        <div className="flex gap-4 items-center">
-          <NavLink className="text-xl font-bold py-2 px-2 hover:bg-dark hover:text-light-green transition rounded-xl" to="/detailed">Waste Types</NavLink>
+      <div className={`header-menu flex items-center gap-2 pl-3 pr-3 max-[425px]:gap-1 ${!isAuth && 'max-[425px]:px-1'}`}>
+        <div className="flex gap-4 items-center max-[425px]:gap-2">
+          <NavLink className="text-xl font-bold py-2 px-2 hover:bg-dark hover:text-light-green transition rounded-xl max-[520px]:text-base max-[425px]:text-sm max-[425px]:w-fit max-[325px]:mx-[-10px]" to="/detailed">Waste Types</NavLink>
 
           {role === 'Service' && (
-            <NavLink className=" hover:bg-dark hover:text-light-green transition rounded-xl text-xl font-bold py-2 px-2" to="/services">Services</NavLink>
+            <NavLink className=" hover:bg-dark hover:text-light-green transition rounded-xl text-xl font-bold py-2 px-2 max-[520px]:text-base max-[425px]:text-sm" to="/services">Services</NavLink>
           )}
 
           {!isAuth ? (
@@ -58,6 +58,8 @@ export function Header() {
               onClick={() => {
                 setCredentialsStore({});
                 logOut();
+                setLogoutRecommend();
+                setLogOutFilter();
               }}
             >
               <svg
@@ -78,14 +80,14 @@ export function Header() {
         {!isAuth && (
           <div
             data-open={userMenuOpen}
-            className="header-menu__account flex gap-3 items-center"
+            className="header-menu__account flex gap-3 items-center max-[425px]:gap-2"
           >
-            <NavLink className="text-sm font-bold py-1 px-3 hover:bg-dark hover:text-light-green transition rounded-xl" to="/Login">
+            <NavLink className="text-sm shrink-0 text-center font-bold py-1 px-3 hover:bg-dark hover:text-light-green transition rounded-xl max-[425px]:px-2" to="/Login">
               Sign in
             </NavLink>
 
-            <NavLink className="text-sm font-bold py-1 px-3 hover:bg-dark hover:text-light-green transition rounded-xl" to="/Auth">
-              Create account
+            <NavLink className="text-sm font-bold py-1 px-3 hover:bg-dark hover:text-light-green transition rounded-xl max-[425px]:px-2" to="/Auth">
+              Register
             </NavLink>
           </div>
         )}

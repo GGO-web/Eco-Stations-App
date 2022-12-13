@@ -167,7 +167,7 @@ export function Popup() {
                 <p className="py-2">
                   Types of waste:
                   {' '}
-                  {typeOfWastes.map((type, index) => (
+                  {typeOfWastes.map((type) => (
                     <Link
                       to={`/detailed/${type.toLowerCase()}`}
                       onMouseEnter={() => setWaste(type as ImagesType)}
@@ -175,8 +175,7 @@ export function Popup() {
                       key={uuidv4()}
                       className="cursor-pointer"
                     >
-                      {type}
-                      {index + 1 !== typeOfWastes.length && ', '}
+                      <span className="bg-[#7483bd] p-1 text-white rounded">{type}</span>
                       {' '}
                     </Link>
                   ))}
@@ -272,7 +271,7 @@ export function Popup() {
                     {' '}
                     {credentials.role === ROLES.User
                       ? <StarRating rate={rating as number} />
-                      : `${rating}⭐`}
+                      : `${rating?.toFixed(1)}⭐`}
                   </div>
                 ) : null}
               </div>

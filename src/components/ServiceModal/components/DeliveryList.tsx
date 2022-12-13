@@ -30,7 +30,7 @@ export function DeliveryList({
       updatedList.splice(service.deliveryOptions.indexOf(e.target.value), 1);
     }
 
-    setService((prevState: IService) => ({ ...prevState, deliveryOptions: updatedList }));
+    setService({ ...service, deliveryOptions: updatedList });
   };
 
   return (
@@ -44,11 +44,17 @@ export function DeliveryList({
 
             return prevState;
           });
-        }, [priceOfDelivery]);
 
-        useEffect(() => {
-          setPriceOfDelivery(descArr[2] || {});
-        }, [descArr[2]]);
+          const descriptionChanged = `[${
+            JSON.stringify(descArr[0])
+          },${
+            JSON.stringify(descArr[1])
+          }, ${
+            JSON.stringify(priceOfDelivery)
+          }]`;
+
+          setService({ ...service, description: descriptionChanged });
+        }, [priceOfDelivery]);
 
         return (
           <div className={`flex items-center gap-1 ${checkedStateDelivery[index] && 'w-full'}`} key={delivery}>

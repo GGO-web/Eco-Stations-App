@@ -6,6 +6,8 @@ import { v4 } from 'uuid';
 import { BestRecommendations } from '../BestRecommendations/BestRecommendations';
 
 import { useMediaCondition } from '../../hooks/mediaCondition';
+
+import { useAppSelector } from '../../hooks/redux';
 import { useActions } from '../../hooks/actions';
 
 import { DELIVERY_OPTIONS, PAYMENT_CONDITIONS, WASTE_TYPES } from '../../constants';
@@ -25,6 +27,12 @@ export function Sidebar() {
   const [filterServicesIsOpened, setFilterServicesIsOpened] = useState<boolean>(false);
 
   const { setTrashBinsFilter } = useActions();
+
+  const {
+    typeOfWastes,
+    deliveryOptions,
+    paymentConditions,
+  } = useAppSelector((store) => store.trashBins.filter);
 
   const setCheckState = (checked: boolean, revert: boolean = false) => {
     const checkboxes: NodeListOf<HTMLInputElement> = document.querySelectorAll('.input-checkbox');
@@ -156,7 +164,13 @@ export function Sidebar() {
               {DELIVERY_OPTIONS.map((deliveryOption) => (
                 <li key={v4()} className="sidebar-form__option">
                   <label className="inline-flex cursor-pointer items-center sidebar-form__label">
-                    <input value={deliveryOption} className="input-checkbox cursor-pointer" name="delivery" type="checkbox" />
+                    <input
+                      value={deliveryOption}
+                      defaultChecked={deliveryOptions.includes(deliveryOption)}
+                      className="input-checkbox cursor-pointer"
+                      name="delivery"
+                      type="checkbox"
+                    />
                     <span className="input-label uppercase transition-all text-lg">{deliveryOption}</span>
                   </label>
                 </li>
@@ -173,7 +187,13 @@ export function Sidebar() {
               {PAYMENT_CONDITIONS.map((paymentOption) => (
                 <li key={v4()} className="sidebar-form__option ">
                   <label className="inline-flex cursor-pointer items-center sidebar-form__label">
-                    <input value={paymentOption} className="input-checkbox cursor-pointer" name="payment" type="checkbox" />
+                    <input
+                      value={paymentOption}
+                      defaultChecked={paymentConditions.includes(paymentOption)}
+                      className="input-checkbox cursor-pointer"
+                      name="payment"
+                      type="checkbox"
+                    />
                     <span className="input-label uppercase transition-all text-lg">{paymentOption}</span>
                   </label>
                 </li>
@@ -190,7 +210,13 @@ export function Sidebar() {
               {WASTE_TYPES.map((wasteType) => (
                 <li key={v4()} className="sidebar-form__option">
                   <label className="inline-flex cursor-pointer items-center sidebar-form__label">
-                    <input value={wasteType} className="input-checkbox cursor-pointer" name="waste-type" type="checkbox" />
+                    <input
+                      value={wasteType}
+                      defaultChecked={typeOfWastes.includes(wasteType)}
+                      className="input-checkbox cursor-pointer"
+                      name="waste-type"
+                      type="checkbox"
+                    />
                     <span className="input-label uppercase transition-all text-lg">{wasteType}</span>
                   </label>
                 </li>

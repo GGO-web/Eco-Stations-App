@@ -6,7 +6,16 @@
   }
 
   &__account[data-open="false"] {
-    margin-right: -210px;
+    margin-right: -160px;
     transform: translateX(20%);
   }
 }
+
+@media screen and (max-width: 425px) {
+  .header-menu {
+    &__account[data-open="false"] {
+      margin-right: -135px;
+    }
+  }
+}
+

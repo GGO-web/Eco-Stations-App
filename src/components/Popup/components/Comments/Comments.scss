@@ -84,3 +84,12 @@
     }
   }
 }
+
+@media screen and (max-width: 520px) {
+  .switch {
+    --dot-size: 17px;
+    --dot-distance: 7px;
+    --switch-width: 45px;
+    --switch-height: 27.5px;
+  }
+}

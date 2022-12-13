@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import usePlacesAutocomplete, {
   getGeocode,
@@ -17,8 +17,10 @@ import '@reach/combobox/styles.css';
 import { IService } from '../../models/service.model';
 import { useActions } from '../../hooks/actions';
 
-export function PlacesAutocomplete({ setService, service, placeholder }:
-{ setService?: Function, service?: IService, placeholder?: string }) {
+export function PlacesAutocomplete({
+  defaultAddress, setService, service, placeholder,
+}:
+{ defaultAddress: string, setService?: Function, service?: IService, placeholder?: string }) {
   const {
     ready,
     value,
@@ -32,23 +34,46 @@ export function PlacesAutocomplete({ setService, service, placeholder }:
   const handleSelect = async (address: string) => {
     setValue(address, false);
     clearSuggestions();
-
-    const results = await getGeocode({ address });
-    const { lat, lng } = await getLatLng(results[0]);
-
-    if (service && setService) {
-      const s = { ...service };
-      s.coordinate.latitude = lat;
-      s.coordinate.longitude = lng;
-      setService(s as IService);
-    }
-    setUserLocation({ lat, lng });
   };
+
+  useEffect(() => {
+    const updateAddressHandler = async () => {
+      try {
+        const results = await getGeocode({ address: value });
+        const { lat, lng } = await getLatLng(results[0]);
+
+        if (!results) return;
+
+        if (service && setService) {
+          const s: IService = {
+            ...service,
+            address: value,
+            coordinate: {
+              latitude: lat,
+              longitude: lng,
+            },
+          };
+
+          setService(s as IService);
+        }
+
+        setUserLocation({ lat, lng });
+      } catch (error: any) {
+        // handle error
+      }
+    };
+
+    updateAddressHandler();
+  }, [value]);
+
+  useEffect(() => {
+    setValue(defaultAddress);
+  }, [defaultAddress]);
 
   return (
     <Combobox onSelect={handleSelect} className="mb-2 relative">
       <ComboboxInput
-        value={value || service?.address}
+        value={value}
         onChange={(e) => setValue(e.target.value)}
         disabled={!ready}
         className={`w-full p-3 border-dark-green rounded-2xl border-2 outline-none

@@ -4,61 +4,46 @@ import { toast } from 'react-toastify';
 
 import { useCreateNewServiceMutation, useUpdateExistingServiceMutation } from '../../redux/services/services';
 import { useActions } from '../../hooks/actions';
+import { useAppSelector } from '../../hooks/redux';
 
 import { PlacesAutocomplete } from '../PlacesAutocomplete/PlacesAutocomplete';
 import { WasteList } from './components/WasteList';
 import { PaymentList } from './components/PaymentList';
 import { DeliveryList } from './components/DeliveryList';
 
+import 'react-toastify/dist/ReactToastify.css';
 import { IService } from '../../models/service.model';
 
-import 'react-toastify/dist/ReactToastify.css';
+export function ServiceModal({ isUpdateService = false }:
+{ isUpdateService?: boolean }) {
+  const { setPopupState, setUpdatePopupState, setCurrentService } = useActions();
 
-export function ServiceModal({ isUpdateService = false, updateService }:
-{ isUpdateService?: boolean;
-  updateService?: IService }) {
-  const [service, setService] = useState<IService>({
-    id: updateService?.id || 0,
-    address: updateService?.address || '',
-    serviceName: updateService?.serviceName || '',
-    typeOfWastes: updateService?.typeOfWastes || [],
-    paymentConditions: updateService?.paymentConditions || [],
-    deliveryOptions: updateService?.deliveryOptions || [],
-    description: updateService?.description || '',
-    coordinate: {
-      id: updateService?.coordinate.id || 0,
-      latitude: updateService?.coordinate.latitude || 0,
-      longitude: updateService?.coordinate.longitude || 0,
-    },
-  });
+  const [service, setService] = isUpdateService
+    ? [useAppSelector((store) => store.service.service), setCurrentService]
+    : useState<IService>({
+      id: 0,
+      address: '',
+      serviceName: '',
+      paymentConditions: [],
+      coordinate: {
+        longitude: 0,
+        latitude: 0,
+      },
+      typeOfWastes: [],
+      deliveryOptions: [],
+      rating: 0,
+      priceOfService: 0,
+      description: '',
+    });
 
-  const [descArr, setDescArr] = useState(service?.description
+  const [descArr, setDescArr] = useState(isUpdateService
     ? JSON.parse(service?.description as string) : []);
 
-  const [text, setText] = useState<string>(descArr[0] || '');
+  const [serviceName, setServiceName] = useState<string>(service.serviceName || '');
+  const [description, setDescription] = useState<string>(descArr[0] || '');
 
   const [createService] = useCreateNewServiceMutation();
   const [updateExistingService] = useUpdateExistingServiceMutation();
-
-  const { setPopupState, setUpdatePopupState } = useActions();
-
-  useEffect(() => {
-    setDescArr((prevState: string[]) => {
-      prevState[0] = text;
-
-      return prevState;
-    });
-
-    const descriptionChanged = `[${
-      JSON.stringify(descArr[0])
-    },${
-      JSON.stringify(descArr[1])
-    }, ${
-      JSON.stringify(descArr[2])
-    }]`;
-
-    setService({ ...service, description: descriptionChanged });
-  }, [text]);
 
   const handleSubmitService = async () => {
     if (service.serviceName === '') {
@@ -101,7 +86,7 @@ export function ServiceModal({ isUpdateService = false, updateService }:
       });
 
       return;
-    } if (service.coordinate.latitude === 0 || service.coordinate.longitude === 0) {
+    } if (!service.address) {
       toast.error('Please write your service address 😅', {
         toastId: 'error-msg',
         position: toast.POSITION.TOP_RIGHT,
@@ -151,13 +136,29 @@ export function ServiceModal({ isUpdateService = false, updateService }:
     }
   };
 
-  const handleChangeServiceName = (e: React.ChangeEvent<HTMLInputElement>) => {
-    e.preventDefault();
+  useEffect(() => {
+    setDescArr((prevState: string[]) => {
+      prevState[0] = description;
 
-    const { name, value } = e.target;
+      return prevState;
+    });
 
-    setService((prevState) => ({ ...prevState, [name]: value }));
-  };
+    const descriptionChanged = `[${
+      JSON.stringify(description)
+    },${
+      JSON.stringify(descArr[1])
+    }, ${
+      JSON.stringify(descArr[2])
+    }]`;
+
+    setService({ ...service, serviceName, description: descriptionChanged });
+  }, [
+    service.typeOfWastes,
+    service.paymentConditions,
+    service.deliveryOptions,
+    description,
+    serviceName,
+  ]);
 
   return (
     <div
@@ -165,7 +166,7 @@ export function ServiceModal({ isUpdateService = false, updateService }:
       className="bg-light fixed w-full h-screen left-0 top-0 grid place-items-center p-5 wrapper-popup"
     >
       <div className="bg-white rounded-2xl p-5 max-w-[550px]">
-        <h4 className="text-center pb-5 text-2xl">
+        <h4 className="description-center pb-5 text-2xl">
           {isUpdateService ? 'Update' : 'Create'}
           {' '}
           Service
@@ -176,11 +177,13 @@ export function ServiceModal({ isUpdateService = false, updateService }:
 
           <input
             name="serviceName"
-            value={service.serviceName}
-            onChange={handleChangeServiceName}
+            value={serviceName}
+            onChange={(e) => {
+              setServiceName(e.target.value);
+            }}
             className="w-full p-3 border-dark-green rounded-2xl border-2 outline-none"
             placeholder="Enter your service name..."
-            type="text"
+            type="description"
             id="serviceName"
           />
         </div>
@@ -189,6 +192,7 @@ export function ServiceModal({ isUpdateService = false, updateService }:
           <label htmlFor="serviceAddress">Your Service Address</label>
 
           <PlacesAutocomplete
+            defaultAddress={service.address as string}
             setService={setService}
             service={service}
           />
@@ -201,8 +205,10 @@ export function ServiceModal({ isUpdateService = false, updateService }:
             className="w-full p-3 border-dark-green rounded-2xl border-2 outline-none h-14"
             placeholder="Enter your service description..."
             id="serviceDescription"
-            onChange={(e) => setText(e.target.value)}
-            value={text}
+            onChange={(e) => {
+              setDescription(e.target.value);
+            }}
+            value={description}
           />
         </div>
 
@@ -244,7 +250,7 @@ export function ServiceModal({ isUpdateService = false, updateService }:
               setPopupState(false);
               setUpdatePopupState(false);
             }}
-            className="font-semibold uppercase rounded text-white bg-[#b14e46] px-6 py-2"
+            className="font-semibold uppercase rounded description-white bg-[#b14e46] px-6 py-2"
           >
             Quit
           </button>
@@ -252,7 +258,7 @@ export function ServiceModal({ isUpdateService = false, updateService }:
           <button
             type="button"
             onClick={handleSubmitService}
-            className="font-semibold uppercase rounded text-white bg-[#7bae37] px-6 py-2"
+            className="font-semibold uppercase rounded description-white bg-[#7bae37] px-6 py-2"
           >
             Submit
           </button>

@@ -30,7 +30,7 @@ export function PaymentList({
     } else {
       updatedList.splice(service.paymentConditions.indexOf(e.target.value), 1);
     }
-    setService((prevState: IService) => ({ ...prevState, paymentConditions: updatedList }));
+    setService({ ...service, paymentConditions: updatedList });
   };
 
   return (
