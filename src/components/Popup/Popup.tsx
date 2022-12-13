@@ -167,7 +167,7 @@ export function Popup() {
                 <p className="py-2">
                   Types of waste:
                   {' '}
-                  {typeOfWastes.map((type, index) => (
+                  {typeOfWastes.map((type) => (
                     <Link
                       to={`/detailed/${type.toLowerCase()}`}
                       onMouseEnter={() => setWaste(type as ImagesType)}
@@ -176,7 +176,6 @@ export function Popup() {
                       className="cursor-pointer"
                     >
                       <span className="bg-[#7483bd] p-1 text-white rounded">{type}</span>
-                      {index + 1 !== typeOfWastes.length && ', '}
                       {' '}
                     </Link>
                   ))}
