@@ -137,7 +137,7 @@ export function Map({
       {popUp && <Popup />}
 
       <GoogleMap
-        mapContainerStyle={{ width: '100%', height: '100%' }}
+        mapContainerStyle={{ width: '100%' }}
         mapContainerClassName="flex-1 border-t-2 border-r-2 border-r-blue-500 border-t-blue-500"
         center={userLocation || center}
         zoom={12}

@@ -109,7 +109,7 @@ export function LoginPage() {
     <>
       <Header />
 
-      <div className="grid place-items-center w-full bg-light p-5 h-screen">
+      <div className="flex-1 grid place-items-center w-full bg-light p-5 h-screen">
         <form
           className="auth-form rounded-[20px] bg-white p-5 w-[480px] max-[520px]:w-full"
           action="#"
