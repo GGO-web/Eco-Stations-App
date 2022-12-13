@@ -42,7 +42,7 @@ export function Auth() {
 
   const roleOptions = useMemo(() => ([
     { value: 'User', label: 'User' },
-    { value: 'Service Provider', label: 'Service Provider' },
+    { value: 'Service', label: 'Service Provider' },
   ]), []);
 
   const roleColourStyles: any = {
