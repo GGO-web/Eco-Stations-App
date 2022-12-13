@@ -80,10 +80,6 @@ export function Map({
     getServicesInAnArea();
   }, [debouncedMapOptions, trashBinsFilter]);
 
-  useEffect(() => {
-
-  }, [userLocation]);
-
   const handleClick = async (trashBinService: IShortService) => {
     const addressResponse = await getAddress({
       lat: trashBinService.coordinate.latitude,
@@ -146,6 +142,9 @@ export function Map({
         options={mapDefaultOptions}
       >
         {trashBins?.map((trashBin: IShortService) => {
+          const trashBinRating = `${trashBin.serviceName}
+          ${trashBin.rating && trashBin?.rating > 0 ? `(${trashBin?.rating.toFixed(1)}⭐)` : ''}`;
+
           const trashBinCenter = {
             lng: trashBin.coordinate.longitude,
             lat: trashBin.coordinate.latitude,
@@ -153,12 +152,11 @@ export function Map({
 
           return (
             <MarkerF
+              key={trashBin.rating}
               icon="eco-bin.png"
-              key={trashBin.id}
               position={trashBinCenter}
               label={{
-                text: `${trashBin.serviceName}
-                ${trashBin.rating && trashBin?.rating > 0 ? `(${trashBin?.rating.toFixed(1)}⭐)` : ''}`,
+                text: trashBinRating,
                 className: 'absolute left-[-5px] top-[-5px]',
                 fontSize: '1.5rem',
                 fontWeight: 'bold',
