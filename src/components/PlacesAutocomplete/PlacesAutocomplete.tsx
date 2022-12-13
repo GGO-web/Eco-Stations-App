@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import usePlacesAutocomplete, {
   getGeocode,
@@ -16,6 +16,7 @@ import '@reach/combobox/styles.css';
 
 import { IService } from '../../models/service.model';
 import { useActions } from '../../hooks/actions';
+import { useAppSelector } from '../../hooks/redux';
 
 export function PlacesAutocomplete({ setService, service, placeholder }:
 { setService?: Function, service?: IService, placeholder?: string }) {
@@ -29,6 +30,10 @@ export function PlacesAutocomplete({ setService, service, placeholder }:
 
   const { setUserLocation } = useActions();
 
+  const currentService = useAppSelector((store) => store.service.service);
+
+  const { userLocation } = useAppSelector((store) => store.userLocations);
+
   const handleSelect = async (address: string) => {
     setValue(address, false);
     clearSuggestions();
@@ -37,18 +42,44 @@ export function PlacesAutocomplete({ setService, service, placeholder }:
     const { lat, lng } = await getLatLng(results[0]);
 
     if (service && setService) {
-      const s = { ...service };
-      s.coordinate.latitude = lat;
-      s.coordinate.longitude = lng;
+      const s: IService = {
+        ...service,
+        address,
+        coordinate: {
+          latitude: lat,
+          longitude: lng,
+        },
+      };
+
       setService(s as IService);
     }
+
     setUserLocation({ lat, lng });
   };
+
+  useEffect(() => {
+    if (service && setService) {
+      const s: IService = {
+        ...service,
+        address: value,
+        coordinate: {
+          latitude: userLocation?.lat as number,
+          longitude: userLocation?.lat as number,
+        },
+      };
+
+      setService(s as IService);
+    }
+  }, [value]);
+
+  useEffect(() => {
+    setValue(currentService?.address as string);
+  }, []);
 
   return (
     <Combobox onSelect={handleSelect} className="mb-2 relative">
       <ComboboxInput
-        value={value || service?.address}
+        value={value}
         onChange={(e) => setValue(e.target.value)}
         disabled={!ready}
         className={`w-full p-3 border-dark-green rounded-2xl border-2 outline-none

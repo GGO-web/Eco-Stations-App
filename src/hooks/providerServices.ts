@@ -21,7 +21,7 @@ export const useGetProviderServices = () => {
 
       getAllServices();
     }
-  }, [allProviderServices]);
+  });
 
   return providerServices;
 };

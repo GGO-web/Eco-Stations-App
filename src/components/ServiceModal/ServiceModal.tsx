@@ -4,6 +4,7 @@ import { toast } from 'react-toastify';
 
 import { useCreateNewServiceMutation, useUpdateExistingServiceMutation } from '../../redux/services/services';
 import { useActions } from '../../hooks/actions';
+import { useAppSelector } from '../../hooks/redux';
 
 import { PlacesAutocomplete } from '../PlacesAutocomplete/PlacesAutocomplete';
 import { WasteList } from './components/WasteList';
@@ -14,9 +15,10 @@ import { IService } from '../../models/service.model';
 
 import 'react-toastify/dist/ReactToastify.css';
 
-export function ServiceModal({ isUpdateService = false, updateService }:
-{ isUpdateService?: boolean;
-  updateService?: IService }) {
+export function ServiceModal({ isUpdateService = false }:
+{ isUpdateService?: boolean }) {
+  const updateService = useAppSelector((store) => store.service.service);
+
   const [service, setService] = useState<IService>({
     id: updateService?.id || 0,
     address: updateService?.address || '',
