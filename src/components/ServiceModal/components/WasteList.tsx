@@ -30,7 +30,7 @@ export function WasteList({
       updatedList.splice(service.typeOfWastes.indexOf(e.target.value), 1);
     }
 
-    setService((prevState: IService) => ({ ...prevState, typeOfWastes: updatedList }));
+    setService({ ...service, typeOfWastes: updatedList });
   };
 
   return (
@@ -44,6 +44,16 @@ export function WasteList({
 
             return prevState;
           });
+
+          const descriptionChanged = `[${
+            JSON.stringify(descArr[0])
+          },${
+            JSON.stringify(priceOfWaste)
+          }, ${
+            JSON.stringify(descArr[2])
+          }]`;
+
+          setService({ ...service, description: descriptionChanged });
         }, [priceOfWaste]);
 
         useEffect(() => {

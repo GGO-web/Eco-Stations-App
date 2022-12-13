@@ -30,7 +30,7 @@ export function DeliveryList({
       updatedList.splice(service.deliveryOptions.indexOf(e.target.value), 1);
     }
 
-    setService((prevState: IService) => ({ ...prevState, deliveryOptions: updatedList }));
+    setService({ ...service, deliveryOptions: updatedList });
   };
 
   return (
@@ -44,6 +44,16 @@ export function DeliveryList({
 
             return prevState;
           });
+
+          const descriptionChanged = `[${
+            JSON.stringify(descArr[0])
+          },${
+            JSON.stringify(descArr[1])
+          }, ${
+            JSON.stringify(priceOfDelivery)
+          }]`;
+
+          setService({ ...service, description: descriptionChanged });
         }, [priceOfDelivery]);
 
         useEffect(() => {
