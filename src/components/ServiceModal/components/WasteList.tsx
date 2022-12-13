@@ -38,6 +38,8 @@ export function WasteList({
       {TypesOfWaste.map((type, index) => {
         const [priceOfWaste, setPriceOfWaste] = useState(descArr[1] || {});
 
+        // console.log(service);
+
         useEffect(() => {
           setDescArr((prevState: string[]) => {
             prevState[1] = priceOfWaste;
@@ -55,10 +57,6 @@ export function WasteList({
 
           setService({ ...service, description: descriptionChanged });
         }, [priceOfWaste]);
-
-        useEffect(() => {
-          setPriceOfWaste(descArr[1] || {});
-        }, [descArr[1]]);
 
         return (
           <div className={`flex items-center gap-1 ${checkedStateWaste[index] && 'w-full'}`} key={type}>

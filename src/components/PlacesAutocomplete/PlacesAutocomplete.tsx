@@ -38,25 +38,29 @@ export function PlacesAutocomplete({
 
   useEffect(() => {
     const updateAddressHandler = async () => {
-      const results = await getGeocode({ address: value });
-      const { lat, lng } = await getLatLng(results[0]);
+      try {
+        const results = await getGeocode({ address: value });
+        const { lat, lng } = await getLatLng(results[0]);
 
-      if (!results) return;
+        if (!results) return;
 
-      if (service && setService) {
-        const s: IService = {
-          ...service,
-          address: value,
-          coordinate: {
-            latitude: lat,
-            longitude: lng,
-          },
-        };
+        if (service && setService) {
+          const s: IService = {
+            ...service,
+            address: value,
+            coordinate: {
+              latitude: lat,
+              longitude: lng,
+            },
+          };
 
-        setService(s as IService);
+          setService(s as IService);
+        }
+
+        setUserLocation({ lat, lng });
+      } catch (error: any) {
+        // handle error
       }
-
-      setUserLocation({ lat, lng });
     };
 
     updateAddressHandler();

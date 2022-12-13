@@ -36,9 +36,10 @@ export function ServiceModal({ isUpdateService = false }:
       description: '',
     });
 
-  const [descArr, setDescArr] = useState(service?.description
+  const [descArr, setDescArr] = useState(isUpdateService
     ? JSON.parse(service?.description as string) : []);
 
+  const [serviceName, setServiceName] = useState<string>(service.serviceName || '');
   const [description, setDescription] = useState<string>(descArr[0] || '');
 
   const [createService] = useCreateNewServiceMutation();
@@ -143,15 +144,21 @@ export function ServiceModal({ isUpdateService = false }:
     });
 
     const descriptionChanged = `[${
-      JSON.stringify(descArr[0])
+      JSON.stringify(description)
     },${
       JSON.stringify(descArr[1])
     }, ${
       JSON.stringify(descArr[2])
     }]`;
 
-    setService({ ...service, description: descriptionChanged });
-  }, [service.typeOfWastes, service.paymentConditions, service.deliveryOptions, description]);
+    setService({ ...service, serviceName, description: descriptionChanged });
+  }, [
+    service.typeOfWastes,
+    service.paymentConditions,
+    service.deliveryOptions,
+    description,
+    serviceName,
+  ]);
 
   return (
     <div
@@ -170,11 +177,9 @@ export function ServiceModal({ isUpdateService = false }:
 
           <input
             name="serviceName"
-            value={service.serviceName}
+            value={serviceName}
             onChange={(e) => {
-              e.preventDefault();
-
-              setService({ ...service, serviceName: e.target.value });
+              setServiceName(e.target.value);
             }}
             className="w-full p-3 border-dark-green rounded-2xl border-2 outline-none"
             placeholder="Enter your service name..."
@@ -202,7 +207,6 @@ export function ServiceModal({ isUpdateService = false }:
             id="serviceDescription"
             onChange={(e) => {
               setDescription(e.target.value);
-              setCurrentService({ ...service, description: e.target.value });
             }}
             value={description}
           />

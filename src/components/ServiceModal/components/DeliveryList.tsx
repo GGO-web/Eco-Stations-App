@@ -56,10 +56,6 @@ export function DeliveryList({
           setService({ ...service, description: descriptionChanged });
         }, [priceOfDelivery]);
 
-        useEffect(() => {
-          setPriceOfDelivery(descArr[2] || {});
-        }, [descArr[2]]);
-
         return (
           <div className={`flex items-center gap-1 ${checkedStateDelivery[index] && 'w-full'}`} key={delivery}>
             <input
