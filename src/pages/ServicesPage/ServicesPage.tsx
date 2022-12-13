@@ -1,30 +1,35 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import { BsPlusLg } from 'react-icons/Bs';
 
-import { ServiceModal } from '../../components/ServiceModal/ServiceModal';
 import { ServiceCard } from '../../components/ServiceCard/ServiceCard';
 import { Header } from '../../components/Header/Header';
 
-import { useAppSelector } from '../../hooks/redux';
 import { useActions } from '../../hooks/actions';
 
 import { IService } from '../../models/service.model';
 import { useGetProviderServices } from '../../hooks/providerServices';
+import { ServiceModal } from '../../components/ServiceModal/ServiceModal';
+import { useAppSelector } from '../../hooks/redux';
 
-export function ServicesPage({ isLoaded }: { isLoaded: boolean }) {
+export function ServicesPage() {
   const providerServices = useGetProviderServices();
 
-  const [serviceForUpdate, setServiceForUpdate] = useState<IService>({} as IService);
+  const { setPopupState } = useActions();
 
   const popup = useAppSelector((store) => store.service.isPopupOpen);
   const updatePopup = useAppSelector((store) => store.service.isUpdatePopupOpen);
 
-  const { setPopupState } = useActions();
-
   return (
     <>
       <Header />
+
+      {(popup && !updatePopup) && <ServiceModal />}
+      {updatePopup && (
+        <ServiceModal
+          isUpdateService
+        />
+      )}
 
       <div className="min-h-screen bg-light p-5">
         <div className="border-b-2 border-b-dark flex items-center justify-between pb-2 max-[500px]:flex-col">
@@ -34,20 +39,12 @@ export function ServicesPage({ isLoaded }: { isLoaded: boolean }) {
             <BsPlusLg />
           </button>
         </div>
-        {popup && isLoaded && <ServiceModal />}
-        {updatePopup && isLoaded && (
-        <ServiceModal
-          isUpdateService
-          updateService={serviceForUpdate}
-        />
-        )}
 
         <div className="my-5 flex flex-col gap-3">
           {providerServices && providerServices?.map((service: IService) => (
             <ServiceCard
               key={service.id}
               service={service}
-              setServiceForUpdate={setServiceForUpdate}
             />
           ))}
         </div>

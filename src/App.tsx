@@ -30,7 +30,7 @@ function App() {
 
   return (
     <Router>
-      <ToastContainer limit={1} />
+      <ToastContainer />
 
       <Routes>
         <Route path="/" element={<Home isLoaded={isLoaded} />} />
@@ -41,7 +41,7 @@ function App() {
         <Route
           path="/services"
           element={
-            <ProtectedRoute userRole="Service" element={<ServicesPage isLoaded={isLoaded} />} />
+            <ProtectedRoute userRole="Service" element={<ServicesPage />} />
           }
         />
         <Route path="/*" element={<Error />} />

@@ -1,4 +1,4 @@
-import React, { useId, useRef } from 'react';
+import React, { useId, useRef, useState } from 'react';
 
 import { RiDeleteBin5Fill } from 'react-icons/Ri';
 
@@ -10,8 +10,11 @@ import { useActions } from '../../../../../hooks/actions';
 
 import { IComment } from '../../../../../models/comment.model';
 import { useDeleteCommentWithIdMutation } from '../../../../../redux/services/services';
+import { CommentPopup } from './CommentPopup';
 
 export function Comment({ comment }: { comment: IComment }) {
+  const [popup, setPopup] = useState(false);
+
   const persistentId = useId();
   const persistentRef = useRef<HTMLInputElement>(null);
 
@@ -19,7 +22,6 @@ export function Comment({ comment }: { comment: IComment }) {
 
   const providerServices = useGetProviderServices();
   const currentService = useAppSelector((store) => store.service.service);
-  const [deleteCommentWithId] = useDeleteCommentWithIdMutation();
 
   const isServiceOwner = () => providerServices?.some(
     (service) => service.id === currentService.id,
@@ -40,13 +42,10 @@ export function Comment({ comment }: { comment: IComment }) {
     }
   }, 500);
 
-  const deleteCommentHandler = () => {
-    deleteComment(comment.id);
-    deleteCommentWithId(comment.id);
-  };
-
   return (
     <li className="comments__item p-3 bg-light-green rounded-tr-[20px] rounded-bl-[20px] mb-4">
+
+      {popup && <CommentPopup id={comment.id} setPopup={setPopup} />}
 
       <header className="comments__item-persistent flex items-center justify-between mb-2">
         <time className="comments__item-time text-dark text-sm" dateTime={comment.timeStamp}>
@@ -75,7 +74,7 @@ export function Comment({ comment }: { comment: IComment }) {
 
       {isServiceOwner() && (
         <div className="comments__item-remove flex items-center justify-end mt-2">
-          <RiDeleteBin5Fill className="w-[30px] h-[30px] text-white cursor-pointer" onClick={() => deleteCommentHandler()} />
+          <RiDeleteBin5Fill className="w-[30px] h-[30px] text-white cursor-pointer" onClick={() => setPopup(true)} />
         </div>
       )}
     </li>

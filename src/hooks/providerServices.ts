@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-import { useLazyGetServicesOfProviderQuery } from '../redux/services/services';
+import { useGetServicesOfProviderQuery } from '../redux/services/services';
 import { useActions } from './actions';
 import { useAppSelector } from './redux';
 
@@ -9,21 +9,19 @@ import { IService } from '../models/service.model';
 export const useGetProviderServices = () => {
   const providerServices: IService[] = useAppSelector((store) => store.auth.services);
 
-  const [getAllProviderServices] = useLazyGetServicesOfProviderQuery();
+  const { data: allProviderServices } = useGetServicesOfProviderQuery();
 
   const { setServicesOfProvider } = useActions();
 
   useEffect(() => {
-    if (providerServices.length === 0) {
+    if (allProviderServices) {
       const getAllServices = async () => {
-        const providerAllServices = await getAllProviderServices().unwrap();
-
-        setServicesOfProvider(providerAllServices);
+        setServicesOfProvider(allProviderServices as IService[]);
       };
 
       getAllServices();
     }
-  }, []);
+  });
 
   return providerServices;
 };

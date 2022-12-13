@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
 
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import jwt_decode from 'jwt-decode';
 
@@ -18,7 +18,9 @@ import { useActions } from '../../hooks/actions';
 import { useLocalStorage } from '../../hooks/localStorage';
 
 import { IAuth } from '../../models/auth.model';
-import { AUTH_CREDENTIALS, AUTH_STATUS_DESCRIPTION, TError } from '../../constants';
+import {
+  AUTH_CREDENTIALS, AUTH_STATUS_DESCRIPTION, TError,
+} from '../../constants';
 
 export function Auth() {
   const [values, setValues] = React.useState<IAuth>({
@@ -39,7 +41,7 @@ export function Auth() {
 
   const roleOptions = useMemo(() => ([
     { value: 'User', label: 'User' },
-    { value: 'Service Provider', label: 'Service Provider' },
+    { value: 'Service', label: 'Service Provider' },
   ]), []);
 
   const roleColourStyles: any = {
@@ -129,31 +131,30 @@ export function Auth() {
         return;
       }
 
-      const toastErrors = (err as TError).data.message.map(
-        (errorMessage) => (
-          <div key={v4()}>
-            {AUTH_STATUS_DESCRIPTION[errorMessage as never]}
-          </div>
+      (err as TError).data.message.map(
+        (errorMessage, index: number) => (
+          setTimeout(() => {
+            toast
+              .warn(<div key={v4()}>{AUTH_STATUS_DESCRIPTION[errorMessage as never]}</div>, {
+                toastId: v4(),
+                position: toast.POSITION.TOP_RIGHT,
+                autoClose: 1000,
+              });
+          }, index * 500)
         ),
       );
-
-      toast.warn(<div>{toastErrors}</div>, {
-        toastId: 'error-msg',
-        position: toast.POSITION.TOP_RIGHT,
-        autoClose: 2500,
-      });
     }
   };
 
   return (
-    <div className="grid place-items-center fixed w-full h-screen bg-light">
+    <div className="grid place-items-center w-full bg-light p-5 min-[500px]:h-screen">
       <form
-        className="auth-form rounded-[20px] bg-white p-5 w-[480px]"
+        className="auth-form rounded-[20px] bg-white p-5 w-[480px] max-[520px]:w-full"
         action="#"
         onSubmit={(e) => e.preventDefault()}
       >
         <div className="card__content flex flex-col gap-[10px] mb-6">
-          <p className="text-blue-400 text-2xl mb-5">
+          <p className="text-blue-400 text-2xl mb-5 max-[425px]:mb-2">
             Create a new account
           </p>
 
@@ -221,6 +222,15 @@ export function Auth() {
         </div>
 
         <button className="p-3 rounded-2xl bg-[#7483bd] text-white w-full" type="button" onClick={handleAuth}>Sign up</button>
+
+        <p className="text-sm mt-2 text-center min-[520px]:text-base">
+          If you have account already,
+          {' '}
+          <Link to="/Login" className="underline text-dark font-semibold">login</Link>
+          {' '}
+          now
+          🙏🏻
+        </p>
       </form>
     </div>
   );

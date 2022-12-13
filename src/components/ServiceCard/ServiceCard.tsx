@@ -11,46 +11,52 @@ import { IService } from '../../models/service.model';
 import { useActions } from '../../hooks/actions';
 
 export function ServiceCard({
-  service, setServiceForUpdate,
-}:{ service: IService, setServiceForUpdate: Function }) {
-  const [address, setAddress] = useState('');
-  const [text, setText] = useState('');
-
+  service,
+}:{ service: IService }) {
   const {
-    id, serviceName, typeOfWastes, deliveryOptions, paymentConditions, coordinate, description,
+    id,
+    address: standardAddress,
+    serviceName,
+    typeOfWastes,
+    deliveryOptions,
+    paymentConditions,
+    coordinate,
+    description,
   } = service;
 
-  const { setUpdatePopupState } = useActions();
+  const [address, setAddress] = useState(standardAddress);
+
+  const text = description ? JSON.parse(description as string)[0] : '';
+
+  const { setUpdatePopupState, setCurrentService } = useActions();
 
   const [getAddress] = useLazyGetAddressFromCoordinatesQuery();
   const [deleteService] = useDeleteExistingServiceMutation();
 
   useEffect(() => {
-    if (description) {
-      const [descText, ,] = JSON.parse(description as string);
-      setText(descText);
+    const serviceAddress = async () => {
+      const adrs = await getAddress({
+        lat: coordinate.latitude,
+        lng: coordinate.longitude,
+      }).unwrap();
 
-      const serviceAddress = async () => {
-        const adrs = await getAddress({
-          lat: coordinate.latitude,
-          lng: coordinate.longitude,
-        }).unwrap();
-        setAddress((adrs as any).results[0].formatted_address);
-      };
+      setAddress((adrs as any).results[0].formatted_address);
+      setCurrentService({ ...service, address: adrs });
+    };
 
-      serviceAddress();
-    }
-  }, []);
+    serviceAddress();
+  }, [address]);
 
   return (
-    <div className="w-full grid gap-6 grid-cols-4-auto-types bg-main
-    rounded-2xl min-h-[50px] text-white p-5 items-center justify-center place-items-center"
+    <div className="w-full md:grid gap-6 md:grid-cols-2 bg-main
+    rounded-2xl min-h-[50px] text-white p-5"
     >
       <div className="w-full">
-        <h3 className="text-2xl font-semibold text-dark pb-3">{serviceName}</h3>
+        <h3 className="text-2xl font-bold text-white pb-3">{serviceName}</h3>
         <p className="text-sm">{address}</p>
       </div>
-      <div>
+
+      <div className="mb-2 md:mb-0 justify-self-end">
         <p className="pb-1">
           Types of waste:
           {' '}
@@ -63,6 +69,7 @@ export function ServiceCard({
             </span>
           ))}
         </p>
+
         <p className="pb-1">
           Delivery options:
           {' '}
@@ -73,6 +80,7 @@ export function ServiceCard({
             </span>
           ))}
         </p>
+
         <p>
           Payment Conditions:
           {' '}
@@ -84,32 +92,27 @@ export function ServiceCard({
           ))}
         </p>
       </div>
-      <div>
-        <p>
-          Description:
-          {' '}
-          {text}
-        </p>
-      </div>
-      <div className="flex gap-8 text-4xl justify-self-end">
-        <RiEditFill
-          className="cursor-pointer"
-          onClick={() => {
-            setUpdatePopupState(true); setServiceForUpdate({
-              ...{
-                id,
-                serviceName,
-                typeOfWastes,
-                deliveryOptions,
-                paymentConditions,
-                coordinate,
-                address,
-                description,
-              },
-            });
-          }}
-        />
-        <RiDeleteBin5Fill className="cursor-pointer" onClick={() => deleteService(id as number)} />
+
+      <div className="w-full col-span-2 flex gap-8 justify-between">
+        <div>
+          <p>
+            Description:
+            {' '}
+            {text}
+          </p>
+        </div>
+
+        <div className="text-4xl flex gap-8">
+          <RiEditFill
+            className="cursor-pointer"
+            onClick={() => {
+              setUpdatePopupState(true);
+              setCurrentService({ ...service, address });
+            }}
+          />
+
+          <RiDeleteBin5Fill className="cursor-pointer" onClick={() => deleteService(id as number)} />
+        </div>
       </div>
     </div>
   );

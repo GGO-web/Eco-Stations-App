@@ -7,12 +7,12 @@ import {
   setUpdatePopupState,
 } from '../redux/features/serviceSlice';
 
-import { setAllTrashBins, setTrashBinsFilter } from '../redux/features/trashBinsSlice';
+import { setAllTrashBins, setTrashBinsFilter, setLogOutFilter } from '../redux/features/trashBinsSlice';
 
 import { setCredentials, logOut, setServicesOfProvider } from '../redux/features/authSlice';
 
 import {
-  setMidCircles, setSmallCircles, setFarCircles, setUserLocation,
+  setMidCircles, setSmallCircles, setFarCircles, setUserLocation, setLogoutRecommend,
 } from '../redux/features/userLocationSlice';
 import { serviceApi } from '../redux/services/services';
 import { setComment, setComments, deleteComment } from '../redux/features/commentsSlice';
@@ -33,6 +33,8 @@ const actions = {
   setComments,
   setComment,
   deleteComment,
+  setLogOutFilter,
+  setLogoutRecommend,
   changePersistentOfComment: serviceApi.endpoints.changeCommentPersistent.initiate,
 };
 

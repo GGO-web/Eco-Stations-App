@@ -27,9 +27,14 @@ export const trashBinsSlice = createSlice({
     setTrashBinsFilter: (state, action: PayloadAction<IServiceFilter>) => {
       state.filter = action.payload;
     },
+    setLogOutFilter: (state) => {
+      state.filter.deliveryOptions = [];
+      state.filter.paymentConditions = [];
+      state.filter.typeOfWastes = [];
+    },
   },
 });
 
-export const { setAllTrashBins, setTrashBinsFilter } = trashBinsSlice.actions;
+export const { setAllTrashBins, setTrashBinsFilter, setLogOutFilter } = trashBinsSlice.actions;
 
 export const trashBinsReducer = trashBinsSlice.reducer;
