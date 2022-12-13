@@ -1,13 +1,14 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
-import { v4 as uuidv4 } from 'uuid';
 import { toast } from 'react-toastify';
-import { useCreateNewServiceMutation, useUpdateExistingServiceMutation } from '../../redux/services/services';
-import { PlacesAutocomplete } from '../PlacesAutocomplete/PlacesAutocomplete';
 
+import { useCreateNewServiceMutation, useUpdateExistingServiceMutation } from '../../redux/services/services';
 import { useActions } from '../../hooks/actions';
 
-import { DeliveryOptions, PaymentConditions, TypesOfWaste } from './Options';
+import { PlacesAutocomplete } from '../PlacesAutocomplete/PlacesAutocomplete';
+import { WasteList } from './components/WasteList';
+import { PaymentList } from './components/PaymentList';
+import { DeliveryList } from './components/DeliveryList';
 
 import { IService } from '../../models/service.model';
 
@@ -31,51 +32,33 @@ export function ServiceModal({ isUpdateService = false, updateService }:
     },
   });
 
-  const [descArr, setDescArr] = useState(updateService?.description
-    ? JSON.parse(updateService?.description as string) : []);
-
-  const priceWasteRef = useRef<HTMLInputElement>(null);
-  const priceDeliveryRef = useRef<HTMLInputElement>(null);
+  const [descArr, setDescArr] = useState(service?.description
+    ? JSON.parse(service?.description as string) : []);
 
   const [text, setText] = useState<string>(descArr[0] || '');
-  const [priceOfWaste, setPriceOfWaste] = useState(descArr[2] || {});
-  const [priceOfDelivery, setPriceOfDelivery] = useState(descArr[1] || {});
-
-  const TypeOfWasteInitialCheckers = new Array(TypesOfWaste.length).fill(false);
-  const DeliveryOptionsInitialCheckers = new Array(DeliveryOptions.length).fill(false);
-  const PaymentConditionsInitialCheckers = new Array(PaymentConditions.length).fill(false);
 
   const [createService] = useCreateNewServiceMutation();
   const [updateExistingService] = useUpdateExistingServiceMutation();
 
-  const [checkedStateWaste, setCheckedStateWaste] = useState(
-    service.typeOfWastes.length > 0
-      ? TypesOfWaste?.map((type:string, index: number) => (service.typeOfWastes.includes(type)
-        ? TypeOfWasteInitialCheckers[index] = true : false))
-      : TypeOfWasteInitialCheckers,
-  );
-
-  const [checkedStateOptions, setCheckedStateOptions] = useState(
-    service.deliveryOptions.length > 0
-      ? DeliveryOptions
-        ?.map((option: string, index: number) => (service.deliveryOptions.includes(option)
-          ? DeliveryOptionsInitialCheckers[index] = true : false))
-      : DeliveryOptionsInitialCheckers,
-  );
-  const [checkedStatePayment, setCheckedStatePayment] = useState(
-    service.paymentConditions.length > 0
-      ? PaymentConditions
-        ?.map((pay: string, index: number) => (service.paymentConditions.includes(pay)
-          ? DeliveryOptionsInitialCheckers[index] = true : false))
-      : PaymentConditionsInitialCheckers,
-  );
-
   const { setPopupState, setUpdatePopupState } = useActions();
 
   useEffect(() => {
-    setDescArr([text as never, priceOfDelivery as never, priceOfWaste as never]);
-    setService((prevState) => ({ ...prevState, description: JSON.stringify(descArr) }));
-  }, [text, priceOfDelivery, priceOfDelivery]);
+    setDescArr((prevState: string[]) => {
+      prevState[0] = text;
+
+      return prevState;
+    });
+
+    const descriptionChanged = `[${
+      JSON.stringify(descArr[0])
+    },${
+      JSON.stringify(descArr[1])
+    }, ${
+      JSON.stringify(descArr[2])
+    }]`;
+
+    setService({ ...service, description: descriptionChanged });
+  }, [text]);
 
   const handleSubmitService = async () => {
     if (service.serviceName === '') {
@@ -135,9 +118,19 @@ export function ServiceModal({ isUpdateService = false, updateService }:
         autoClose: 1500,
       });
 
+      const descriptionEdited = `[${
+        JSON.stringify(descArr[0])
+      },${
+        JSON.stringify(descArr[1])
+      }, ${
+        JSON.stringify(descArr[2])
+      }]`;
+
+      await updateExistingService({ ...service, description: descriptionEdited }).unwrap();
+
       setUpdatePopupState(false);
-      await updateExistingService(service).unwrap();
     }
+
     if (!isUpdateService) {
       toast.success('Congrats! Your service have been created 🥳', {
         toastId: 'error-msg',
@@ -145,8 +138,9 @@ export function ServiceModal({ isUpdateService = false, updateService }:
         autoClose: 1500,
       });
 
-      setPopupState(false);
       await createService(service).unwrap();
+
+      setPopupState(false);
     }
   };
 
@@ -157,7 +151,7 @@ export function ServiceModal({ isUpdateService = false, updateService }:
     }
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChangeServiceName = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
 
     const { name, value } = e.target;
@@ -165,55 +159,10 @@ export function ServiceModal({ isUpdateService = false, updateService }:
     setService((prevState) => ({ ...prevState, [name]: value }));
   };
 
-  const handleCheckTypes = (e: React.ChangeEvent<HTMLInputElement>, position: number) => {
-    const updatedCheckedState = checkedStateWaste
-      .map((item, index) => (index === position ? !item : item));
-
-    setCheckedStateWaste(updatedCheckedState);
-
-    let updatedList = [...service.typeOfWastes];
-    if (e.target.checked) {
-      updatedList = [...service.typeOfWastes, e.target.value];
-    } else {
-      updatedList.splice(service.typeOfWastes.indexOf(e.target.value), 1);
-    }
-    setService((prevState) => ({ ...prevState, typeOfWastes: updatedList }));
-  };
-
-  const handleCheckOptions = (e: React.ChangeEvent<HTMLInputElement>, position: number) => {
-    const updatedCheckedState = checkedStateOptions
-      .map((item, index) => (index === position ? !item : item));
-
-    setCheckedStateOptions(updatedCheckedState);
-
-    let updatedList = [...service.deliveryOptions];
-    if (e.target.checked) {
-      updatedList = [...service.deliveryOptions, e.target.value];
-    } else {
-      updatedList.splice(service.deliveryOptions.indexOf(e.target.value), 1);
-    }
-    setService((prevState) => ({ ...prevState, deliveryOptions: updatedList }));
-  };
-
-  const handleCheckPayment = (e: React.ChangeEvent<HTMLInputElement>, position: number) => {
-    const updatedCheckedState = checkedStatePayment
-      .map((item, index) => (index === position ? !item : item));
-
-    setCheckedStatePayment(updatedCheckedState);
-
-    let updatedList = [...service.paymentConditions];
-    if (e.target.checked) {
-      updatedList = [...service.paymentConditions, e.target.value];
-    } else {
-      updatedList.splice(service.paymentConditions.indexOf(e.target.value), 1);
-    }
-    setService((prevState) => ({ ...prevState, paymentConditions: updatedList }));
-  };
-
   return (
     <div
       onClick={(e) => popupHandleClick(e)}
-      className="bg-light fixed w-full h-screen left-0 top-0 grid place-items-center p-5 pt-[90px] wrapper-popup"
+      className="bg-light fixed w-full h-screen left-0 top-0 grid place-items-center p-5 wrapper-popup"
     >
       <div className="bg-white rounded-2xl p-5 max-w-[550px]">
         <h4 className="text-center pb-5 text-2xl">
@@ -221,25 +170,30 @@ export function ServiceModal({ isUpdateService = false, updateService }:
           {' '}
           Service
         </h4>
+
         <div className="mb-2">
           <label htmlFor="serviceName">Your Service Name</label>
+
           <input
             name="serviceName"
             value={service.serviceName}
-            onChange={handleChange}
+            onChange={handleChangeServiceName}
             className="w-full p-3 border-dark-green rounded-2xl border-2 outline-none"
             placeholder="Enter your service name..."
             type="text"
             id="serviceName"
           />
         </div>
+
         <div className="mb-2 relative">
           <label htmlFor="serviceAddress">Your Service Address</label>
+
           <PlacesAutocomplete
             setService={setService}
             service={service}
           />
         </div>
+
         <div className="mb-2">
           <label htmlFor="serviceName">Service Description</label>
           <textarea
@@ -251,87 +205,38 @@ export function ServiceModal({ isUpdateService = false, updateService }:
             value={text}
           />
         </div>
+
         <div className="mb-2">
-          <label htmlFor="types">Waste Types You Can Carry</label>
-          <div className="flex gap-4 items-center flex-wrap">
-            {TypesOfWaste.map((type, index) => (
-              <div className={`flex items-center gap-1 ${checkedStateWaste[index] && 'w-full'}`} key={uuidv4()}>
-                <input
-                  value={type}
-                  type="checkbox"
-                  onChange={(e) => handleCheckTypes(e, index)}
-                  checked={checkedStateWaste[index]}
-                  id="types"
-                  className="cursor-pointer accent-dark-green"
-                  style={{ accentColor: '#379683' }}
-                />
-                <span>{type}</span>
-                {checkedStateWaste[index] && (
-                  <input
-                    ref={priceWasteRef}
-                    value={priceOfWaste[type as never]}
-                    onChange={(e) => {
-                      setPriceOfWaste({ ...priceOfWaste, [type]: e.target.value });
-                    }}
-                    className="grow p-3 border-dark-green rounded-2xl border-2 outline-none"
-                    type="text"
-                    placeholder="Write down price here. It should be like: 0.01 EUR/kg"
-                  />
-                )}
-              </div>
-            ))}
-          </div>
+          <label className="block mb-2" htmlFor="types">Waste Types You Can Carry</label>
+
+          <WasteList
+            descArr={descArr}
+            setDescArr={setDescArr}
+            service={service}
+            setService={setService}
+          />
         </div>
+
         <div className="mb-2">
-          <label htmlFor="pay">Your Payment Conditions</label>
-          <div className="flex gap-4 items-center">
-            {PaymentConditions.map((pay, index) => (
-              <div className="flex items-center gap-1" key={uuidv4()}>
-                <input
-                  value={pay}
-                  type="checkbox"
-                  onChange={(e) => handleCheckPayment(e, index)}
-                  checked={checkedStatePayment[index]}
-                  id="pay"
-                  className="cursor-pointer accent-dark-green"
-                />
-                <span>{pay}</span>
-              </div>
-            ))}
-          </div>
+          <label className="block mb-2" htmlFor="pay">Your Payment Conditions</label>
+
+          <PaymentList
+            service={service}
+            setService={setService}
+          />
         </div>
+
         <div className="mb-5">
-          <label htmlFor="delivery">Your Delivery Options</label>
-          <div className="flex gap-4 items-center flex-wrap">
-            {DeliveryOptions.map((deliver, index) => (
-              <div className={`flex items-center gap-1 ${checkedStateOptions[index] && 'w-full'}`} key={uuidv4()}>
-                <input
-                  value={deliver}
-                  type="checkbox"
-                  onChange={(e) => handleCheckOptions(e, index)}
-                  checked={checkedStateOptions[index]}
-                  id="delivery"
-                  className="cursor-pointer accent-dark-green"
-                />
-                <span>{deliver}</span>
-                {checkedStateOptions[index] && (
-                  <input
-                    ref={priceDeliveryRef}
-                    value={priceOfDelivery[deliver as never]}
-                    onChange={(e) => {
-                      setPriceOfDelivery(
-                        (prevState: any) => ({ ...prevState, [deliver]: e.target.value }),
-                      );
-                    }}
-                    className="grow p-3 border-dark-green rounded-2xl border-2 outline-none"
-                    type="text"
-                    placeholder="Write down price here. It should be like: 1 EUR/ 20kg"
-                  />
-                )}
-              </div>
-            ))}
-          </div>
+          <label className="block mb-2" htmlFor="delivery">Your Delivery Options</label>
+
+          <DeliveryList
+            descArr={descArr}
+            setDescArr={setDescArr}
+            service={service}
+            setService={setService}
+          />
         </div>
+
         <div className="flex justify-between items-center">
           <button
             type="button"
@@ -343,6 +248,7 @@ export function ServiceModal({ isUpdateService = false, updateService }:
           >
             Quit
           </button>
+
           <button
             type="button"
             onClick={handleSubmitService}
@@ -352,6 +258,7 @@ export function ServiceModal({ isUpdateService = false, updateService }:
           </button>
         </div>
       </div>
+
     </div>
   );
 }
