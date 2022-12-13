@@ -35,17 +35,23 @@ export function ServiceCard({
 
   useEffect(() => {
     const serviceAddress = async () => {
-      const adrs = await getAddress({
-        lat: coordinate.latitude,
-        lng: coordinate.longitude,
-      }).unwrap();
+      try {
+        const adrs = await getAddress({
+          lat: coordinate.latitude,
+          lng: coordinate.longitude,
+        }).unwrap();
 
-      setAddress((adrs as any).results[0].formatted_address);
-      setCurrentService({ ...service, address: adrs });
+        const newAddress = (adrs as any)?.results[0]?.formatted_address || 'Somewhere in the Earth';
+
+        setAddress(newAddress);
+        setCurrentService({ ...service, address: newAddress });
+      } catch (err: any) {
+        console.log(err.message);
+      }
     };
 
     serviceAddress();
-  }, [address]);
+  }, [address, coordinate]);
 
   return (
     <div className="w-full md:grid gap-6 md:grid-cols-2 bg-main

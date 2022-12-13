@@ -15,6 +15,8 @@ import { useAppSelector } from '../../hooks/redux';
 export function ServicesPage() {
   const providerServices = useGetProviderServices();
 
+  console.log(providerServices);
+
   const { setPopupState } = useActions();
 
   const popup = useAppSelector((store) => store.service.isPopupOpen);
