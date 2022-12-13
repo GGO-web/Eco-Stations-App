@@ -8,6 +8,7 @@ import { useUpdateServiceRatingMutation } from '../../../../redux/services/servi
 import { useAppSelector } from '../../../../hooks/redux';
 
 import { IService } from '../../../../models/service.model';
+import { useActions } from '../../../../hooks/actions';
 
 export function StarRating({ rate }: { rate: number | undefined }) {
   const [rating, setRating] = useState(rate || 0);
@@ -16,8 +17,18 @@ export function StarRating({ rate }: { rate: number | undefined }) {
   const [updateRating] = useUpdateServiceRatingMutation();
   const currentService: IService = useAppSelector((store) => store.service.service);
 
+  const { trashBins } = useAppSelector((store) => store.trashBins);
+  const { setAllTrashBins } = useActions();
+
   const updateRatingHandler = (ratingValue: number) => {
     setRating(ratingValue);
+
+    setAllTrashBins(trashBins.map((trashBin: IService) => (trashBin.id === currentService.id
+      ? {
+        ...trashBin,
+        rating: ratingValue,
+      }
+      : trashBin)));
 
     updateRating({ id: currentService.id as number, rating: ratingValue });
 
