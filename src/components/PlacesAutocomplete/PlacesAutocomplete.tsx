@@ -20,7 +20,7 @@ import { useActions } from '../../hooks/actions';
 export function PlacesAutocomplete({
   defaultAddress, setService, service, placeholder,
 }:
-{ defaultAddress: string, setService?: Function, service?: IService, placeholder?: string }) {
+{ defaultAddress?: string, setService?: Function, service?: IService, placeholder?: string }) {
   const {
     ready,
     value,
@@ -67,7 +67,9 @@ export function PlacesAutocomplete({
   }, [value]);
 
   useEffect(() => {
-    setValue(defaultAddress);
+    if (defaultAddress) {
+      setValue(defaultAddress);
+    }
   }, [defaultAddress]);
 
   return (
