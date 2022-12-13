@@ -130,6 +130,7 @@ export function LoginPage() {
             <div className="relative">
               <input
                 className="input"
+                style={{ paddingRight: '50px' }}
                 placeholder="Please enter your password"
                 value={values.password}
                 type={!values.showPassword ? 'password' : 'text'}
@@ -137,7 +138,7 @@ export function LoginPage() {
               />
 
               <button
-                className="absolute top-[50%] bg-white p-1 right-3 translate-y-[-50%]"
+                className="absolute top-[50%] p-1 right-3 translate-y-[-50%]"
                 type="button"
                 aria-label="toggle password visibility"
                 onClick={handleClickShowPassword}
