@@ -175,7 +175,7 @@ export function Popup() {
                       key={uuidv4()}
                       className="cursor-pointer"
                     >
-                      {type}
+                      <span className="bg-[#7483bd] p-1 text-white rounded">{type}</span>
                       {index + 1 !== typeOfWastes.length && ', '}
                       {' '}
                     </Link>
@@ -272,7 +272,7 @@ export function Popup() {
                     {' '}
                     {credentials.role === ROLES.User
                       ? <StarRating rate={rating as number} />
-                      : `${rating}⭐`}
+                      : `${rating?.toFixed(1)}⭐`}
                   </div>
                 ) : null}
               </div>

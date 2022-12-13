@@ -39,11 +39,16 @@ export const userLocationSlice = createSlice({
     setUserLocation: (state, action: PayloadAction<ICoordinate>) => {
       state.userLocation = action.payload;
     },
+    setLogoutRecommend: (state) => {
+      state.recommend.farDistance = false;
+      state.recommend.midDistance = false;
+      state.recommend.smallDistance = false;
+    },
   },
 });
 
 export const {
-  setFarCircles, setMidCircles, setSmallCircles, setUserLocation,
+  setFarCircles, setMidCircles, setSmallCircles, setUserLocation, setLogoutRecommend,
 } = userLocationSlice.actions;
 
 export const userLocationsReducer = userLocationSlice.reducer;
