@@ -133,27 +133,28 @@ export function Auth() {
       }
 
       (err as TError).data.message.map(
-        (errorMessage) => {
-          sleep(1000);
-          return toast
-            .warn(<div key={v4()}>{AUTH_STATUS_DESCRIPTION[errorMessage as never]}</div>, {
-              toastId: v4(),
-              position: toast.POSITION.TOP_RIGHT,
-              autoClose: 2500,
-            });
-        },
+        (errorMessage, index: number) => (
+          setTimeout(() => {
+            toast
+              .warn(<div key={v4()}>{AUTH_STATUS_DESCRIPTION[errorMessage as never]}</div>, {
+                toastId: v4(),
+                position: toast.POSITION.TOP_RIGHT,
+                autoClose: 1000,
+              });
+          }, index * 500)
+        ),
       );
     }
   };
 
   return (
-    <div className="grid place-items-center fixed w-full h-screen bg-light p-5">
+    <div className="grid place-items-center w-full bg-light p-5 min-[500px]:h-screen">
       <form
         className="auth-form rounded-[20px] bg-white p-5 w-[480px] max-[520px]:w-full"
         action="#"
         onSubmit={(e) => e.preventDefault()}
       >
-        <div className="card__content flex flex-col gap-[10px] mb-6 max-[425px]:gap-0.5">
+        <div className="card__content flex flex-col gap-[10px] mb-6">
           <p className="text-blue-400 text-2xl mb-5 max-[425px]:mb-2">
             Create a new account
           </p>

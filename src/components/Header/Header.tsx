@@ -22,11 +22,9 @@ export function Header() {
         background: '#8EE4AF',
         color: '#05386B',
         display: 'flex',
-        maxHeight: '70px',
+        height: '70px',
         justifyContent: 'space-between',
         alignItems: 'center',
-        overflow: 'hidden',
-        zIndex: 1111111111,
       }}
     >
       <NavLink className="h-[70px]" to="/">

@@ -105,7 +105,7 @@ export function LoginPage() {
   };
 
   return (
-    <div className="grid place-items-center fixed w-full h-screen bg-light p-5">
+    <div className="grid place-items-center w-full bg-light p-5 min-[500px]:h-screen">
       <form
         className="auth-form rounded-[20px] bg-white p-5 w-[480px] max-[520px]:w-full"
         action="#"
