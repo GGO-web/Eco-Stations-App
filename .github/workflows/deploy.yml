@@ -1,0 +1,28 @@
+name: 'Deploy react app to github pages'
+description: 'This action will automate the process of building and depolying react app in gh-pages branch.'
+author: 'tanwanimohit'
+branding:
+  color: blue
+  icon: code
+runs:
+  using: 'composite'
+  steps:
+    - run : npm i
+      shell: bash
+    - run : npm ci
+      shell: bash
+    - run: |
+        touch .env
+        echo VITE_API_KEY=${{ secrets.VITE_API_KEY }} >> .env
+        cat .env
+        touch .env
+        echo VITE_BACKEND_URL=http://176.126.78.61:8080/api/ecoservice >> .env
+        cat .env
+        touch .env
+        echo VITE_BACKEND_AUTH_URL=http://176.126.78.61:8080/api/auth >> .env
+        cat .env
+        touch .env
+        echo VITE_GEOCODING_URL=https://maps.googleapis.com/maps/api/geocode/json >> .env
+        cat .env
+    - run : npm run build
+      shell: bash
